@@ -3,6 +3,7 @@ import { axios } from "./system";
 import { Dimmer, Loader } from "semantic-ui-react";
 import "./styles/bootstrap-utilites.min.css";
 import "./App.css";
+import Login from "./Components/Auth/Login";
 
 function App() {
 
@@ -10,21 +11,24 @@ function App() {
   const [login, setLogin] = React.useState(false);
 
   React.useEffect(() => {
-    
-    axios.get('user')
-    .then(() => {
-      setLogin(false);
-    })
-    .catch(e => {
 
-    })
-    .then(() => setLoading(false));
+    setLoading(true);
+
+    axios.get('user')
+      .then(({ data }) => {
+        setLogin(data);
+      })
+      .catch(e => {
+
+      })
+      .then(() => setLoading(false));
 
   }, []);
 
-  console.log(process.env);
+  if (!Boolean(login) && !loading)
+    return <Login setLogin={setLogin} />
 
-  return <div className="App">
+  return <div>
 
     <Dimmer active={loading} inverted><Loader /></Dimmer>
 

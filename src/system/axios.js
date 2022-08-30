@@ -16,8 +16,8 @@ instance.interceptors.request.use(function (config) {
     let tokenKey = process.env.REACT_APP_TOKEN_KEY || "crm_ard_token";
     const token = Cookies.get(tokenKey) || localStorage.getItem(tokenKey);
 
-    config.headers.Authorization = token ? `Bearer ${token}` : null;
-    // config.headers['X-Requested-Version'] = process.env.REACT_APP_VERSION || null;
+    config.headers['Authorization'] = token ? `Bearer ${token}` : null;
+    config.headers['X-App-Version'] = process.env.REACT_APP_VERSION || null;
 
     if (window.Echo && window.Echo.socketId())
         config.headers['X-Socket-ID'] = window.Echo.socketId();
