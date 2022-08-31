@@ -4,11 +4,11 @@ const defaultState = {
     showAdd: false,
 };
 
-export const expensesReducer = (state = defaultState, action) => {
+export const incomesReducer = (state = defaultState, action) => {
 
     switch (action.type) {
 
-        case ACTIONS.EXPENSES_SHOW_ADD:
+        case ACTIONS.INCOMES_SHOW_ADD:
             return { ...state, showAdd: action.payload }
 
         default:

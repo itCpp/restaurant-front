@@ -1,6 +1,7 @@
+import * as ACTIONS from "./actions";
 import { combineReducers } from "redux";
 import { expensesReducer } from "./expenses/reducer";
-import * as ACTIONS from "./actions";
+import { incomesReducer } from "./incomes/reducers";
 
 const defaultMainState = {
     user: {},
@@ -8,6 +9,7 @@ const defaultMainState = {
 
 export default combineReducers({
     expenses: expensesReducer,
+    incomes: incomesReducer,
     main: (state = defaultMainState, action) => {
 
         switch (action.type) {

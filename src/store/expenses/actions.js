@@ -1,5 +1,5 @@
-export const SHOW_ADD = "SHOW_ADD";
+export const EXPENSES_SHOW_ADD = "EXPENSES_SHOW_ADD";
 export const setShowAdd = data => ({
-    type: SHOW_ADD,
+    type: EXPENSES_SHOW_ADD,
     payload: data
 });

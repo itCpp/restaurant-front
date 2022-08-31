@@ -1,5 +1,6 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { ExpenseHeaderButtons } from "./Expenses";
+import { IncomeHeaderButtons } from "./Incomes";
 
 const Header = props => {
 
@@ -18,6 +19,7 @@ const Header = props => {
         <div className="flex-grow-1">
 
             {pathname.indexOf("/expenses") >= 0 && <ExpenseHeaderButtons />}
+            {pathname.indexOf("/income") >= 0 && <IncomeHeaderButtons />}
 
         </div>
 

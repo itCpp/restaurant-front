@@ -16,8 +16,8 @@ const ExpenseTable = props => {
             <Table.Header>
                 <Table.Row>
                     <Table.HeaderCell>Дата</Table.HeaderCell>
-                    <Table.HeaderCell>Наименование</Table.HeaderCell>
                     <Table.HeaderCell>Тип</Table.HeaderCell>
+                    <Table.HeaderCell>Наименование</Table.HeaderCell>
                     <Table.HeaderCell>Сумма</Table.HeaderCell>
                     <Table.HeaderCell />
                 </Table.Row>
@@ -56,14 +56,14 @@ const ExpenseTableRow = props => {
 
         <Table.Cell>{moment(row.created_at).format("DD.MM.YYYY HH:mm")}</Table.Cell>
 
+        <Table.Cell>{row.type}</Table.Cell>
+
         <Table.Cell>
             <div>{row.name_type || row.name}</div>
             {Boolean(row.name_type) && Boolean(row.name) && <div>
                 <small>{row.name}</small>
             </div>}
         </Table.Cell>
-
-        <Table.Cell>{row.type}</Table.Cell>
 
         <Table.Cell>{row.sum}</Table.Cell>
 
