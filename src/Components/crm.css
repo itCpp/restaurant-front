@@ -1,0 +1,17 @@
+.body-header {
+    height: 50px;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid var(--bs-gray-200);
+    background-color: var(--bs-white);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.body-header > *:not(:last-child) {
+    margin-right: 1rem;
+}
+
+.header-link.active {
+    color: red;
+}
