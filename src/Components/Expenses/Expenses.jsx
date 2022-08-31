@@ -2,8 +2,9 @@ import { axios } from "../../system";
 import React from "react";
 import { Loader } from "semantic-ui-react";
 import ExpenseAdd from "./ExpenseAdd";
+import ExpenseTable from "./ExpenseTable";
 
-const Expenses = props => {
+const Expenses = () => {
 
     const [loading, setLoading] = React.useState(false);
     const [rows, setRows] = React.useState([]);
@@ -13,7 +14,9 @@ const Expenses = props => {
         setLoading(true);
 
         axios.post('expenses')
-            .then(() => { })
+            .then(({ data }) => {
+                setRows(data.rows);
+            })
             .catch(e => { })
             .then(() => {
                 setLoading(false);
@@ -29,9 +32,15 @@ const Expenses = props => {
 
     return <div>
 
-        <ExpenseAdd />
+        <ExpenseAdd setRows={setRows} />
 
         {loading && <Loader inline="centered" active className="mt-4" />}
+
+        {!loading && rows.length === 0 && <div className="mt-4 text-center">
+            <strong className="opacity-40">Данных ещё нет</strong>
+        </div>}
+
+        {!loading && <ExpenseTable rows={rows} />}
 
     </div>
 }

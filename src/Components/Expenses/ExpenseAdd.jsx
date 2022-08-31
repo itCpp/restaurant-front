@@ -4,10 +4,11 @@ import { Dimmer, Form, Loader, Modal, Icon } from "semantic-ui-react";
 import { setShowAdd } from "../../store/expenses/actions";
 import { axios } from "../../system";
 
-const ExpenseAdd = () => {
+const ExpenseAdd = props => {
 
     const dispatch = useDispatch();
     const { showAdd } = useSelector(s => s.expenses);
+    const { setRows } = props;
 
     const [formdata, setFormdata] = React.useState({});
     const [loading, setLoading] = React.useState(false);
@@ -35,7 +36,7 @@ const ExpenseAdd = () => {
                         key,
                         text: row.name,
                         value: row.id,
-                    })))
+                    })));
                 })
                 .catch(e => { })
                 .then(() => {
@@ -58,6 +59,24 @@ const ExpenseAdd = () => {
 
             axios.put('expenses/save', formdata)
                 .then(({ data }) => {
+
+                    setRows(p => {
+
+                        let rows = [...p],
+                            added = true;
+
+                        rows.map((row, key) => {
+                            if (row.id === data.row.id) {
+                                rows[key] = data.row;
+                                added = false;
+                            }
+                        });
+
+                        if (added) rows.unshift(data.row);
+
+                        return rows;
+                    });
+
                     dispatch(setShowAdd(false))
                 })
                 .catch(e => {
@@ -116,7 +135,7 @@ const ExpenseAdd = () => {
                             label="Сумма расхода"
                             placeholder="Введите сумму"
                             name="sum"
-                            value={formdata?.sum || null}
+                            value={formdata?.sum || ""}
                             onChange={handleChange}
                             required
                             type="number"
@@ -132,7 +151,7 @@ const ExpenseAdd = () => {
                             label="Наименование расхода"
                             placeholder="Укажите наименование"
                             name="name"
-                            value={formdata?.name || null}
+                            value={formdata?.name || ""}
                             onChange={handleChange}
                             error={Boolean(saveErrors?.name)}
                             disabled={save}
