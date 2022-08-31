@@ -15,6 +15,8 @@ const ExpenseAdd = props => {
     const [types, setTypes] = React.useState([]);
     const [save, setSave] = React.useState(false);
     const [saveErrors, setSaveErrors] = React.useState({});
+    const [typesLoad, setTypesLoad] = React.useState(false);
+    const [subTypes, setSubTypes] = React.useState([]);
 
     const handleChange = React.useCallback((e, { name, value }) => {
         setFormdata(p => ({ ...p, [name]: value }));
@@ -49,9 +51,24 @@ const ExpenseAdd = props => {
             setLoading(false);
             setSave(false);
             setSaveErrors({});
+            setTypesLoad(false);
         }
 
     }, [showAdd]);
+
+    React.useEffect(() => {
+
+        if (Boolean(formdata?.expense_type_id)) {
+
+            setTypesLoad(true);
+
+            axios.post('expenses/types', { id: formdata.expense_type_id })
+                .then(({ data }) => setSubTypes(data))
+                .catch(() => null)
+                .then(() => setTypesLoad(false));
+        }
+
+    }, [formdata?.expense_type_id])
 
     React.useEffect(() => {
 
@@ -106,7 +123,13 @@ const ExpenseAdd = props => {
                             options={types}
                             name="expense_type_id"
                             value={formdata?.expense_type_id || null}
-                            onChange={handleChange}
+                            onChange={(e, { name, value }) => {
+                                setFormdata(p => ({
+                                    ...p,
+                                    [name]: value,
+                                    expense_subtype_id: null,
+                                }));
+                            }}
                             required
                             error={Boolean(saveErrors?.expense_type_id)}
                             disabled={save}
@@ -114,15 +137,28 @@ const ExpenseAdd = props => {
                     </Form.Field>
 
                     <Form.Field width={10}>
-                        <Form.Select
-                            label="Подтип расхода"
-                            placeholder="Выберите подтип расхода"
-                            options={[]}
+                        <Form.Dropdown
+                            label="Фиксированное наименование"
+                            placeholder="Выберите или добавьте наименование"
+                            options={subTypes.map((row, key) => ({
+                                key, ...row,
+                            }))}
                             name="expense_subtype_id"
                             value={formdata?.expense_subtype_id || null}
                             onChange={handleChange}
                             disabled={!Boolean(formdata?.expense_type_id) || save}
                             error={Boolean(saveErrors?.expense_subtype_id)}
+                            loading={typesLoad}
+                            search
+                            selection
+                            fluid
+                            allowAdditions
+                            additionLabel="Добавить в список: "
+                            onAddItem={(e, { name, value }) => {
+                                setSubTypes(p => ([{ text: value, value: value }, ...p]));
+                                setFormdata(p => ({ ...p, [name]: value }));
+                            }}
+                            noResultsMessage="Ничего не найдено..."
                         />
                     </Form.Field>
 

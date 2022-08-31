@@ -40,7 +40,7 @@ const Expenses = () => {
             <strong className="opacity-40">Данных ещё нет</strong>
         </div>}
 
-        {!loading && <ExpenseTable rows={rows} />}
+        {!loading && rows.length > 0 && <ExpenseTable rows={rows} />}
 
     </div>
 }
