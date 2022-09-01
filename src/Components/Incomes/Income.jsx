@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { axios } from "../../system";
 import { Loader } from "semantic-ui-react";
 import IncomeTable from "./IncomeTable";
+import IncomeAdd from "./IncomeAdd";
 
 const Income = props => {
 
@@ -31,6 +32,8 @@ const Income = props => {
     }, []);
 
     return <div className="p-2">
+
+        <IncomeAdd setRows={setRows} />
 
         {loading && <Loader inline="centered" active className="mt-4" />}
 

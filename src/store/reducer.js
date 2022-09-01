@@ -5,6 +5,10 @@ import { incomesReducer } from "./incomes/reducers";
 
 const defaultMainState = {
     user: {},
+    payTypes: [
+        { key: 0, text: "Наличные", value: 1 },
+        { key: 1, text: "б/н", value: 2 },
+    ]
 };
 
 export default combineReducers({
