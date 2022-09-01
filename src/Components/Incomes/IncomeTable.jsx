@@ -1,7 +1,7 @@
 import { Icon, Table } from "semantic-ui-react";
 import moment from "moment";
 import { useDispatch } from "react-redux";
-import { setShowAdd } from "../../store/incomes/actions";
+import { setShowAdd, setIncomeSourceAdd } from "../../store/incomes/actions";
 
 const colSpan = 9;
 
@@ -98,8 +98,16 @@ const TableRowSource = props => {
             <div className="d-flex justify-content-center">
                 <span>
                     <Icon
-                        name="eye"
+                        name="pencil"
                         link
+                        title="Редактировать данные"
+                        onClick={() => dispatch(setIncomeSourceAdd(row))}
+                    />
+                </span>
+                <span>
+                    <Icon
+                        name="eye"
+                        // link
                         title="Посмотреть оплаты"
                         disabled
                     />

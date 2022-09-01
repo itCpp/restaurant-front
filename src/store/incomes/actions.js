@@ -3,3 +3,9 @@ export const setShowAdd = data => ({
     type: INCOMES_SHOW_ADD,
     payload: data
 });
+
+export const INCOMES_SOURCE_ADD = "INCOMES_SOURCE_ADD";
+export const setIncomeSourceAdd = data => ({
+    type: INCOMES_SOURCE_ADD,
+    payload: data
+});

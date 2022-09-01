@@ -1,6 +1,6 @@
 import { Button, Dropdown } from "semantic-ui-react";
 import { useDispatch } from "react-redux";
-import { setShowAdd } from "../../store/incomes/actions";
+import { setShowAdd, setIncomeSourceAdd } from "../../store/incomes/actions";
 
 const IncomeHeaderButtons = () => {
 
@@ -33,7 +33,7 @@ const IncomeHeaderButtons = () => {
                 <Dropdown.Item
                     content="Добавить помещение"
                     icon="plus square"
-                    disabled
+                    onClick={() => dispatch(setIncomeSourceAdd(true))}
                 />
             </Dropdown.Menu>
         </Dropdown>
