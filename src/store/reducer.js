@@ -6,8 +6,20 @@ import { incomesReducer } from "./incomes/reducers";
 const defaultMainState = {
     user: {},
     payTypes: [
-        { key: 0, text: "Наличные", value: 1 },
-        { key: 1, text: "б/н", value: 2 },
+        {
+            key: 0,
+            text: "Наличные",
+            value: 1
+        },
+        {
+            key: 1,
+            text: "б/н",
+            value: 2,
+            icon: {
+                name: "credit card",
+                color: "green",
+            }
+        },
     ]
 };
 

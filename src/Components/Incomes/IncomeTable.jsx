@@ -1,7 +1,7 @@
 import { Icon, Table } from "semantic-ui-react";
 import moment from "moment";
 import { useDispatch } from "react-redux";
-import { setShowAdd, setIncomeSourceAdd } from "../../store/incomes/actions";
+import { setShowAdd, setIncomeSourceAdd, setShowIncomes } from "../../store/incomes/actions";
 
 const colSpan = 9;
 
@@ -12,7 +12,8 @@ const IncomeTable = props => {
 
     return <div>
 
-        <Table basic compact selectable>
+        <Table compact selectable>
+
             <Table.Header>
                 <Table.Row>
                     <Table.HeaderCell>Кабинет</Table.HeaderCell>
@@ -27,38 +28,11 @@ const IncomeTable = props => {
                 </Table.Row>
             </Table.Header>
 
-            {rows.map(row => <Table.Body key={row.id}>
-
-                <Table.Row textAlign="center" warning>
-                    <Table.Cell colSpan={colSpan}>
-                        <div className="d-flex align-items-center">
-                            <div className="flex-grow-1">
-                                <b>{row.name}</b>
-                                {row.comment && <i>{' '}{row.comment}</i>}
-                            </div>
-                            {/* <div>
-                                <Icon
-                                    name="plus"
-                                    link
-                                    fitted
-                                    title="Добавить кабинет или помещение"
-                                />
-                            </div> */}
-                        </div>
-                    </Table.Cell>
-                </Table.Row>
-
-                {row.rows.length === 0 && <Table.Row textAlign="center" disabled>
-                    <Table.Cell colSpan={colSpan}>Данных ещё нет</Table.Cell>
-                </Table.Row>}
-
-                {row.rows.map(row => <TableRowSource
-                    key={row.id}
-                    row={row}
-                    dispatch={dispatch}
-                />)}
-
-            </Table.Body>)}
+            {rows.map(row => <TableBodySource
+                key={row.id}
+                row={row}
+                dispatch={dispatch}
+            />)}
 
         </Table>
 
@@ -66,13 +40,50 @@ const IncomeTable = props => {
 
 }
 
+const TableBodySource = props => {
+
+    const { row } = props;
+
+    return <>
+
+        <Table.Body className="header-table-parts">
+
+            <Table.Row textAlign="center">
+                <Table.Cell
+                    colSpan={colSpan}
+                    className="py-2"
+                    content={<div className="d-flex align-items-center">
+                        <div className="flex-grow-1">
+                            <b>{row.name}</b>
+                            {row.comment && <i>{' '}{row.comment}</i>}
+                        </div>
+                    </div>}
+                />
+            </Table.Row>
+
+        </Table.Body>
+
+        <Table.Body>
+
+            {row.rows.map(row => <TableRowSource
+                key={row.id}
+                {...props}
+                row={row}
+            />)}
+
+        </Table.Body>
+
+    </>
+}
+
 const TableRowSource = props => {
 
     const { row, dispatch } = props;
+    const overdue = Boolean(row.overdue);
 
-    return <Table.Row negative={Boolean(row.overdue)} positive={row.is_free}>
+    return <Table.Row negative={overdue} positive={row.is_free}>
 
-        <Table.Cell>{row.cabinet}</Table.Cell>
+        <Table.Cell>{row.cabinet || `ID#${row.id}`}</Table.Cell>
         <Table.Cell>{row.name}</Table.Cell>
         <Table.Cell>
             {row.contact_person && <div>{row.contact_person}</div>}
@@ -89,8 +100,10 @@ const TableRowSource = props => {
         </Table.Cell>
         <Table.Cell>
             {row.last && <div>
-                <span>{moment(row.last.date).format("DD.MM.YYYY")}</span>
-                {' - '}
+                <span style={overdue ? { fontWeight: 700, color: "#dc3545" } : {}}>
+                    {moment(row.last.date).format("DD.MM.YYYY")}
+                </span>
+                <span>{' - '}</span>
                 <span>{row.last.sum}</span>
             </div>}
         </Table.Cell>
@@ -107,9 +120,9 @@ const TableRowSource = props => {
                 <span>
                     <Icon
                         name="eye"
-                        // link
+                        link
                         title="Посмотреть оплаты"
-                        disabled
+                        onClick={() => dispatch(setShowIncomes(row))}
                     />
                 </span>
                 <span>

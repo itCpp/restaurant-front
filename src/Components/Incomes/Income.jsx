@@ -5,6 +5,7 @@ import { Loader } from "semantic-ui-react";
 import IncomeTable from "./IncomeTable";
 import IncomeAdd from "./IncomeAdd";
 import IncomeSourceAdd from "./IncomeSourceAdd";
+import IncomesView from "./IncomesView";
 
 const Income = props => {
 
@@ -36,6 +37,7 @@ const Income = props => {
 
         <IncomeAdd setRows={setRows} />
         <IncomeSourceAdd setRows={setRows} />
+        <IncomesView />
 
         {loading && <Loader inline="centered" active className="mt-4" />}
 

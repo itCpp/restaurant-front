@@ -12,6 +12,7 @@ const IncomeSourceAdd = props => {
 
     const [loading, setLoading] = React.useState(false);
     const [formdata, setFormdata] = React.useState({});
+    const [parts, setParts] = React.useState([]);
 
     const [save, setSave] = React.useState(false);
     const [saveError, setSaveError] = React.useState(null);
@@ -39,14 +40,15 @@ const IncomeSourceAdd = props => {
 
     React.useEffect(() => {
 
-        if (Boolean(showSourceAdd?.id)) {
+        if (Boolean(showSourceAdd)) {
 
             setLoading(true);
 
             axios.get('incomes/source/get', {
-                params: { id: showSourceAdd.id }
+                params: { id: showSourceAdd?.id, getParts: true }
             }).then(({ data }) => {
                 setFormdata(data.row);
+                setParts(data.parts);
             }).catch(e => {
             }).then(() => {
                 setLoading(false);
@@ -69,13 +71,18 @@ const IncomeSourceAdd = props => {
                     setRows(p => {
                         let parts = [...p];
                         parts.map((p, k) => {
+                            let add = true;
                             p.rows.map((r, i) => {
-                                if (r.id === data.source.id)
-                                    parts[k].rows[i] = data.source;
+                                if (r.id === data.row?.id) {
+                                    parts[k].rows[i] = data.row;
+                                    add = false;
+                                }
                             });
+                            if (add && p.id === data.row?.part_id) parts[k].rows.unshift(data.row);
                         });
                         return parts;
                     });
+                    dispatch(setIncomeSourceAdd(false));
                 })
                 .catch(e => {
                     setSave(false);
@@ -94,6 +101,20 @@ const IncomeSourceAdd = props => {
 
             <Form>
 
+                <Form.Select
+                    label="Раздел"
+                    placeholder="Выберите раздел"
+                    options={parts.map(row => ({
+                        key: row.id,
+                        text: `${row.name} ${row.comment}`,
+                        value: row.id,
+                    }))}
+                    name="part_id"
+                    value={formdata?.part_id || null}
+                    onChange={handleChange}
+                    disabled={save || Boolean(formdata?.id)}
+                />
+
                 <Form.Group>
 
                     <Form.Field width={10}>
@@ -103,7 +124,7 @@ const IncomeSourceAdd = props => {
                             name="name"
                             value={formdata?.name || ""}
                             onChange={handleChange}
-                            disabled={save}
+                            disabled={save || !Boolean(formdata?.part_id)}
                         />
                     </Form.Field>
 
@@ -114,7 +135,7 @@ const IncomeSourceAdd = props => {
                             name="inn"
                             value={formdata?.inn || ""}
                             onChange={handleChange}
-                            disabled={save}
+                            disabled={save || !Boolean(formdata?.part_id)}
                         />
                     </Form.Field>
 
@@ -129,7 +150,7 @@ const IncomeSourceAdd = props => {
                             name="cabinet"
                             value={formdata?.cabinet || ""}
                             onChange={handleChange}
-                            disabled={save}
+                            disabled={save || !Boolean(formdata?.part_id)}
                         />
                     </Form.Field>
 
@@ -140,7 +161,7 @@ const IncomeSourceAdd = props => {
                             name="space"
                             value={formdata?.space || ""}
                             onChange={handleChange}
-                            disabled={save}
+                            disabled={save || !Boolean(formdata?.part_id)}
                         />
                     </Form.Field>
 
@@ -151,7 +172,7 @@ const IncomeSourceAdd = props => {
                             name="price"
                             value={formdata?.price || ""}
                             onChange={handleChange}
-                            disabled={save}
+                            disabled={save || !Boolean(formdata?.part_id)}
                         />
                     </Form.Field>
 
@@ -163,7 +184,7 @@ const IncomeSourceAdd = props => {
                             name="date"
                             value={formdata?.date || ""}
                             onChange={handleChange}
-                            disabled={save}
+                            disabled={save || !Boolean(formdata?.part_id)}
                         />
                     </Form.Field>
 
@@ -178,7 +199,7 @@ const IncomeSourceAdd = props => {
                             name="contact_person"
                             value={formdata?.contact_person || ""}
                             onChange={handleChange}
-                            disabled={save}
+                            disabled={save || !Boolean(formdata?.part_id)}
                         />
                     </Form.Field>
 
@@ -189,7 +210,7 @@ const IncomeSourceAdd = props => {
                             name="contact_number"
                             value={formdata?.contact_number || ""}
                             onChange={handleChange}
-                            disabled={save}
+                            disabled={save || !Boolean(formdata?.part_id)}
                         />
                     </Form.Field>
 
@@ -201,7 +222,7 @@ const IncomeSourceAdd = props => {
                     name="is_free"
                     checked={formdata?.is_free || false}
                     onChange={handleChange}
-                    disabled={save}
+                    disabled={save || !Boolean(formdata?.part_id)}
                 />
 
                 <Form.TextArea
@@ -212,7 +233,7 @@ const IncomeSourceAdd = props => {
                     name="comment_date"
                     value={formdata?.settings?.comment_date || ""}
                     onChange={handleChange}
-                    disabled={save}
+                    disabled={save || !Boolean(formdata?.part_id)}
                 />
 
                 <Form.TextArea
@@ -223,7 +244,7 @@ const IncomeSourceAdd = props => {
                     name="comment"
                     value={formdata?.settings?.comment || ""}
                     onChange={handleChange}
-                    disabled={save}
+                    disabled={save || !Boolean(formdata?.part_id)}
                 />
 
             </Form>
