@@ -166,7 +166,7 @@ const ExpenseAdd = props => {
 
                 <Form.Group>
 
-                    <Form.Field width={4}>
+                    <Form.Field width={8}>
                         <Form.Input
                             label="Сумма расхода"
                             placeholder="Введите сумму"
@@ -182,19 +182,30 @@ const ExpenseAdd = props => {
                         />
                     </Form.Field>
 
-                    <Form.Field width={12}>
+                    <Form.Field width={8}>
                         <Form.Input
-                            label="Наименование расхода"
-                            placeholder="Укажите наименование"
-                            name="name"
-                            value={formdata?.name || ""}
+                            label="Дата расхода"
+                            placeholder="Укажите дату"
+                            type="date"
+                            name="date"
+                            value={formdata?.date || ""}
                             onChange={handleChange}
-                            error={Boolean(saveErrors?.name)}
+                            error={Boolean(saveErrors?.date)}
                             disabled={save}
                         />
                     </Form.Field>
 
                 </Form.Group>
+
+                <Form.Input
+                    label="Наименование расхода"
+                    placeholder="Укажите наименование"
+                    name="name"
+                    value={formdata?.name || ""}
+                    onChange={handleChange}
+                    error={Boolean(saveErrors?.name)}
+                    disabled={save}
+                />
 
             </Form>
 

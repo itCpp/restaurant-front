@@ -84,7 +84,14 @@ const TableRowSource = props => {
     return <Table.Row negative={overdue} positive={row.is_free}>
 
         <Table.Cell>{row.cabinet || `ID#${row.id}`}</Table.Cell>
-        <Table.Cell>{row.name}</Table.Cell>
+        <Table.Cell
+            content={<div>
+                <div>{row.name}</div>
+                {Boolean(row.settings?.comment) && <div>
+                    <small><Icon name="comment" disabled />{row.settings.comment}</small>
+                </div>}
+            </div>}
+        />
         <Table.Cell>
             {row.contact_person && <div>{row.contact_person}</div>}
             {row.contact_number && <div><a href={`tel:${row.contact_number}`}>{row.contact_number}</a></div>}
