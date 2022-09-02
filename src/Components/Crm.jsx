@@ -8,6 +8,7 @@ import "./crm.css";
 import Expenses from "./Expenses";
 import Header from "./Header";
 import Income from "./Incomes";
+import Main from "./Main";
 
 const Crm = props => {
 
@@ -18,7 +19,7 @@ const Crm = props => {
         <Routes>
             <Route path="/income" element={<Income />} />
             <Route path="/expenses" element={<Expenses />} />
-            <Route path="*" element={<div></div>} />
+            <Route path="*" element={<Main />} />
         </Routes>
 
     </Router>

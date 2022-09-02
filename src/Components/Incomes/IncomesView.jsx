@@ -66,7 +66,7 @@ const IncomesView = props => {
                             />
                             <Table.Cell
                                 content={<div className="d-flex">
-                                    {row.source?.cabinet && <b className="mx-1" title="Кабинет">{row.source.cabinet}</b>}
+                                    {/* {row.source?.cabinet && <b className="mx-1" title="Кабинет">{row.source.cabinet}</b>} */}
                                     {row.source?.name ? <span className="mx-1">{row.source.name}</span> : <span className="opacity-40 mx-1">ID#{row.source.id}</span>}
                                 </div>}
                             />

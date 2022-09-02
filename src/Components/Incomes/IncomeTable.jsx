@@ -12,7 +12,7 @@ const IncomeTable = props => {
 
     return <div>
 
-        <Table compact selectable>
+        <Table compact selectable celled>
 
             <Table.Header>
                 <Table.Row>
@@ -87,7 +87,7 @@ const TableRowSource = props => {
         <Table.Cell>{row.name}</Table.Cell>
         <Table.Cell>
             {row.contact_person && <div>{row.contact_person}</div>}
-            {row.contact_number && <div>{row.contact_number}</div>}
+            {row.contact_number && <div><a href={`tel:${row.contact_number}`}>{row.contact_number}</a></div>}
         </Table.Cell>
         <Table.Cell>{row.inn}</Table.Cell>
         <Table.Cell>{row.space}</Table.Cell>

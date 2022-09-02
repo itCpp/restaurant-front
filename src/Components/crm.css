@@ -1,4 +1,6 @@
 .body-header {
+    position: sticky;
+    top: 0;
     height: 50px;
     padding: 0.5rem 1rem;
     border-bottom: 1px solid var(--bs-gray-200);
@@ -6,6 +8,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    z-index: 200;
 }
 
 .body-header > *:not(:last-child) {
