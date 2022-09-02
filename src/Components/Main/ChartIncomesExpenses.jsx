@@ -45,7 +45,7 @@ const ChartIncomesExpenses = props => {
 
     }, []);
 
-    return <div className="mt-4 px-3 py-2">
+    return <div className="mt-4 mx-2 px-3 py-2 rounded" style={{ background: "#fff" }}>
         <div ref={container} />
     </div>
 

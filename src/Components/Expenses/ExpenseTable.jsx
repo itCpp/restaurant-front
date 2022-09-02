@@ -24,7 +24,11 @@ const ExpenseTable = props => {
             </Table.Header>
 
             <Table.Body>
-                {rows.map(row => <ExpenseTableRow key={row.id} row={row} />)}
+                {rows.map(row => <ExpenseTableRow
+                    key={row.id}
+                    row={row}
+                    setShowFiles={props.setShowFiles}
+                />)}
             </Table.Body>
 
         </Table>
@@ -36,7 +40,7 @@ const ExpenseTable = props => {
 const ExpenseTableRow = props => {
 
     const dispatch = useDispatch();
-    const { row } = props;
+    const { row, setShowFiles } = props;
     const [deleted, setDeleted] = React.useState(Boolean(row.deleted_at));
     const [drop, setDrop] = React.useState(false);
 
@@ -100,6 +104,13 @@ const ExpenseTableRow = props => {
                 disabled={drop}
                 onClick={() => setDrop(true)}
             />}
+            <Icon
+                name="file"
+                color={row.files > 0 ? "blue" : null}
+                link
+                title={`Файлы (${row.files || 0})`}
+                onClick={() => setShowFiles(row)}
+            />
         </Table.Cell>
 
     </Table.Row>
