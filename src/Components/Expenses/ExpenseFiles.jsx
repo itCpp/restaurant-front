@@ -1,6 +1,7 @@
 import React from "react";
 import { Dimmer, Modal, Loader } from "semantic-ui-react";
 import { axios } from "../../system";
+import useUpload from "./useUpload";
 
 const ExpenseFiles = props => {
 
@@ -8,6 +9,9 @@ const ExpenseFiles = props => {
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState(null);
     const [files, setFiles] = React.useState([]);
+    const { FileUploader } = useUpload({
+        cashboxId: show?.id,
+    });
 
     React.useEffect(() => {
 
@@ -46,6 +50,12 @@ const ExpenseFiles = props => {
                 {!loading && error && <div className="position-absolute-all d-flex align-items-center justify-content-center py-4">
                     <div className="text-danger text-center"><strong>{error}</strong></div>
                 </div>}
+
+                {!loading && !error && <>
+
+                    <FileUploader />
+
+                </>}
 
                 <Dimmer active={loading} inverted>
                     <Loader />
