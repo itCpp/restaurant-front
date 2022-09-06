@@ -2,6 +2,7 @@ import React from "react";
 import { axios } from "../../system";
 import { Loader } from "semantic-ui-react";
 import ChartIncomesExpenses from "./ChartIncomesExpenses";
+import Logout from "../Auth/Logout";
 
 const Main = () => {
 
@@ -36,13 +37,17 @@ const Main = () => {
         {loading && <Loader active inline="centered" className="mt-4" />}
 
         {!loading && error && <div className="text-center mt-4 text-danger">
-            <b>Ошибка</b>{' '}<span>{error}</span>    
+            <b>Ошибка</b>{' '}<span>{error}</span>
         </div>}
 
         {!loading && !error && <>
-            
+
             <ChartIncomesExpenses data={chart} />
-            
+
+            <div className="mt-4 text-center">
+                <Logout />
+            </div>
+
         </>}
 
     </div>

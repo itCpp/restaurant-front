@@ -7,14 +7,18 @@ import Login from "./Components/Auth/Login";
 import Error from "./Components/Errors/Error";
 import Crm from "./Components/Crm";
 import { useDispatch, useSelector } from "react-redux";
-import { setUserData } from "./store/actions";
+import { setIsLogin, setUserData } from "./store/actions";
 
 function App() {
 
   const dispatch = useDispatch();
+  const { login } = useSelector(s => s.main);
   const [loading, setLoading] = React.useState(true);
-  const [login, setLogin] = React.useState(false);
   const [error, setError] = React.useState(null);
+
+  const setLogin = React.useCallback(data => {
+    dispatch(setIsLogin(data));
+  }, []);
 
   React.useEffect(() => {
 

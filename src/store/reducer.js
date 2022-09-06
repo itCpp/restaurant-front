@@ -5,6 +5,7 @@ import { incomesReducer } from "./incomes/reducers";
 
 const defaultMainState = {
     user: {},
+    login: false,
     payTypes: [
         {
             key: 0,
@@ -29,6 +30,9 @@ export default combineReducers({
     main: (state = defaultMainState, action) => {
 
         switch (action.type) {
+
+            case ACTIONS.IS_LOGIN:
+                return { ...state, login: action.payload }
 
             case ACTIONS.USER_DATA:
                 return { ...state, user: action.payload }

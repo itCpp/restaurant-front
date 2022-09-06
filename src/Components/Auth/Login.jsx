@@ -2,10 +2,15 @@ import React from "react";
 import { Button, Dimmer, Form, Loader } from "semantic-ui-react";
 import { axios } from "../../system";
 import Cookies from "js-cookie";
+import { useDispatch } from "react-redux";
+import { setIsLogin } from "../../store/actions";
 
-const Login = props => {
+const Login = () => {
 
-    const { setLogin } = props;
+    const dispatch = useDispatch();
+    const setLogin = React.useCallback(data => {
+        dispatch(setIsLogin(data));
+    }, []);
 
     const [formdata, setFormdata] = React.useState({});
     const [auth, setAuth] = React.useState(false);
@@ -51,10 +56,19 @@ const Login = props => {
         left: 0,
         right: 0,
         bottom: 0,
-        zIndex: 20
-    }} className="d-flex justify-content-center align-items-center">
+        zIndex: 20,
+    }} className="d-flex justify-content-center align-items-start p-3">
 
-        <Dimmer.Dimmable blurring dimmed={auth} style={{ width: "100%", maxWidth: 300 }}>
+        <Dimmer.Dimmable blurring dimmed={auth}
+            style={{
+                width: "100%",
+                maxWidth: 300,
+                background: "#ffffff",
+                borderRadius: "0.5rem",
+            }}
+        >
+
+            <h3 className="text-center mt-3 mb-1">Аторизация</h3>
 
             <Form className="p-3">
 
@@ -75,6 +89,7 @@ const Login = props => {
                         value={formdata.password || ""}
                         onChange={(e, { value }) => setFormdata(p => ({ ...p, password: value }))}
                         error={Boolean(error)}
+                        type="password"
                     />
                 </Form.Field>
 
