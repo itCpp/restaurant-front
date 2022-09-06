@@ -1,5 +1,5 @@
 import React from "react";
-import { Dimmer, Modal, Loader } from "semantic-ui-react";
+import { Dimmer, Modal, Loader, List, Icon } from "semantic-ui-react";
 import { axios } from "../../system";
 import useUpload from "./useUpload";
 
@@ -11,6 +11,7 @@ const ExpenseFiles = props => {
     const [files, setFiles] = React.useState([]);
     const { FileUploader } = useUpload({
         cashboxId: show?.id,
+        setFilesList: setFiles,
     });
 
     React.useEffect(() => {
@@ -21,7 +22,7 @@ const ExpenseFiles = props => {
 
             axios.post('expenses/files', { id: show?.id })
                 .then(({ data }) => {
-
+                    setFiles(data.files);
                 })
                 .catch(e => {
                     setError(axios.getError(e));
@@ -55,6 +56,30 @@ const ExpenseFiles = props => {
 
                     <FileUploader />
 
+                    {files.length === 0 && <div className="text-center mt-4">
+                        <div className="opacity-40">Файлов еще нет</div>
+                    </div>}
+
+                    {files.length > 0 && <div className="mt-4">
+
+                        <div className="file-list">
+                            {files.map(row => <div key={row.id} className="d-flex align-items-center">
+                                <span>
+                                    <FileIcon extension={row.extension} />
+                                </span>
+
+                                <div className="flex-grow-1">
+                                    {row.name}
+                                </div>
+
+                                <div className="position-relative">
+
+                                </div>
+                            </div>)}
+                        </div>
+
+                    </div>}
+
                 </>}
 
                 <Dimmer active={loading} inverted>
@@ -63,6 +88,24 @@ const ExpenseFiles = props => {
 
             </div>
         }}
+    />
+}
+
+const etensionsToName = {
+    pdf: "file pdf",
+    zip: "file archive",
+    jpg: "file image",
+    jpeg: "file image",
+    png: "file image",
+    gif: "file image",
+    ico: "file image",
+    bmp: "file image",
+}
+
+const FileIcon = ({ extension }) => {
+
+    return <Icon
+        name={etensionsToName[extension] || "file"}
     />
 }
 
