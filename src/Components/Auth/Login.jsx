@@ -93,6 +93,14 @@ const Login = () => {
                     />
                 </Form.Field>
 
+                <Form.Field className="mx-2">
+                    <Form.Checkbox
+                        label="Запомнить меня"
+                        checked={Boolean(formdata.remember)}
+                        onChange={(e, { checked }) => setFormdata(p => ({ ...p, remember: checked }))}
+                    />
+                </Form.Field>
+
                 <div className="px-2">
                     <Button
                         content="Войти"
@@ -103,7 +111,7 @@ const Login = () => {
                     />
                 </div>
 
-                {error && <div style={{ position: "absolute", top: "100%" }} className="px-2 text-danger"><b>{error}</b></div>}
+                {error && <div style={{ position: "absolute", top: "100%" }} className="px-0 pt-2 text-danger"><b>{error}</b></div>}
 
             </Form>
 
