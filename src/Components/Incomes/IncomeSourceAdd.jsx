@@ -258,7 +258,7 @@ const IncomeSourceAdd = props => {
             {
                 key: "cansel",
                 content: "Отмена",
-                onClick: () => dispatch(showSourceAdd(false)),
+                onClick: () => dispatch(setIncomeSourceAdd(false)),
                 disabled: loading || save,
             },
             {
