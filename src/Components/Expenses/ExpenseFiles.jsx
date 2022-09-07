@@ -9,7 +9,7 @@ const ExpenseFiles = props => {
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState(null);
     const [files, setFiles] = React.useState([]);
-    const { FileUploader } = useUpload({
+    const { FileUploader, uploadProcess } = useUpload({
         cashboxId: show?.id,
         setFilesList: setFiles,
     });
@@ -64,6 +64,7 @@ const ExpenseFiles = props => {
 
                         <div className="file-list">
                             {files.map(row => <div key={row.id} className="d-flex align-items-center">
+
                                 <span>
                                     <FileIcon extension={row.extension} />
                                 </span>
@@ -74,7 +75,12 @@ const ExpenseFiles = props => {
 
                                 <div className="position-relative">
 
+                                    {row.is_upload && Boolean(uploadProcess[row.id]) && <div>
+                                        <UploadProcess percent={uploadProcess[row.id]} />
+                                    </div>}
+
                                 </div>
+
                             </div>)}
                         </div>
 
@@ -89,6 +95,12 @@ const ExpenseFiles = props => {
             </div>
         }}
     />
+}
+
+const UploadProcess = ({ percent }) => {
+    return <div className="file-upload-progress">
+        <div className="file-upload-progress-bar" style={{ width: `${percent || 0}%` }} />
+    </div>
 }
 
 const etensionsToName = {
@@ -127,6 +139,7 @@ const FileIcon = ({ extension }) => {
 
     return <Icon
         name={etensionsToName[extension] || "file"}
+        title={extension}
     />
 }
 
