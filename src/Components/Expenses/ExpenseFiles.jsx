@@ -55,6 +55,7 @@ const ExpenseFiles = props => {
                 <FileRename
                     data={rename}
                     close={() => setRename(false)}
+                    setFiles={setFiles}
                 />
 
                 {!loading && error && <div className="position-absolute-all d-flex align-items-center justify-content-center py-4">
@@ -98,7 +99,7 @@ const ExpenseFiles = props => {
 
 export const FileRename = props => {
 
-    const { data, close } = props;
+    const { data, close, setFiles } = props;
     const [name, setName] = React.useState("");
     const [rename, setRename] = React.useState(false);
     const [error, setError] = React.useState(null);
@@ -113,7 +114,16 @@ export const FileRename = props => {
         if (rename) {
             axios.post('files/rename', { id: data?.id, name })
                 .then(({ data }) => {
-
+                    setFiles(p => {
+                        let files = [...p];
+                        files.forEach((row, i) => {
+                            if (row.id === data.id) {
+                                files[i] = data;
+                            }
+                        });
+                        return files;
+                    });
+                    close();
                 })
                 .catch(e => setError(axios.getError(e)))
                 .then(() => setRename(false));
