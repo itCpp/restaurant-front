@@ -75,7 +75,7 @@ const getDataFromURL = (url) => new Promise((resolve, reject) => {
 
 const ExpenseFileRow = props => {
 
-    const { row, uploadProcess } = props;
+    const { row, uploadProcess, setRename } = props;
     const className = ["d-flex align-items-center"];
 
     if (Boolean(row.error)) className.push("file-error");
@@ -122,9 +122,9 @@ const ExpenseFileRow = props => {
                 <span>
                     <Icon
                         name="pencil"
-                        // link
+                        link
                         title="Переименовать"
-                        disabled
+                        onClick={() => setRename(row)}
                     />
                 </span>
                 <span>

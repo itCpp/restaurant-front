@@ -1,5 +1,5 @@
 import React from "react";
-import { Dimmer, Modal, Loader } from "semantic-ui-react";
+import { Dimmer, Modal, Loader, Header, Input, Button } from "semantic-ui-react";
 import { axios } from "../../system";
 import ExpenseFileRow from "./ExpenseFileRow";
 import useUpload from "./useUpload";
@@ -14,6 +14,8 @@ const ExpenseFiles = props => {
         cashboxId: show?.id,
         setFilesList: setFiles,
     });
+
+    const [rename, setRename] = React.useState(false);
 
     React.useEffect(() => {
 
@@ -50,6 +52,11 @@ const ExpenseFiles = props => {
             scrolling: true,
             content: <div className="position-relative" style={{ minHeight: "5rem" }}>
 
+                <FileRename
+                    data={rename}
+                    close={() => setRename(false)}
+                />
+
                 {!loading && error && <div className="position-absolute-all d-flex align-items-center justify-content-center py-4">
                     <div className="text-danger text-center"><strong>{error}</strong></div>
                 </div>}
@@ -72,6 +79,7 @@ const ExpenseFiles = props => {
                                 key={row.id}
                                 row={row}
                                 uploadProcess={uploadProcess}
+                                setRename={setRename}
                             />)}
                         </div>
 
@@ -85,6 +93,78 @@ const ExpenseFiles = props => {
 
             </div>
         }}
+    />
+}
+
+export const FileRename = props => {
+
+    const { data, close } = props;
+    const [name, setName] = React.useState("");
+    const [rename, setRename] = React.useState(false);
+    const [error, setError] = React.useState(null);
+
+    React.useEffect(() => {
+        setError(null);
+        setName(data?.name || "")
+    }, [data]);
+
+    React.useEffect(() => {
+
+        if (rename) {
+            axios.post('files/rename', { id: data?.id, name })
+                .then(({ data }) => {
+
+                })
+                .catch(e => setError(axios.getError(e)))
+                .then(() => setRename(false));
+        }
+
+    }, [rename]);
+
+    return <Modal
+        open={Boolean(props.data)}
+        size="mini"
+        centered={false}
+        onClose={() => rename ? null : close()}
+        content={<div className="p-3">
+
+            <Header
+                as="h5"
+                content="Переименовать"
+            />
+
+            <Input
+                fluid
+                value={name}
+                onChange={(e, { value }) => setName(value)}
+                className="mb-3"
+                disabled={rename}
+            />
+
+            {error && <div className="text-danger mb-3" style={{ opacity: rename ? ".4" : "1" }}>
+                <strong>Ошибка</strong>{' '}
+                <span>{error}</span>
+            </div>}
+
+            <div className="text-center">
+
+                <Button
+                    content="Отмена"
+                    onClick={() => rename ? null : close()}
+                    disabled={rename}
+                />
+
+                <Button
+                    content="Переименовать"
+                    color="green"
+                    onClick={() => setRename(true)}
+                    disabled={rename}
+                    loading={rename}
+                />
+
+            </div>
+
+        </div>}
     />
 }
 
