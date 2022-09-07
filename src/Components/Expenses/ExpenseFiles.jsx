@@ -149,6 +149,7 @@ export const FileRename = props => {
                 onChange={(e, { value }) => setName(value)}
                 className="mb-3"
                 disabled={rename}
+                onKeyUp={e => e.keyCode === 13 ? setRename(true) : null}
             />
 
             {error && <div className="text-danger mb-3" style={{ opacity: rename ? ".4" : "1" }}>
