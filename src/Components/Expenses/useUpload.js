@@ -5,7 +5,7 @@ import { Icon } from "semantic-ui-react";
 import moment from "moment";
 
 const md5 = require('js-md5');
-const getFileNameHash = file => md5(file.lastModified + file.name + file.size + file.type);
+const getFileNameHash = (file, append = "") => md5(file.lastModified + file.name + file.size + file.type + append);
 
 const FileUploaderComponent = props => {
 
@@ -87,7 +87,8 @@ const useUpload = data => {
                     let rows = [...p];
                     rows.forEach((row, i) => {
                         if (row.id === hash) {
-                            rows[i].error = axios.getError(e);
+                            rows[i].id = getFileNameHash(file, new Date);
+                            rows[i].error = axios.getError(e) || e?.message;
                         }
                     });
                     return rows;
@@ -112,13 +113,15 @@ const useUpload = data => {
                 files_array.forEach(file => {
 
                     let hash = getFileNameHash(file);
+                    let match = String(file.name).match(/\.([^.]+)$/);
+                    let extension = match && match[1];
 
-                    uploads.push({
+                    uploads.unshift({
                         id: hash,
                         cashbox_id: cashboxId,
                         created_at: new Date,
                         updated_at: new Date,
-                        extension: null,
+                        extension: extension,
                         mime_type: file.type,
                         name: file.name,
                         size: file.size,

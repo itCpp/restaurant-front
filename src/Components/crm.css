@@ -73,6 +73,15 @@
     border-bottom: 1px solid var(--bs-gray-200);
 }
 
+
+.file-list>.file-error {
+    color: brown;
+    background-color: #fff3f3;
+}
+.file-list>.file-error:hover {
+    background-color: #ffe6e6;
+}
+
 .file-upload-progress {
     position: relative;
     width: 80px;

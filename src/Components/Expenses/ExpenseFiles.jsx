@@ -1,6 +1,7 @@
 import React from "react";
-import { Dimmer, Modal, Loader, List, Icon } from "semantic-ui-react";
+import { Dimmer, Modal, Loader } from "semantic-ui-react";
 import { axios } from "../../system";
+import ExpenseFileRow from "./ExpenseFileRow";
 import useUpload from "./useUpload";
 
 const ExpenseFiles = props => {
@@ -9,7 +10,7 @@ const ExpenseFiles = props => {
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState(null);
     const [files, setFiles] = React.useState([]);
-    const { FileUploader, uploadProcess } = useUpload({
+    const { uploading, FileUploader, uploadProcess } = useUpload({
         cashboxId: show?.id,
         setFilesList: setFiles,
     });
@@ -44,8 +45,9 @@ const ExpenseFiles = props => {
         open={Boolean(show)}
         header={`Файлы ${show?.name_type || show?.name}`}
         centered={false}
-        closeIcon={{ name: "close", onClick: () => setShowFiles(false) }}
+        closeIcon={uploading ? null : { name: "close", onClick: () => setShowFiles(false) }}
         content={{
+            scrolling: true,
             content: <div className="position-relative" style={{ minHeight: "5rem" }}>
 
                 {!loading && error && <div className="position-absolute-all d-flex align-items-center justify-content-center py-4">
@@ -54,7 +56,10 @@ const ExpenseFiles = props => {
 
                 {!loading && !error && <>
 
-                    <FileUploader />
+                    <div className="position-relative">
+                        <FileUploader />
+                        <Dimmer active={uploading} inverted><Loader /></Dimmer>
+                    </div>
 
                     {files.length === 0 && <div className="text-center mt-4">
                         <div className="opacity-40">Файлов еще нет</div>
@@ -63,25 +68,11 @@ const ExpenseFiles = props => {
                     {files.length > 0 && <div className="mt-4">
 
                         <div className="file-list">
-                            {files.map(row => <div key={row.id} className="d-flex align-items-center">
-
-                                <span>
-                                    <FileIcon extension={row.extension} />
-                                </span>
-
-                                <div className="flex-grow-1">
-                                    {row.name}
-                                </div>
-
-                                <div className="position-relative">
-
-                                    {row.is_upload && Boolean(uploadProcess[row.id]) && <div>
-                                        <UploadProcess percent={uploadProcess[row.id]} />
-                                    </div>}
-
-                                </div>
-
-                            </div>)}
+                            {files.map(row => <ExpenseFileRow
+                                key={row.id}
+                                row={row}
+                                uploadProcess={uploadProcess}
+                            />)}
                         </div>
 
                     </div>}
@@ -94,52 +85,6 @@ const ExpenseFiles = props => {
 
             </div>
         }}
-    />
-}
-
-const UploadProcess = ({ percent }) => {
-    return <div className="file-upload-progress">
-        <div className="file-upload-progress-bar" style={{ width: `${percent || 0}%` }} />
-    </div>
-}
-
-const etensionsToName = {
-    pdf: "file pdf",
-    zip: "file archive",
-    jpg: "file image",
-    jpeg: "file image",
-    png: "file image",
-    gif: "file image",
-    ico: "file image",
-    bmp: "file image",
-    mp3: "file audio",
-    wav: "file audio",
-    ogg: "file audio",
-    avi: "file video",
-    mp4: "file video",
-    h264: "file video",
-    h265: "file video",
-    mkv: "file video",
-    js: "file code",
-    json: "file code",
-    php: "file code",
-    css: "file code",
-    xml: "file code",
-    html: "file code",
-    csv: "file excel",
-    xls: "file excel",
-    xlsx: "file excel",
-    doc: "file word",
-    docx: "file word",
-    rtf: "file word",
-    txt: "file text",
-}
-
-const FileIcon = ({ extension }) => {
-
-    return <Icon
-        name={etensionsToName[extension] || "file"}
-        title={extension}
     />
 }
 
