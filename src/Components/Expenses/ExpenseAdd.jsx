@@ -1,3 +1,4 @@
+import moment from "moment";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Dimmer, Form, Loader, Modal, Icon } from "semantic-ui-react";
@@ -28,12 +29,17 @@ const ExpenseAdd = props => {
 
             setLoading(true);
 
+
+
             axios.post('expenses/get', {
                 ...(typeof showAdd == "object" ? showAdd : {}),
                 modalData: true,
             })
                 .then(({ data }) => {
-                    setFormdata(data.row);
+                    setFormdata({
+                        ...data.row,
+                        date: data.row.date || moment().format("YYYY-MM-DD"),
+                    });
                     setTypes([{ id: null, name: "Не выбрано" }, ...data.types].map((row, key) => ({
                         key,
                         text: row.name,
