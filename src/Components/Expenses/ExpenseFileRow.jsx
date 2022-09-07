@@ -1,18 +1,19 @@
 import { Icon } from "semantic-ui-react";
 import Spinner from "../UI/Spinner";
+import DownloadLink from "react-download-link";
+import Cookies from "js-cookie";
 
-const UploadProcess = ({ percent }) => {
-    return <div>
+const UploadProcess = ({ percent }) => <div>
 
-        <div className="file-upload-progress">
-            <div className="file-upload-progress-bar" style={{ width: `${percent || 0}%`, opacity: Number(percent) >= 100 ? "0.3" : "1" }} />
-        </div>
-
-        {Number(percent) >= 100 && <div className="d-flex align-items-center justify-content-center">
-            <Spinner size="mini" />
-        </div>}
+    <div className="file-upload-progress">
+        <div className="file-upload-progress-bar" style={{ width: `${percent || 0}%`, opacity: Number(percent) >= 100 ? "0.3" : "1" }} />
     </div>
-}
+
+    {Number(percent) >= 100 && <div className="d-flex align-items-center justify-content-center">
+        <Spinner size="mini" />
+    </div>}
+
+</div>
 
 const etensionsToName = {
     pdf: "file pdf",
@@ -54,6 +55,24 @@ const FileIcon = ({ extension }) => {
     />
 }
 
+const getDataFromURL = (url) => new Promise((resolve, reject) => {
+    setTimeout(() => {
+
+        let tokenKey = process.env.REACT_APP_TOKEN_KEY || "crm_ard_token";
+        const token = Cookies.get(tokenKey) || localStorage.getItem(tokenKey);
+
+        fetch(url, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        })
+            .then(response => response.blob())
+            .then(data => {
+                resolve(data)
+            });
+    });
+}, 300);
+
 const ExpenseFileRow = props => {
 
     const { row, uploadProcess } = props;
@@ -82,6 +101,43 @@ const ExpenseFileRow = props => {
                 color="red"
                 title={`Ошибка: ${row.error}`}
             />}
+
+            {!row.is_upload && !row.error && <div className="d-flex align-items-center">
+
+                <span>
+                    <DownloadLink
+                        label={<Icon
+                            name="download"
+                            // link
+                            title="Скачать"
+                        />}
+                        filename={row.name}
+                        exportFile={() => Promise.resolve(getDataFromURL(row.url))}
+                        style={{
+                            color: null,
+                            marginRight: "0.5rem",
+                        }}
+                    />
+                </span>
+                <span>
+                    <Icon
+                        name="pencil"
+                        // link
+                        title="Переименовать"
+                        disabled
+                    />
+                </span>
+                <span>
+                    <Icon
+                        name="trash"
+                        link
+                        color="red"
+                        title="Удалить"
+                        disabled
+                    />
+                </span>
+
+            </div>}
 
         </div>
 
