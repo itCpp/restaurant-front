@@ -82,6 +82,14 @@
     background-color: #ffe6e6;
 }
 
+.file-list>.file-deleted .file-type-icon {
+    opacity: .5;
+}
+.file-list>.file-deleted .file-name {
+    text-decoration: line-through;
+    opacity: .6;
+}
+
 .file-upload-progress {
     position: relative;
     width: 80px;

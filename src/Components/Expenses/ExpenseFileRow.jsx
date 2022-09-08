@@ -1,7 +1,9 @@
+import React from "react";
 import { Icon } from "semantic-ui-react";
 import Spinner from "../UI/Spinner";
 import DownloadLink from "react-download-link";
 import Cookies from "js-cookie";
+import { axios } from "../../system";
 
 const UploadProcess = ({ percent }) => <div>
 
@@ -52,6 +54,7 @@ const FileIcon = ({ extension }) => {
     return <Icon
         name={etensionsToName[extension] || "file"}
         title={extension}
+        className="file-type-icon"
     />
 }
 
@@ -75,10 +78,35 @@ const getDataFromURL = (url) => new Promise((resolve, reject) => {
 
 const ExpenseFileRow = props => {
 
-    const { row, uploadProcess, setRename } = props;
+    const { row, uploadProcess, setRename, setDropFile, setFiles } = props;
     const className = ["d-flex align-items-center"];
 
+    const [reestablish, setReestablish] = React.useState(false);
+    const [error, setError] = React.useState(false);
+
+    React.useEffect(() => {
+
+        const handleReestablish = () => axios.post('files/reestablish', { id: row.id })
+            .then(({ data }) => {
+                setFiles(p => {
+                    let files = [...p];
+                    files.forEach((row, i) => {
+                        if (row.id === data.id) {
+                            files[i] = data;
+                        }
+                    });
+                    return files;
+                });
+            })
+            .catch(e => setError(axios.getError(e)))
+            .then(() => setReestablish(false));
+
+        if (reestablish) handleReestablish();
+
+    }, [reestablish]);
+
     if (Boolean(row.error)) className.push("file-error");
+    if (row.deleted_at) className.push("file-deleted");
 
     return <div className={className.join(" ")}>
 
@@ -86,7 +114,7 @@ const ExpenseFileRow = props => {
             <FileIcon extension={row.extension} />
         </span>
 
-        <div className="flex-grow-1">
+        <div className="flex-grow-1 file-name">
             {row.name}
         </div>
 
@@ -104,38 +132,63 @@ const ExpenseFileRow = props => {
 
             {!row.is_upload && !row.error && <div className="d-flex align-items-center">
 
-                <span>
-                    <DownloadLink
-                        label={<Icon
-                            name="download"
-                            // link
-                            title="Скачать"
-                        />}
-                        filename={row.name}
-                        exportFile={() => Promise.resolve(getDataFromURL(row.url))}
-                        style={{
-                            color: null,
-                            marginRight: "0.5rem",
-                        }}
-                    />
-                </span>
-                <span>
-                    <Icon
-                        name="pencil"
-                        link
-                        title="Переименовать"
-                        onClick={() => setRename(row)}
-                    />
-                </span>
-                <span>
-                    <Icon
-                        name="trash"
-                        link
-                        color="red"
-                        title="Удалить"
-                        disabled
-                    />
-                </span>
+                {!row.deleted_at && <>
+                    <span>
+                        <DownloadLink
+                            label={<Icon
+                                name="download"
+                                link
+                                title="Скачать"
+                            />}
+                            filename={row.name}
+                            exportFile={() => Promise.resolve(getDataFromURL(row.url))}
+                            style={{
+                                color: null,
+                                marginRight: "0.5rem",
+                            }}
+                        />
+                    </span>
+                    <span>
+                        <Icon
+                            name="pencil"
+                            link
+                            title="Переименовать"
+                            onClick={() => setRename(row)}
+                        />
+                    </span>
+                    <span>
+                        <Icon
+                            name="trash"
+                            link
+                            color="red"
+                            title="Удалить"
+                            onClick={() => setDropFile(row)}
+                        />
+                    </span>
+                </>}
+
+                {row.deleted_at && <>
+                    {error && <span>
+                        <Icon
+                            name="warning sign"
+                            color="red"
+                            title={`Ошибка ${error}`}
+                        />
+                    </span>}
+                    <span className="position-relative">
+                        <Icon
+                            name="redo"
+                            link={!reestablish}
+                            disabled={reestablish}
+                            color="orange"
+                            title="Восстановить"
+                            onClick={() => setReestablish(true)}
+                        />
+
+                        {reestablish && <span className="position-absolute-all"><Spinner size="mini" /></span>}
+
+                    </span>
+                </>}
 
             </div>}
 
