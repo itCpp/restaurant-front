@@ -5,21 +5,19 @@ import {
     Route
 } from "react-router-dom";
 import "./crm.css";
-import Expenses from "./Expenses";
-import Header from "./Header";
-import Income from "./Incomes";
-import Main from "./Main";
+import * as Components from "./Components";
 
 const Crm = props => {
 
     return <Router>
 
-        <Header />
+        <Components.Header />
 
         <Routes>
-            <Route path="/income" element={<Income />} />
-            <Route path="/expenses" element={<Expenses />} />
-            <Route path="*" element={<Main />} />
+            <Route path="/income" element={<Components.Income />} />
+            <Route path="/expenses" element={<Components.Expenses />} />
+            <Route path="/employees" element={<Components.Employees />} />
+            <Route path="*" element={<Components.Main />} />
         </Routes>
 
     </Router>

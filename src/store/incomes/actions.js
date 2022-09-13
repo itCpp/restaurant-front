@@ -15,3 +15,9 @@ export const setShowIncomes = data => ({
     type: INCOMES_SHOW,
     payload: data
 });
+
+export const INCOMES_PART_ADD = "INCOMES_PART_ADD";
+export const setPartAdd = data => ({
+    type: INCOMES_PART_ADD,
+    payload: data
+});

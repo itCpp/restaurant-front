@@ -1,7 +1,9 @@
+import React from "react";
 import { Icon, Table } from "semantic-ui-react";
 import moment from "moment";
 import { useDispatch } from "react-redux";
 import { setShowAdd, setIncomeSourceAdd, setShowIncomes } from "../../store/incomes/actions";
+import IncomeFiles from "./IncomeFiles";
 
 const colSpan = 9;
 
@@ -9,8 +11,14 @@ const IncomeTable = props => {
 
     const { rows } = props;
     const dispatch = useDispatch();
+    const [showFiles, setShowFiles] = React.useState([]);
 
     return <div>
+
+        <IncomeFiles
+            show={showFiles}
+            setShowFiles={setShowFiles}
+        />
 
         <Table compact selectable celled>
 
@@ -32,6 +40,7 @@ const IncomeTable = props => {
                 key={row.id}
                 row={row}
                 dispatch={dispatch}
+                setShowFiles={setShowFiles}
             />)}
 
         </Table>
@@ -78,7 +87,7 @@ const TableBodySource = props => {
 
 const TableRowSource = props => {
 
-    const { row, dispatch } = props;
+    const { row, dispatch, setShowFiles } = props;
     const overdue = Boolean(row.overdue);
 
     return <Table.Row negative={overdue} positive={row.is_free}>
@@ -137,11 +146,19 @@ const TableRowSource = props => {
                         name="plus"
                         link
                         title="Внести оплату"
-                        fitted
                         onClick={() => dispatch(setShowAdd({
                             income_part_id: row.part_id,
                             income_source_id: row.id,
                         }))}
+                    />
+                </span>
+                <span>
+                    <Icon
+                        name={row.files_count > 0 ? "folder open" : "folder"}
+                        link
+                        title="Файлы"
+                        fitted
+                        onClick={() => setShowFiles(row)}
                     />
                 </span>
             </div>

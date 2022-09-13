@@ -4,6 +4,7 @@ const defaultState = {
     showAdd: false,
     showSourceAdd: false,
     show: false,
+    showPartAdd: false,
 };
 
 export const incomesReducer = (state = defaultState, action) => {
@@ -18,6 +19,9 @@ export const incomesReducer = (state = defaultState, action) => {
 
         case ACTIONS.INCOMES_SHOW:
             return { ...state, show: action.payload }
+
+        case ACTIONS.INCOMES_PART_ADD:
+            return { ...state, showPartAdd: action.payload }
 
         default:
             return state;

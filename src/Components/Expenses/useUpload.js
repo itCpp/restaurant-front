@@ -48,7 +48,7 @@ const FileUploaderComponent = props => {
 
 const useUpload = data => {
 
-    const { setFilesList, cashboxId } = data;
+    const { setFilesList, cashboxId, incomeId, url } = data;
     const [files, setFiles] = React.useState(null);
     const [uploadProcess, setUploadProcess] = React.useState({});
     const uploading = Boolean(files);
@@ -63,10 +63,11 @@ const useUpload = data => {
         formdata.append('size', file.size);
         formdata.append('type', file.type);
         formdata.append('date', moment(file.lastModified));
-        formdata.append('cashboxId', cashboxId);
+        cashboxId && formdata.append('cashboxId', cashboxId);
+        incomeId && formdata.append('incomeId', incomeId);
         formdata.append('hash', hash);
 
-        await axios.post('expenses/file/upload', formdata, {
+        await axios.post(url || 'expenses/file/upload', formdata, {
             onUploadProgress: (progressEvent) => {
                 setUploadProcess(p => ({ ...p, [hash]: parseInt(Math.round((progressEvent.loaded / progressEvent.total) * 100)) }));
             }
@@ -98,7 +99,7 @@ const useUpload = data => {
                 setUploadProcess(p => ({ ...p, [hash]: 0 }));
             });
 
-    }, [cashboxId]);
+    }, [cashboxId, incomeId]);
 
     React.useEffect(() => {
 

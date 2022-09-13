@@ -13,6 +13,7 @@ const Header = props => {
             </NavLink>
         </div>
 
+        {/* <NavLink to="/employees" className="header-link">Сотрудники</NavLink> */}
         <NavLink to="/income" className="header-link">Доходы</NavLink>
         <NavLink to="/expenses" className="header-link">Раcходы</NavLink>
 

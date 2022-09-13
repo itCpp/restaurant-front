@@ -6,6 +6,7 @@ import IncomeTable from "./IncomeTable";
 import IncomeAdd from "./IncomeAdd";
 import IncomeSourceAdd from "./IncomeSourceAdd";
 import IncomesView from "./IncomesView";
+import IncomePartAdd from "./IncomePartAdd";
 
 const Income = props => {
 
@@ -36,6 +37,7 @@ const Income = props => {
     return <div className="p-2">
 
         <IncomeAdd setRows={setRows} />
+        <IncomePartAdd setRows={setRows} />
         <IncomeSourceAdd setRows={setRows} />
         <IncomesView />
 

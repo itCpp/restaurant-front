@@ -1,6 +1,6 @@
 import { Button, Dropdown } from "semantic-ui-react";
 import { useDispatch } from "react-redux";
-import { setShowAdd, setIncomeSourceAdd } from "../../store/incomes/actions";
+import { setShowAdd, setIncomeSourceAdd, setPartAdd } from "../../store/incomes/actions";
 
 const IncomeHeaderButtons = () => {
 
@@ -20,15 +20,15 @@ const IncomeHeaderButtons = () => {
         >
             <Dropdown.Menu>
                 <Dropdown.Item
-                    onClick={() => dispatch(setShowAdd(true))}
                     content="Внести оплату"
                     icon="plus"
+                    onClick={() => dispatch(setShowAdd(true))}
                 />
                 <Dropdown.Divider className="my-0" />
                 <Dropdown.Item
                     content="Создать раздел"
                     icon="factory"
-                    disabled
+                    onClick={() => dispatch(setPartAdd(true))}
                 />
                 <Dropdown.Item
                     content="Добавить помещение"
