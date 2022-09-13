@@ -1,5 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import { Dimmer, Form, Icon, Loader, Modal } from "semantic-ui-react";
 import { setIncomeSourceAdd } from "../../store/incomes/actions";
 import { axios } from "../../system";
@@ -8,6 +9,7 @@ const IncomeSourceAdd = props => {
 
     const { setRows } = props;
     const dispatch = useDispatch();
+    const { id } = useParams();
     const { showSourceAdd } = useSelector(s => s.incomes);
 
     const [loading, setLoading] = React.useState(false);
@@ -45,7 +47,7 @@ const IncomeSourceAdd = props => {
             setLoading(true);
 
             axios.get('incomes/source/get', {
-                params: { id: showSourceAdd?.id, getParts: true }
+                params: { id: showSourceAdd?.id, getParts: true, building: id }
             }).then(({ data }) => {
                 setFormdata(data.row);
                 setParts(data.parts);
@@ -106,7 +108,7 @@ const IncomeSourceAdd = props => {
                     placeholder="Выберите раздел"
                     options={parts.map(row => ({
                         key: row.id,
-                        text: `${row.name} ${row.comment}`,
+                        text: `${row.name} ${row.comment || ""}`,
                         value: row.id,
                     }))}
                     name="part_id"

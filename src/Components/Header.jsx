@@ -14,7 +14,8 @@ const Header = props => {
         </div>
 
         {/* <NavLink to="/employees" className="header-link">Сотрудники</NavLink> */}
-        <NavLink to="/income" className="header-link">Доходы</NavLink>
+        <NavLink to="/income/1" className="header-link">Здание 1</NavLink>
+        <NavLink to="/income/2" className="header-link">Здание 2</NavLink>
         <NavLink to="/expenses" className="header-link">Раcходы</NavLink>
 
         <div className="flex-grow-1">

@@ -11,7 +11,7 @@ const IncomeTable = props => {
 
     const { rows } = props;
     const dispatch = useDispatch();
-    const [showFiles, setShowFiles] = React.useState([]);
+    const [showFiles, setShowFiles] = React.useState(null);
 
     return <div>
 

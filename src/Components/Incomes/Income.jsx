@@ -7,9 +7,11 @@ import IncomeAdd from "./IncomeAdd";
 import IncomeSourceAdd from "./IncomeSourceAdd";
 import IncomesView from "./IncomesView";
 import IncomePartAdd from "./IncomePartAdd";
+import { useParams } from "react-router-dom";
 
-const Income = props => {
+const Income = () => {
 
+    const { id } = useParams();
     const [loading, setLoading] = React.useState(false);
     const [rows, setRows] = React.useState([]);
 
@@ -17,7 +19,7 @@ const Income = props => {
 
         setLoading(true);
 
-        axios.get('incomes')
+        axios.get('incomes', { params: { id } })
             .then(({ data }) => {
                 setRows(data.rows);
             })
@@ -26,13 +28,13 @@ const Income = props => {
                 setLoading(false);
             });
 
-    }, []);
+    }, [id]);
 
     React.useEffect(() => {
 
         getIncomes();
 
-    }, []);
+    }, [id]);
 
     return <div className="p-2">
 

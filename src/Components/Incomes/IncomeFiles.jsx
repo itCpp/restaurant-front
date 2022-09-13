@@ -11,8 +11,6 @@ const IncomeFiles = props => {
     const [error, setError] = React.useState(null);
     const [files, setFiles] = React.useState([]);
 
-    console.log(show);
-
     const { uploading, FileUploader, uploadProcess } = useUpload({
         incomeId: show?.id,
         setFilesList: setFiles,
