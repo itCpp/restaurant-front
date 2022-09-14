@@ -1,4 +1,5 @@
-import { Button, Dropdown, Icon, Table } from "semantic-ui-react";
+import moment from "moment";
+import { Dropdown, Icon, Table } from "semantic-ui-react";
 
 const EmployeesTableRow = props => {
 
@@ -23,8 +24,9 @@ const EmployeesTableRow = props => {
                 {row.work_shedule_time && <div className="mx-1">({row.work_shedule_time})</div>}
             </div>
         </Table.Cell>
-        <Table.Cell>
-
+        <Table.Cell textAlign="center" error={Boolean(row.date_work_stop)}>
+            {row.date_work_start && <span className="px-1">с {moment(row.date_work_start).format("DD.MM.YYYY")}</span>}
+            {row.date_work_stop && <span className="px-1">по {moment(row.date_work_stop).format("DD.MM.YYYY")}</span>}
         </Table.Cell>
         <Table.Cell>
 

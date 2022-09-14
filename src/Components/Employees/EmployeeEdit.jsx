@@ -200,7 +200,7 @@ const EmployeeEdit = props => {
                         value={formdata.date_work_start || ""}
                         onChange={handleChange}
                         error={Boolean(saveErrors.date_work_start)}
-                        disabled={isError}
+                        disabled={isError || true}
                     />
 
                     <Form.Input
@@ -210,7 +210,7 @@ const EmployeeEdit = props => {
                         value={formdata.date_work_stop || ""}
                         onChange={handleChange}
                         error={Boolean(saveErrors.date_work_stop)}
-                        disabled={isError}
+                        disabled={isError || true}
                     />
 
                 </Form.Group>
