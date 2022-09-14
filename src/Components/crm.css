@@ -78,6 +78,7 @@
     color: brown;
     background-color: #fff3f3;
 }
+
 .file-list>.file-error:hover {
     background-color: #ffe6e6;
 }
@@ -85,6 +86,7 @@
 .file-list>.file-deleted .file-type-icon {
     opacity: .5;
 }
+
 .file-list>.file-deleted .file-name {
     text-decoration: line-through;
     opacity: .6;
@@ -98,6 +100,7 @@
     border-radius: .25rem;
     overflow: hidden;
 }
+
 .file-upload-progress-bar {
     background-color: var(--bs-green);
     position: absolute;
@@ -111,6 +114,25 @@
     cursor: pointer;
     text-decoration: none !important;
 }
+
 .download-file-name:hover {
     text-decoration: underline !important;
+}
+
+.income-table-row:hover {
+    background-color: var(--bs-gray-100);
+}
+
+.income-table-row.not-free {
+    background-color: #baffb8;
+}
+.income-table-row.not-free:hover {
+    background-color: #9fffa2;
+}
+
+.income-table-row.overdue {
+    background-color: #ffd2d2;
+}
+.income-table-row.overdue:hover {
+    background-color: #ffc0c0;
 }

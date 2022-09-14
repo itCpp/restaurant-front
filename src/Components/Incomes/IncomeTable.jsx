@@ -20,7 +20,7 @@ const IncomeTable = props => {
             setShowFiles={setShowFiles}
         />
 
-        <Table compact selectable celled>
+        <Table compact celled>
 
             <Table.Header>
                 <Table.Row>
@@ -99,7 +99,11 @@ const TableRowSource = props => {
     const { row, dispatch, setShowFiles } = props;
     const overdue = Boolean(row.overdue);
 
-    return <Table.Row negative={overdue} positive={row.is_free}>
+    const className = ["income-table-row"];
+    overdue && !row.is_free && className.push("overdue");
+    !row.is_free && className.push('not-free');
+
+    return <Table.Row className={className.join(" ")}>
 
         <Table.Cell>{row.cabinet || ``}</Table.Cell>
         <Table.Cell
@@ -118,7 +122,10 @@ const TableRowSource = props => {
         <Table.Cell>{row.space}</Table.Cell>
         <Table.Cell>{row.price}</Table.Cell>
         <Table.Cell>
-            {row.date && <div>{moment(row.date).format("DD.MM.YYYY")}</div>}
+            <div className="d-flex">
+                {row.date && <div className="mx-1">с {moment(row.date).format("DD.MM.YYYY")}</div>}
+                {row.date_to && <div className="mx-1">по {moment(row.date_to).format("DD.MM.YYYY")}</div>}
+            </div>
             {Boolean(row?.settings?.comment_date) && <div>
                 <small>{row.settings.comment_date}</small>
             </div>}

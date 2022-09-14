@@ -117,6 +117,15 @@ const IncomeSourceAdd = props => {
                     disabled={save || Boolean(formdata?.id)}
                 />
 
+                <Form.Checkbox
+                    label="Помещение свободное"
+                    toggle
+                    name="is_free"
+                    checked={formdata?.is_free || false}
+                    onChange={handleChange}
+                    disabled={save || !Boolean(formdata?.part_id)}
+                />
+
                 <Form.Group>
 
                     <Form.Field width={10}>
@@ -143,89 +152,60 @@ const IncomeSourceAdd = props => {
 
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group widths={3}>
 
-                    <Form.Field width={4}>
-                        <Form.Input
-                            label="Кабинет"
-                            placeholder="Укажите кабинет"
-                            name="cabinet"
-                            value={formdata?.cabinet || ""}
-                            onChange={handleChange}
-                            disabled={save || !Boolean(formdata?.part_id)}
-                        />
-                    </Form.Field>
+                    <Form.Input
+                        label="Кабинет"
+                        placeholder="Укажите кабинет"
+                        name="cabinet"
+                        value={formdata?.cabinet || ""}
+                        onChange={handleChange}
+                        disabled={save || !Boolean(formdata?.part_id)}
+                    />
 
-                    <Form.Field width={4}>
-                        <Form.Input
-                            label="Площадь, м²"
-                            placeholder="Укажите площадь"
-                            name="space"
-                            value={formdata?.space || ""}
-                            onChange={handleChange}
-                            disabled={save || !Boolean(formdata?.part_id)}
-                        />
-                    </Form.Field>
+                    <Form.Input
+                        label="Площадь, м²"
+                        placeholder="Укажите площадь"
+                        name="space"
+                        value={formdata?.space || ""}
+                        onChange={handleChange}
+                        disabled={save || !Boolean(formdata?.part_id)}
+                    />
 
-                    <Form.Field width={4}>
-                        <Form.Input
-                            label="Стоимость 1 м²"
-                            placeholder="Укажите стоимость"
-                            name="price"
-                            value={formdata?.price || ""}
-                            onChange={handleChange}
-                            disabled={save || !Boolean(formdata?.part_id)}
-                        />
-                    </Form.Field>
-
-                    <Form.Field width={4}>
-                        <Form.Input
-                            label="Дата начала"
-                            placeholder="Укажите стоимость"
-                            type="date"
-                            name="date"
-                            value={formdata?.date || ""}
-                            onChange={handleChange}
-                            disabled={save || !Boolean(formdata?.part_id)}
-                        />
-                    </Form.Field>
+                    <Form.Input
+                        label="Стоимость 1 м²"
+                        placeholder="Укажите стоимость"
+                        name="price"
+                        value={formdata?.price || ""}
+                        onChange={handleChange}
+                        disabled={save || !Boolean(formdata?.part_id)}
+                    />
 
                 </Form.Group>
 
-                <Form.Group>
+                <hr />
 
-                    <Form.Field width={8}>
-                        <Form.Input
-                            label="Контактное лицо"
-                            placeholder="Введите ФИО"
-                            name="contact_person"
-                            value={formdata?.contact_person || ""}
-                            onChange={handleChange}
-                            disabled={save || !Boolean(formdata?.part_id)}
-                        />
-                    </Form.Field>
+                <Form.Group widths={2}>
 
-                    <Form.Field width={8}>
-                        <Form.Input
-                            label="Контакты"
-                            placeholder="Введите контактные данные"
-                            name="contact_number"
-                            value={formdata?.contact_number || ""}
-                            onChange={handleChange}
-                            disabled={save || !Boolean(formdata?.part_id)}
-                        />
-                    </Form.Field>
+                    <Form.Input
+                        label="Дата начала договора"
+                        type="date"
+                        name="date"
+                        value={formdata?.date || ""}
+                        onChange={handleChange}
+                        disabled={save || !Boolean(formdata?.part_id)}
+                    />
+
+                    <Form.Input
+                        label="Дата окончания договора"
+                        type="date"
+                        name="date_to"
+                        value={formdata?.date_to || ""}
+                        onChange={handleChange}
+                        disabled={save || !Boolean(formdata?.part_id)}
+                    />
 
                 </Form.Group>
-
-                <Form.Checkbox
-                    label="Помещение свободное"
-                    toggle
-                    name="is_free"
-                    checked={formdata?.is_free || false}
-                    onChange={handleChange}
-                    disabled={save || !Boolean(formdata?.part_id)}
-                />
 
                 <Form.TextArea
                     label="Комментарий к дате"
@@ -237,6 +217,57 @@ const IncomeSourceAdd = props => {
                     onChange={handleChange}
                     disabled={save || !Boolean(formdata?.part_id)}
                 />
+
+                <hr />
+
+                <Form.Group widths={2}>
+
+                    <Form.Input
+                        label="Контактное лицо"
+                        placeholder="Введите ФИО"
+                        name="contact_person"
+                        value={formdata?.contact_person || ""}
+                        onChange={handleChange}
+                        disabled={save || !Boolean(formdata?.part_id)}
+                    />
+
+                    <Form.Input
+                        label="Контакты"
+                        placeholder="Введите контактные данные"
+                        name="contact_number"
+                        value={formdata?.contact_number || ""}
+                        onChange={handleChange}
+                        disabled={save || !Boolean(formdata?.part_id)}
+                    />
+
+                </Form.Group>
+
+                <hr />
+
+                <Form.Group widths={2} className="align-items-center">
+
+                    <Form.Checkbox
+                        label="Аренда парковки"
+                        toggle
+                        name="is_parking"
+                        checked={formdata?.is_parking || false}
+                        onChange={handleChange}
+                        disabled={save || !Boolean(formdata?.part_id)}
+                    />
+
+                    <Form.Input
+                        label="Номер автомобиля"
+                        placeholder="Введите гос. номер машины"
+                        prename="settings"
+                        name="car_number"
+                        value={formdata?.settings?.car_number || ""}
+                        onChange={handleChange}
+                        disabled={save || !Boolean(formdata?.part_id) || !Boolean(formdata?.is_parking)}
+                    />
+
+                </Form.Group>
+
+                <hr />
 
                 <Form.TextArea
                     label="Комментарий"
