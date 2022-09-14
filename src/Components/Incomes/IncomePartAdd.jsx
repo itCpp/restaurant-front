@@ -22,7 +22,11 @@ const IncomePartAdd = props => {
     React.useEffect(() => {
 
         if (showPartAdd) {
-            setFormdata(p => ({ ...p, building_id: id }));
+            setFormdata(p => ({
+                ...p,
+                building_id: id,
+                ...(typeof showPartAdd == "object" ? showPartAdd : {}),
+            }));
         }
 
         return () => {
@@ -68,7 +72,7 @@ const IncomePartAdd = props => {
 
 
     return <Modal
-        open={showPartAdd}
+        open={Boolean(showPartAdd)}
         header="Раздел"
         centered={false}
         size="small"

@@ -2,7 +2,7 @@ import React from "react";
 import { Icon, Table } from "semantic-ui-react";
 import moment from "moment";
 import { useDispatch } from "react-redux";
-import { setShowAdd, setIncomeSourceAdd, setShowIncomes } from "../../store/incomes/actions";
+import { setShowAdd, setIncomeSourceAdd, setShowIncomes, setPartAdd } from "../../store/incomes/actions";
 import IncomeFiles from "./IncomeFiles";
 
 const colSpan = 9;
@@ -66,6 +66,15 @@ const TableBodySource = props => {
                             <b>{row.name}</b>
                             {row.comment && <i>{' '}{row.comment}</i>}
                         </div>
+                        <span>
+                            <Icon
+                                name="pencil"
+                                link
+                                fitted
+                                onClick={() => props.dispatch(setPartAdd(row))}
+                                title="Изменить данные раздела"
+                            />
+                        </span>
                     </div>}
                 />
             </Table.Row>
@@ -92,7 +101,7 @@ const TableRowSource = props => {
 
     return <Table.Row negative={overdue} positive={row.is_free}>
 
-        <Table.Cell>{row.cabinet || `ID#${row.id}`}</Table.Cell>
+        <Table.Cell>{row.cabinet || ``}</Table.Cell>
         <Table.Cell
             content={<div>
                 <div>{row.name}</div>

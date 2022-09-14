@@ -106,3 +106,11 @@
     bottom: 0;
     transition: .1s;
 }
+
+.download-file-name {
+    cursor: pointer;
+    text-decoration: none !important;
+}
+.download-file-name:hover {
+    text-decoration: underline !important;
+}

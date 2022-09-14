@@ -115,7 +115,13 @@ const ExpenseFileRow = props => {
         </span>
 
         <div className="flex-grow-1 file-name">
-            {row.name}
+            <DownloadLink
+                label={row.name}
+                filename={row.name}
+                exportFile={() => Promise.resolve(getDataFromURL(row.url))}
+                style={{}}
+                className="download-file-name"
+            />
         </div>
 
         <div className="position-relative">
