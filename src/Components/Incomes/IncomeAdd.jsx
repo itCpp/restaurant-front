@@ -15,6 +15,7 @@ const IncomeAdd = props => {
 
     const [parts, setParts] = React.useState([]);
     const [sources, setSources] = React.useState([]);
+    const [purposes, setPurposes] = React.useState([]);
     const [loadSources, setLoadSources] = React.useState(false);
     const [selectSource, setSelectSource] = React.useState(null);
 
@@ -40,10 +41,11 @@ const IncomeAdd = props => {
                 }))
             }
 
-            axios.post('incomes/add', { part: showAdd?.income_part_id || null })
+            axios.post('incomes/add', { income_part_id: showAdd?.income_part_id || null })
                 .then(({ data }) => {
                     setParts(data.parts);
                     setSources(data.sources);
+                    setPurposes(data.purposes || []);
                 })
                 .catch(e => {
 
@@ -183,29 +185,48 @@ const IncomeAdd = props => {
 
                     <Form.Field width={10}>
                         <Form.Select
-                            label="Вид платежа"
-                            placeholder="Выберите тип платежа"
-                            options={payTypes}
-                            name="type_pay"
-                            value={formdata?.type_pay || 1}
+                            label="Назначение платежа"
+                            placeholder="Выберите тип назначения платежа"
+                            options={purposes.map(row => ({
+                                key: row.id,
+                                text: row.name,
+                                value: row.id,
+                            }))}
+                            name="purpose_pay"
+                            value={formdata?.purpose_pay || null}
                             onChange={handleChange}
                             disabled={!Boolean(formdata?.income_source_id) || save}
-                            error={Boolean(saveErrors?.type_pay)}
+                            error={Boolean(saveErrors?.purpose_pay)}
+                            required
                         />
                     </Form.Field>
 
                 </Form.Group>
 
-                <Form.Group>
-                    <Form.Field width={8}>
-                        <Form.Input
-                            label="Дата платежа"
-                            type="date"
-                            name="date"
-                            onChange={handleChange}
-                            disabled={!Boolean(formdata?.income_source_id) || save}
-                            error={Boolean(saveErrors?.date)}
-                        />
+                <Form.Group widths={2}>
+
+                    <Form.Select
+                        label="Вид платежа"
+                        placeholder="Выберите тип платежа"
+                        options={payTypes}
+                        name="type_pay"
+                        value={formdata?.type_pay || null}
+                        onChange={handleChange}
+                        disabled={!Boolean(formdata?.income_source_id) || save}
+                        error={Boolean(saveErrors?.type_pay)}
+                    />
+
+                    <Form.Input
+                        label="Дата платежа"
+                        type="date"
+                        name="date"
+                        onChange={handleChange}
+                        disabled={!Boolean(formdata?.income_source_id) || save}
+                        error={Boolean(saveErrors?.date)}
+                    />
+
+                    {/* <Form.Field width={8}>
+
                     </Form.Field>
                     <Form.Field width={8}>
                         <Form.Input
@@ -216,7 +237,7 @@ const IncomeAdd = props => {
                             disabled={!Boolean(formdata?.income_source_id) || save}
                             error={Boolean(saveErrors?.month)}
                         />
-                    </Form.Field>
+                    </Form.Field> */}
                 </Form.Group>
 
             </Form>
