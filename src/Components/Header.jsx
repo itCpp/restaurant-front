@@ -13,10 +13,10 @@ const Header = props => {
             </NavLink>
         </div>
 
-        {/* <NavLink to="/employees" className="header-link">Сотрудники</NavLink> */}
         <NavLink to="/income/1" className="header-link">Строение 1</NavLink>
         <NavLink to="/income/2" className="header-link">Строение 2</NavLink>
         <NavLink to="/expenses" className="header-link">Раcходы</NavLink>
+        <NavLink to="/employees" className="header-link">Сотрудники</NavLink>
 
         <div className="flex-grow-1">
 

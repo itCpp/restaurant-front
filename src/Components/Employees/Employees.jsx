@@ -2,6 +2,8 @@ import React from "react";
 import { Button, Loader, Message, Table } from "semantic-ui-react";
 import { axios } from "../../system";
 import EmployeeAdd from "./EmployeeAdd";
+import EmployeesTableRow from "./EmployeesTableRow";
+import EmployeeEdit from "./EmployeeEdit";
 
 const Employees = props => {
 
@@ -9,16 +11,32 @@ const Employees = props => {
     const [error, setError] = React.useState(null);
     const [rows, setRows] = React.useState([]);
     const [add, setAdd] = React.useState(false);
+    const [edit, setEdit] = React.useState(null);
 
     const isError = !loading && error;
     const isOk = !loading && !error;
+
+    const handleRows = React.useCallback(row => setRows(p => {
+        let rows = [...p],
+            added = true;
+        rows.forEach((item, i) => {
+            if (item.id === row.id) {
+                rows[i] = row;
+                added = false;
+            }
+        });
+        added && rows.unshift(row);
+        return rows;
+    }));
 
     React.useEffect(() => {
 
         setLoading(true);
 
         axios.post('employees')
-            .then(({ data }) => { })
+            .then(({ data }) => {
+                setRows(data.rows);
+            })
             .catch(e => setError(axios.getError(e)))
             .then(() => setLoading(false));
 
@@ -34,16 +52,24 @@ const Employees = props => {
         <EmployeeAdd
             show={add}
             close={() => setAdd(false)}
+            handleRows={handleRows}
+        />
+
+        <EmployeeEdit
+            show={Boolean(edit)}
+            data={edit}
+            close={() => setEdit(null)}
+            handleRows={handleRows}
         />
 
         {loading && <Loader active inline="centered" />}
 
         {isError && <Message error content={error} style={{ maxWidth: 500 }} className="mx-auto" size="mini" />}
 
-        {isOk && <Table basic="very" className="mt-2">
+        {isOk && <Table className="mt-2" celled>
 
             <Table.Header>
-                <Table.Row>
+                <Table.Row textAlign="center">
                     <Table.HeaderCell />
                     <Table.HeaderCell>ФИО</Table.HeaderCell>
                     <Table.HeaderCell>Должность</Table.HeaderCell>
@@ -51,7 +77,7 @@ const Employees = props => {
                     <Table.HeaderCell>График работы</Table.HeaderCell>
                     <Table.HeaderCell>Период работы</Table.HeaderCell>
                     <Table.HeaderCell>Оклад</Table.HeaderCell>
-                    <Table.HeaderCell>
+                    <Table.HeaderCell className="px-0">
                         <Button
                             icon="plus"
                             basic
@@ -61,6 +87,14 @@ const Employees = props => {
                     </Table.HeaderCell>
                 </Table.Row>
             </Table.Header>
+
+            {rows.length > 0 && <Table.Body>
+                {rows.map(row => <EmployeesTableRow
+                    key={row.id}
+                    row={row}
+                    setEdit={setEdit}
+                />)}
+            </Table.Body>}
 
         </Table>}
 
