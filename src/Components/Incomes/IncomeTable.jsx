@@ -142,6 +142,10 @@ const TableRowSource = props => {
                 </span>
                 <span className="ms-2">{row.last.sum}</span>
             </div>}
+            {Boolean(row.fine) && <div className="text-danger mt-1 text-nowrap" title="Пеня">
+                <Icon name="time" color="red" />
+                <b>{row.fine}</b>
+            </div>}
         </Table.Cell>
         <Table.Cell
             content={<div>
