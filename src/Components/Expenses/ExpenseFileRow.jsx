@@ -188,7 +188,7 @@ const ExpenseFileRow = props => {
                             disabled={reestablish}
                             color="orange"
                             title="Восстановить"
-                            onClick={() => setReestablish(row)}
+                            onClick={() => setReestablish(true)}
                         />
 
                         {reestablish && <span className="position-absolute-all"><Spinner size="mini" /></span>}
