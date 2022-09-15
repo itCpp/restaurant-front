@@ -257,7 +257,7 @@ const IncomeSourceAdd = props => {
 
                     <Form.Input
                         label="Стоимость парковки"
-                        placeholder="Введите стоимость"
+                        placeholder="Введите сумму"
                         type="number"
                         min="0"
                         step="0.01"
@@ -276,6 +276,34 @@ const IncomeSourceAdd = props => {
                         value={formdata?.settings?.car_number || ""}
                         onChange={handleChange}
                         disabled={save || !Boolean(formdata?.part_id) || !Boolean(formdata?.is_parking)}
+                    />
+
+                </Form.Group>
+
+                <hr />
+
+                <Form.Group widths={2} className="align-items-center">
+
+                    <Form.Checkbox
+                        label="Интернет услуги"
+                        toggle
+                        name="is_internet"
+                        checked={formdata?.is_internet || false}
+                        onChange={handleChange}
+                        disabled={save || !Boolean(formdata?.part_id)}
+                    />
+
+                    <Form.Input
+                        label="Стоимость интернета"
+                        placeholder="Введите сумму"
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        prename="settings"
+                        name="internet_price"
+                        value={formdata?.settings?.internet_price || ""}
+                        onChange={handleChange}
+                        disabled={save || !Boolean(formdata?.part_id) || !Boolean(formdata?.is_internet)}
                     />
 
                 </Form.Group>

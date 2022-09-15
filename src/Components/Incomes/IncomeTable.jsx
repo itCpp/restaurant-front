@@ -146,8 +146,8 @@ const TableRowSource = props => {
         <Table.Cell
             content={<div>
                 {Boolean(row.next_pays) && row.next_pays.map((pay, key) => <div key={key} className="d-flex align-items-center text-nowrap">
-                    {pay.icon && <Icon name={pay.icon} disabled title={pay.title} size="small" />}
-                    <span>{moment(pay.date).format("DD.MM.YYYY")}</span>
+                    {pay.icon && <Icon name={pay.icon} disabled title={pay.title} size="small" color={pay.color} />}
+                    {pay.date && <span>{moment(pay.date).format("DD.MM.YYYY")}</span>}
                     <span className="ms-2">{pay.price}</span>
                 </div>)}
             </div>}
