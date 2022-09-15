@@ -78,7 +78,7 @@ const getDataFromURL = (url) => new Promise((resolve, reject) => {
 
 const ExpenseFileRow = props => {
 
-    const { row, uploadProcess, setRename, setDropFile, setFiles } = props;
+    const { row, uploadProcess, setRename, setDropFile, setFiles, income } = props;
     const className = ["d-flex align-items-center"];
 
     const [reestablish, setReestablish] = React.useState(false);
@@ -86,7 +86,7 @@ const ExpenseFileRow = props => {
 
     React.useEffect(() => {
 
-        const handleReestablish = () => axios.post('files/reestablish', { id: row.id })
+        const handleReestablish = () => axios.post('files/reestablish', { id: row.id, income })
             .then(({ data }) => {
                 setFiles(p => {
                     let files = [...p];
@@ -188,7 +188,7 @@ const ExpenseFileRow = props => {
                             disabled={reestablish}
                             color="orange"
                             title="Восстановить"
-                            onClick={() => setReestablish(true)}
+                            onClick={() => setReestablish(row)}
                         />
 
                         {reestablish && <span className="position-absolute-all"><Spinner size="mini" /></span>}

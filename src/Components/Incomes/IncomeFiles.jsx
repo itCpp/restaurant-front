@@ -92,6 +92,7 @@ const IncomeFiles = props => {
                                 setRename={setRename}
                                 setDropFile={setDropFile}
                                 setFiles={setFiles}
+                                income
                             />)}
                         </div>
 
