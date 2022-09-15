@@ -62,6 +62,16 @@ const IncomesView = props => {
 
                 {!loading && !error && data.length > 0 && <Table compact basic="very" textAlign="center">
 
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.HeaderCell>Месяц</Table.HeaderCell>
+                            <Table.HeaderCell textAlign="left">Назначение</Table.HeaderCell>
+                            <Table.HeaderCell>Дата</Table.HeaderCell>
+                            <Table.HeaderCell>Сумма</Table.HeaderCell>
+                            <Table.HeaderCell>Дата ввода информации</Table.HeaderCell>
+                        </Table.Row>
+                    </Table.Header>
+
                     <Table.Body>
                         {data.map((item, key) => {
                             return item.rows.map((iRow, i) => <Table.Row key={`${key}_${i}`} negative={!Boolean(iRow.sum)}>
