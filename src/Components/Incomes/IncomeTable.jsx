@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { setShowAdd, setIncomeSourceAdd, setShowIncomes, setPartAdd } from "../../store/incomes/actions";
 import IncomeFiles from "./IncomeFiles";
 
-const colSpan = 9;
+const colSpan = 11;
 
 const IncomeTable = props => {
 
@@ -30,8 +30,10 @@ const IncomeTable = props => {
                     <Table.HeaderCell>ИНН</Table.HeaderCell>
                     <Table.HeaderCell>Площадь, м²</Table.HeaderCell>
                     <Table.HeaderCell>Стоимость 1м²</Table.HeaderCell>
+                    <Table.HeaderCell>Цена</Table.HeaderCell>
                     <Table.HeaderCell>Дата</Table.HeaderCell>
                     <Table.HeaderCell>Оплата</Table.HeaderCell>
+                    <Table.HeaderCell>Платеж</Table.HeaderCell>
                     <Table.HeaderCell />
                 </Table.Row>
             </Table.Header>
@@ -103,6 +105,8 @@ const TableRowSource = props => {
     overdue && !row.is_free && className.push("overdue");
     !row.is_free && className.push('not-free');
 
+    const price = Number(Number(row.price) * Number(row.space));
+
     return <Table.Row className={className.join(" ")}>
 
         <Table.Cell>{row.cabinet || ``}</Table.Cell>
@@ -121,24 +125,33 @@ const TableRowSource = props => {
         <Table.Cell>{row.inn}</Table.Cell>
         <Table.Cell>{row.space}</Table.Cell>
         <Table.Cell>{row.price}</Table.Cell>
+        <Table.Cell>{price > 0 ? price.toFixed(2) : null}</Table.Cell>
         <Table.Cell>
             <div className="d-flex">
-                {row.date && <div className="mx-1">с {moment(row.date).format("DD.MM.YYYY")}</div>}
-                {row.date_to && <div className="mx-1">по {moment(row.date_to).format("DD.MM.YYYY")}</div>}
+                {row.date && <div>с {moment(row.date).format("DD.MM.YYYY")}</div>}
+                {row.date_to && <div className="ms-1">по {moment(row.date_to).format("DD.MM.YYYY")}</div>}
             </div>
             {Boolean(row?.settings?.comment_date) && <div>
                 <small>{row.settings.comment_date}</small>
             </div>}
         </Table.Cell>
         <Table.Cell>
-            {row.last && <div>
+            {row.last && <div className="d-flex text-nowrap">
                 <span style={overdue ? { fontWeight: 700, color: "#dc3545" } : {}}>
                     {moment(row.last.date).format("DD.MM.YYYY")}
                 </span>
-                <span>{' - '}</span>
-                <span>{row.last.sum}</span>
+                <span className="ms-2">{row.last.sum}</span>
             </div>}
         </Table.Cell>
+        <Table.Cell
+            content={<div>
+                {Boolean(row.next_pays) && row.next_pays.map((pay, key) => <div key={key} className="d-flex align-items-center text-nowrap">
+                    {pay.icon && <Icon name={pay.icon} disabled title={pay.title} size="small" />}
+                    <span>{moment(pay.date).format("DD.MM.YYYY")}</span>
+                    <span className="ms-2">{pay.price}</span>
+                </div>)}
+            </div>}
+        />
         <Table.Cell>
             <div className="d-flex justify-content-center">
                 <span>
