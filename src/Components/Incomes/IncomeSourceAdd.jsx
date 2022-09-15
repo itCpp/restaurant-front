@@ -52,6 +52,7 @@ const IncomeSourceAdd = props => {
                 setFormdata(data.row);
                 setParts(data.parts);
             }).catch(e => {
+
             }).then(() => {
                 setLoading(false);
             });
@@ -60,6 +61,8 @@ const IncomeSourceAdd = props => {
         return () => {
             setFormdata({});
             setSave(false);
+            setSaveError(null);
+            setSaveErrors({});
         }
 
     }, [showSourceAdd]);
@@ -88,6 +91,8 @@ const IncomeSourceAdd = props => {
                 })
                 .catch(e => {
                     setSave(false);
+                    setSaveError(axios.getError(e));
+                    setSaveErrors(axios.getErrors(e));
                 });
         }
 
@@ -115,6 +120,7 @@ const IncomeSourceAdd = props => {
                     value={formdata?.part_id || null}
                     onChange={handleChange}
                     disabled={save || Boolean(formdata?.id)}
+                    error={Boolean(saveErrors.part_id)}
                 />
 
                 <Form.Checkbox
@@ -124,6 +130,7 @@ const IncomeSourceAdd = props => {
                     checked={formdata?.is_free || false}
                     onChange={handleChange}
                     disabled={save || !Boolean(formdata?.part_id)}
+                    error={Boolean(saveErrors.is_free)}
                 />
 
                 <Form.Group>
@@ -136,6 +143,7 @@ const IncomeSourceAdd = props => {
                             value={formdata?.name || ""}
                             onChange={handleChange}
                             disabled={save || !Boolean(formdata?.part_id)}
+                            error={Boolean(saveErrors.name)}
                         />
                     </Form.Field>
 
@@ -147,6 +155,7 @@ const IncomeSourceAdd = props => {
                             value={formdata?.inn || ""}
                             onChange={handleChange}
                             disabled={save || !Boolean(formdata?.part_id)}
+                            error={Boolean(saveErrors.inn)}
                         />
                     </Form.Field>
 
@@ -161,6 +170,7 @@ const IncomeSourceAdd = props => {
                         value={formdata?.cabinet || ""}
                         onChange={handleChange}
                         disabled={save || !Boolean(formdata?.part_id)}
+                        error={Boolean(saveErrors.cabinet)}
                     />
 
                     <Form.Input
@@ -170,6 +180,7 @@ const IncomeSourceAdd = props => {
                         value={formdata?.space || ""}
                         onChange={handleChange}
                         disabled={save || !Boolean(formdata?.part_id)}
+                        error={Boolean(saveErrors.space)}
                     />
 
                     <Form.Input
@@ -179,6 +190,7 @@ const IncomeSourceAdd = props => {
                         value={formdata?.price || ""}
                         onChange={handleChange}
                         disabled={save || !Boolean(formdata?.part_id)}
+                        error={Boolean(saveErrors.price)}
                     />
 
                 </Form.Group>
@@ -194,6 +206,7 @@ const IncomeSourceAdd = props => {
                         value={formdata?.date || ""}
                         onChange={handleChange}
                         disabled={save || !Boolean(formdata?.part_id)}
+                        error={Boolean(saveErrors.date)}
                     />
 
                     <Form.Input
@@ -203,6 +216,7 @@ const IncomeSourceAdd = props => {
                         value={formdata?.date_to || ""}
                         onChange={handleChange}
                         disabled={save || !Boolean(formdata?.part_id)}
+                        error={Boolean(saveErrors.date_to)}
                     />
 
                 </Form.Group>
@@ -216,6 +230,7 @@ const IncomeSourceAdd = props => {
                     value={formdata?.settings?.comment_date || ""}
                     onChange={handleChange}
                     disabled={save || !Boolean(formdata?.part_id)}
+                    error={Boolean(saveErrors.comment_date)}
                 />
 
                 <hr />
@@ -229,6 +244,7 @@ const IncomeSourceAdd = props => {
                         value={formdata?.contact_person || ""}
                         onChange={handleChange}
                         disabled={save || !Boolean(formdata?.part_id)}
+                        error={Boolean(saveErrors.contact_person)}
                     />
 
                     <Form.Input
@@ -238,6 +254,7 @@ const IncomeSourceAdd = props => {
                         value={formdata?.contact_number || ""}
                         onChange={handleChange}
                         disabled={save || !Boolean(formdata?.part_id)}
+                        error={Boolean(saveErrors.contact_number)}
                     />
 
                 </Form.Group>
@@ -253,6 +270,7 @@ const IncomeSourceAdd = props => {
                         checked={formdata?.is_parking || false}
                         onChange={handleChange}
                         disabled={save || !Boolean(formdata?.part_id)}
+                        error={Boolean(saveErrors.is_parking)}
                     />
 
                     <Form.Input
@@ -266,6 +284,7 @@ const IncomeSourceAdd = props => {
                         value={formdata?.settings?.parking_price || ""}
                         onChange={handleChange}
                         disabled={save || !Boolean(formdata?.part_id) || !Boolean(formdata?.is_parking)}
+                        error={Boolean(saveErrors.parking_price)}
                     />
 
                     <Form.Input
@@ -276,6 +295,7 @@ const IncomeSourceAdd = props => {
                         value={formdata?.settings?.car_number || ""}
                         onChange={handleChange}
                         disabled={save || !Boolean(formdata?.part_id) || !Boolean(formdata?.is_parking)}
+                        error={Boolean(saveErrors.car_number)}
                     />
 
                 </Form.Group>
@@ -291,6 +311,7 @@ const IncomeSourceAdd = props => {
                         checked={formdata?.is_internet || false}
                         onChange={handleChange}
                         disabled={save || !Boolean(formdata?.part_id)}
+                        error={Boolean(saveErrors.is_internet)}
                     />
 
                     <Form.Input
@@ -304,6 +325,7 @@ const IncomeSourceAdd = props => {
                         value={formdata?.settings?.internet_price || ""}
                         onChange={handleChange}
                         disabled={save || !Boolean(formdata?.part_id) || !Boolean(formdata?.is_internet)}
+                        error={Boolean(saveErrors.internet_price)}
                     />
 
                 </Form.Group>
@@ -322,6 +344,7 @@ const IncomeSourceAdd = props => {
                         checked={Boolean(formdata?.settings?.no_fine)}
                         onChange={handleChange}
                         disabled={save || !Boolean(formdata?.part_id)}
+                        error={Boolean(saveErrors.no_fine)}
                     />
 
                     <Form.Input
@@ -333,7 +356,8 @@ const IncomeSourceAdd = props => {
                         name="fine_percent"
                         value={formdata?.settings?.fine_percent || ""}
                         onChange={handleChange}
-                        disabled={save || !Boolean(formdata?.part_id)}
+                        disabled={save || !Boolean(formdata?.part_id) || Boolean(formdata?.settings?.no_fine)}
+                        error={Boolean(saveErrors.fine_percent)}
                     />
 
                 </Form.Group>
@@ -349,9 +373,12 @@ const IncomeSourceAdd = props => {
                     value={formdata?.settings?.comment || ""}
                     onChange={handleChange}
                     disabled={save || !Boolean(formdata?.part_id)}
+                    error={Boolean(saveErrors.comment)}
                 />
 
             </Form>
+
+            {saveError && <div className="text-danger mt-3"><b>Ошибка</b>{' '}{saveError}</div>}
 
             <Dimmer active={loading} inverted>
                 <Loader />
