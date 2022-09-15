@@ -24,14 +24,14 @@ const IncomeSourceAdd = props => {
 
         setFormdata(p => {
 
+            if (type === "checkbox") {
+                value = checked;
+            }
+
             if (prename) {
                 let data = { ...p[prename], [name]: value };
                 name = prename;
                 value = data;
-            }
-
-            if (type === "checkbox") {
-                value = checked;
             }
 
             return { ...p, [name]: value }
@@ -304,6 +304,36 @@ const IncomeSourceAdd = props => {
                         value={formdata?.settings?.internet_price || ""}
                         onChange={handleChange}
                         disabled={save || !Boolean(formdata?.part_id) || !Boolean(formdata?.is_internet)}
+                    />
+
+                </Form.Group>
+
+                <hr />
+
+                <b>Процент пени за один просроченный день</b>
+
+                <Form.Group widths={2} className="align-items-center">
+
+                    <Form.Checkbox
+                        label="Не насчитывать пеню"
+                        toggle
+                        prename="settings"
+                        name="no_fine"
+                        checked={Boolean(formdata?.settings?.no_fine)}
+                        onChange={handleChange}
+                        disabled={save || !Boolean(formdata?.part_id)}
+                    />
+
+                    <Form.Input
+                        placeholder="Укажите процент (1% по умолчанию)"
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        prename="settings"
+                        name="fine_percent"
+                        value={formdata?.settings?.fine_percent || ""}
+                        onChange={handleChange}
+                        disabled={save || !Boolean(formdata?.part_id)}
                     />
 
                 </Form.Group>
