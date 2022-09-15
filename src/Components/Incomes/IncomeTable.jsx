@@ -1,5 +1,5 @@
 import React from "react";
-import { Icon, Table } from "semantic-ui-react";
+import { Dropdown, Icon, Table } from "semantic-ui-react";
 import moment from "moment";
 import { useDispatch } from "react-redux";
 import { setShowAdd, setIncomeSourceAdd, setShowIncomes, setPartAdd } from "../../store/incomes/actions";
@@ -154,7 +154,7 @@ const TableRowSource = props => {
         />
         <Table.Cell>
             <div className="d-flex justify-content-center">
-                <span>
+                {/* <span>
                     <Icon
                         name="pencil"
                         link
@@ -180,15 +180,39 @@ const TableRowSource = props => {
                             income_source_id: row.id,
                         }))}
                     />
-                </span>
+                </span> */}
                 <span>
                     <Icon
                         name={row.files_count > 0 ? "folder open" : "folder"}
                         link
                         title="Файлы"
-                        fitted
                         onClick={() => setShowFiles(row)}
+                        className="me-2"
                     />
+                </span>
+                <span>
+                    <Dropdown icon={null} trigger={<Icon name="ellipsis vertical" link fitted />} direction="left" pointing="top">
+                        <Dropdown.Menu>
+                            <Dropdown.Item
+                                content="Редактировать"
+                                icon="pencil"
+                                onClick={() => dispatch(setIncomeSourceAdd(row))}
+                            />
+                            <Dropdown.Item
+                                content="Вывести платежи"
+                                icon="eye"
+                                onClick={() => dispatch(setShowIncomes(row))}
+                            />
+                            <Dropdown.Item
+                                content="Внести оплату"
+                                icon="plus"
+                                onClick={() => dispatch(setShowAdd({
+                                    income_part_id: row.part_id,
+                                    income_source_id: row.id,
+                                }))}
+                            />
+                        </Dropdown.Menu>
+                    </Dropdown>
                 </span>
             </div>
         </Table.Cell>
