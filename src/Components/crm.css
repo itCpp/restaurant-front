@@ -136,3 +136,13 @@
 .income-table-row.overdue:hover {
     background-color: #ffc0c0;
 }
+
+.pay-row.no-pay > *:not(.not-colors) {
+    background-color: #da3939 !important;
+    color: #ffffff !important;
+}
+
+.pay-row.one-pay > *:not(.not-colors) {
+    background-color: #d0d0d0 !important;
+    /* color: #ffffff !important; */
+}

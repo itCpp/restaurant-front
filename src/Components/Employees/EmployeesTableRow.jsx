@@ -1,5 +1,6 @@
+import React from "react";
 import moment from "moment";
-import { Dropdown, Icon, Table } from "semantic-ui-react";
+import { Dropdown, Form, Icon, Table } from "semantic-ui-react";
 
 const EmployeesTableRow = props => {
 
@@ -29,7 +30,12 @@ const EmployeesTableRow = props => {
             {row.date_work_stop && <span className="px-1">по {moment(row.date_work_stop).format("DD.MM.YYYY")}</span>}
         </Table.Cell>
         <Table.Cell>
-
+            <div className="d-flex align-items-center">
+                <span className="flex-grow-1">{row.salary}</span>
+                <span>
+                    <ChangeSalaryDropdown row={row} />
+                </span>
+            </div>
         </Table.Cell>
         <Table.Cell textAlign="center">
             <Dropdown
@@ -47,6 +53,58 @@ const EmployeesTableRow = props => {
             </Dropdown>
         </Table.Cell>
     </Table.Row>
+}
+
+const ChangeSalaryDropdown = props => {
+
+    const { row } = props;
+    const [open, setOpen] = React.useState(false);
+
+    return <Dropdown
+        open={open}
+        trigger={<Icon
+            name="exchange"
+            link
+            title="Сменить оклад"
+            onClick={() => setOpen(p => !p)}
+        />}
+        icon={null}
+        direction="left"
+        pointing="top right"
+
+    >
+        <Dropdown.Menu>
+            <div className="px-2 py-2">
+                <strong>Сменить оклад:</strong>
+            </div>
+            <Dropdown.Divider className="my-0" />
+            <Form className="p-1">
+                <Form.Input
+                    type="date"
+                    size="mini"
+                    className="mb-1"
+                />
+                <Form.Input
+                    size="mini"
+                    placeholder="Укажите размер оклада"
+                />
+            </Form>
+            <div className="px-2 pb-2 d-flex justify-content-between">
+                <Icon
+                    name="cancel"
+                    link
+                    onClick={() => setOpen(false)}
+                    title="Отмена"
+                />
+                <Icon
+                    name="save"
+                    disabled
+                    title="Сохранить"
+                />
+            </div>
+        </Dropdown.Menu>
+    </Dropdown>
+
 }
 
 export default EmployeesTableRow;

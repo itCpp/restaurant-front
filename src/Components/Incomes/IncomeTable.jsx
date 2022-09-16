@@ -102,7 +102,7 @@ const TableRowSource = props => {
     const overdue = Boolean(row.overdue);
 
     const className = ["income-table-row"];
-    overdue && !row.is_free && className.push("overdue");
+    (overdue || row.is_overdue) && !row.is_free && className.push("overdue");
     !row.is_free && className.push('not-free');
 
     const price = Number(Number(row.price) * Number(row.space));
@@ -137,6 +137,13 @@ const TableRowSource = props => {
         </Table.Cell>
         <Table.Cell>
             {row.last && <div className="d-flex text-nowrap">
+                {row.is_overdue && <span>
+                    <Icon
+                        name="calendar"
+                        color="red"
+                        title="Прочка с ранних периодов"
+                    />    
+                </span>}
                 <span style={overdue ? { fontWeight: 700, color: "#dc3545" } : {}}>
                     {moment(row.last.date).format("DD.MM.YYYY")}
                 </span>

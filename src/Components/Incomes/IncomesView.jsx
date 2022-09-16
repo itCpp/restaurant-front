@@ -74,21 +74,26 @@ const IncomesView = props => {
 
                     <Table.Body>
                         {data.map((item, key) => {
-                            return item.rows.map((iRow, i) => <Table.Row key={`${key}_${i}`} negative={!Boolean(iRow.sum)}>
+                            return item.rows.map((iRow, i) => <Table.Row
+                                key={`${key}_${i}`}
+                                className={`pay-row ${!Boolean(iRow.sum) ? "no-pay" : ""} ${Boolean(iRow.purpose?.every_month
+                                    ) ? "" : "one-pay"}`}
+                            >
                                 {i === 0 && <Table.Cell
                                     content={moment(item.month).format("MMM YYYY").toUpperCase()}
                                     rowSpan={item.rows.length}
                                     verticalAlign="top"
+                                    className="not-colors"
                                 />}
                                 <Table.Cell
                                     textAlign="left"
-                                    className="px-2"
+                                    className="ps-3 pe-2"
                                     content={<div className="d-flex">
                                         {iRow.purpose && <div>
                                             {iRow.purpose?.icon && <span>
                                                 <Icon
                                                     name={iRow.purpose?.icon}
-                                                    color={Boolean(iRow.sum) ? "green" : "red"}
+                                                    color={Boolean(iRow.sum) ? "green" : null}
                                                     className="me-3"
                                                 />
                                             </span>}

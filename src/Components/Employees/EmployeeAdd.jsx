@@ -40,7 +40,7 @@ const EmployeeAdd = props => {
         if (save) {
             axios.put('employees/create', formdata)
                 .then(({ data }) => {
-                    handleRows(data.row);
+                    handleRows(data);
                     close();
                 })
                 .catch(e => {
