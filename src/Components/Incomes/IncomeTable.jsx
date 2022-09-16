@@ -136,23 +136,25 @@ const TableRowSource = props => {
             </div>}
         </Table.Cell>
         <Table.Cell>
-            {row.last && <div className="d-flex text-nowrap">
-                {row.is_overdue && <span>
-                    <Icon
-                        name="calendar"
-                        color="red"
-                        title="Прочка с ранних периодов"
-                    />    
-                </span>}
+            {row.last && <div className="d-flex text-nowrap" style={{ opacity: row.last.is_prev ? "0.5" : "1" }}>
                 <span style={overdue ? { fontWeight: 700, color: "#dc3545" } : {}}>
                     {moment(row.last.date).format("DD.MM.YYYY")}
                 </span>
                 <span className="ms-2">{row.last.sum}</span>
             </div>}
-            {Boolean(row.fine) && <div className="text-danger mt-1 text-nowrap" title="Пеня">
-                <Icon name="time" color="red" />
-                <b>{row.fine}</b>
-            </div>}
+            <div className="d-flex align-items-center">
+                {row.is_overdue && <span>
+                    <Icon
+                        name="calendar"
+                        color="red"
+                        title="Просрочка с ранних периодов"
+                    />
+                </span>}
+                {Boolean(row.fine) && <div className="text-danger text-nowrap" title="Пеня">
+                    <Icon name="time" color="red" />
+                    <b>{row.fine}</b>
+                </div>}
+            </div>
         </Table.Cell>
         <Table.Cell
             content={<div>

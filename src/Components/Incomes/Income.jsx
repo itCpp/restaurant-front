@@ -41,7 +41,7 @@ const Income = () => {
         <IncomeAdd setRows={setRows} />
         <IncomePartAdd setRows={setRows} />
         <IncomeSourceAdd setRows={setRows} />
-        <IncomesView />
+        <IncomesView setSourceRows={setRows} />
 
         {loading && <Loader inline="centered" active className="mt-4" />}
 
