@@ -4,6 +4,7 @@ import moment from "moment";
 import { useDispatch } from "react-redux";
 import { setShowAdd, setIncomeSourceAdd, setShowIncomes, setPartAdd } from "../../store/incomes/actions";
 import IncomeFiles from "./IncomeFiles";
+import { useNavigate } from "react-router-dom";
 
 const colSpan = 11;
 
@@ -100,6 +101,7 @@ const TableRowSource = props => {
 
     const { row, dispatch, setShowFiles } = props;
     const overdue = Boolean(row.overdue);
+    const navigate = useNavigate();
 
     const className = ["income-table-row"];
     (overdue || row.is_overdue) && !row.is_free && className.push("overdue");
@@ -205,6 +207,14 @@ const TableRowSource = props => {
                         link
                         title="Файлы"
                         onClick={() => setShowFiles(row)}
+                        className="me-2"
+                    />
+                </span>
+                <span>
+                    <Icon
+                        name="chevron right"
+                        link
+                        onClick={() => navigate("/tenant/" + row.id)}
                         className="me-2"
                     />
                 </span>

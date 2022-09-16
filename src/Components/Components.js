@@ -3,6 +3,7 @@ import Header from "./Header";
 import Income from "./Incomes";
 import Main from "./Main";
 import Employees from "./Employees";
+import Tenant from "./Tenant";
 
 export {
     Employees,
@@ -10,4 +11,5 @@ export {
     Header,
     Income,
     Main,
+    Tenant,
 }
