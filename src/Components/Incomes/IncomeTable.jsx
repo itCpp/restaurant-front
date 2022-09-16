@@ -107,7 +107,12 @@ const TableRowSource = props => {
 
     const price = Number(Number(row.price) * Number(row.space));
 
-    return <Table.Row className={className.join(" ")}>
+    return <Table.Row
+        className={className.join(" ")}
+        style={{
+            background: row?.settings?.color || null,
+        }}
+    >
 
         <Table.Cell>{row.cabinet || ``}</Table.Cell>
         <Table.Cell

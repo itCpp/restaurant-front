@@ -376,6 +376,35 @@ const IncomeSourceAdd = props => {
                     error={Boolean(saveErrors.comment)}
                 />
 
+                {/* <Form.Field>
+                    <label className="d-flex">
+                        <span>Цвет строки</span>
+                        <span
+                            style={{
+                                background: formdata?.settings?.color || "none",
+                                border: "1px solid #eee",
+                                marginLeft: "1rem",
+                                width: "20px",
+                                borderRadius: "0.25rem",
+                                opacity: save ? "0.4" : "1",
+                            }}
+                            children="&nbsp;"
+                        />
+                        <span className=""></span>
+                    </label>
+
+                    <Form.Input
+                        placeholder="Выберите цвет оформления"
+                        type="color"
+                        prename="settings"
+                        name="color"
+                        value={formdata?.settings?.color || ""}
+                        onChange={handleChange}
+                        disabled={save || !Boolean(formdata?.part_id)}
+                        error={Boolean(saveErrors.color)}
+                    />
+                </Form.Field> */}
+
             </Form>
 
             {saveError && <div className="text-danger mt-3"><b>Ошибка</b>{' '}{saveError}</div>}
