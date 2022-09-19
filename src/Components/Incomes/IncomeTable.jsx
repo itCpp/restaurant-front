@@ -1,5 +1,5 @@
 import React from "react";
-import { Dropdown, Icon, Table } from "semantic-ui-react";
+import { Button, Dropdown, Icon, Table } from "semantic-ui-react";
 import moment from "moment";
 import { useDispatch } from "react-redux";
 import { setShowAdd, setIncomeSourceAdd, setShowIncomes, setPartAdd } from "../../store/incomes/actions";
@@ -173,7 +173,7 @@ const TableRowSource = props => {
             </div>}
         />
         <Table.Cell>
-            <div className="d-flex justify-content-center">
+            <div className="d-flex justify-content-center align-items-center">
                 {/* <span>
                     <Icon
                         name="pencil"
@@ -201,6 +201,7 @@ const TableRowSource = props => {
                         }))}
                     />
                 </span> */}
+
                 <span>
                     <Icon
                         name={row.files_count > 0 ? "folder open" : "folder"}
@@ -210,16 +211,9 @@ const TableRowSource = props => {
                         className="me-2"
                     />
                 </span>
+
                 <span>
-                    <Icon
-                        name="chevron right"
-                        link
-                        onClick={() => navigate("/tenant/" + row.id)}
-                        className="me-2"
-                    />
-                </span>
-                <span>
-                    <Dropdown icon={null} trigger={<Icon name="ellipsis vertical" link fitted />} direction="left" pointing="top">
+                    <Dropdown icon={null} trigger={<Icon name="ellipsis vertical" link />} direction="left" pointing="top">
                         <Dropdown.Menu>
                             <Dropdown.Item
                                 content="Редактировать"
@@ -242,6 +236,24 @@ const TableRowSource = props => {
                         </Dropdown.Menu>
                     </Dropdown>
                 </span>
+
+                {/* <span>
+                    <Icon
+                        name="chevron right"
+                        link
+                        onClick={() => navigate("/tenant/" + row.id)}
+                        fitted
+                    />
+                </span> */}
+
+                <Button
+                    icon="chevron right"
+                    size="mini"
+                    basic
+                    title="Перейти на страницу помещения"
+                    onClick={() => navigate("/tenant/" + row.id)}
+                />
+
             </div>
         </Table.Cell>
     </Table.Row>

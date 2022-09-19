@@ -146,3 +146,26 @@
     background-color: #d0d0d0 !important;
     /* color: #ffffff !important; */
 }
+
+.k-segment {
+    box-shadow: none !important;
+    border-color: var(--bs-gray-200) !important;
+}
+
+.pay-row-tenant {
+    padding: 0.25rem 0.5rem;
+    display: flex;
+    align-items: center;
+    cursor: default;
+}
+.pay-row-tenant:not(:last-child) {
+    border-bottom: 1px solid var(--bs-gray-200);
+}
+
+.pay-row-type-one {
+    background-color: var(--bs-gray-400);
+}
+.pay-row-no-pay {
+    color: #ffffff;
+    background-color: var(--bs-red);
+}
