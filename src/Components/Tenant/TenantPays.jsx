@@ -17,6 +17,11 @@ const TenantPays = props => {
 
         <Header as="h3" className="mb-4">Платежи</Header>
 
+        {Boolean(row.fine) && <FineRow
+            row={row}
+            setRow={setRow}
+        />}
+
         {(row.next_pays || []).length > 0 && <div className="mb-2">
             {row.next_pays.map((pay, i) => <NextPayRow
                 key={i}
@@ -51,6 +56,38 @@ const TenantPays = props => {
         </Grid>}
 
     </Segment>
+}
+
+const FineRow = props => {
+
+    const { row, setRow } = props;
+    const [addReady, setAddReady] = React.useState(false);
+
+    return <div className="pay-row-tenant px-3 text-danger position-relative">
+        <div className="me-3 opacity-60">{moment().format("DD.MM.YYYY")}</div>
+        <div><Icon name="ban" /></div>
+        <div className="flex-grow-1">Пеня за просроченные платежи <b>{row.fine} р.</b></div>
+        <span>
+            <Icon
+                name="plus"
+                fitted
+                link
+                title="Добавить оплату пени"
+                onClick={() => setAddReady(true)}
+            />
+        </span>
+        <AddPayForm
+            show={addReady}
+            close={() => setAddReady(false)}
+            setRow={setRow}
+            date={moment().format("YYYY-MM-DD")}
+            sum={row.fine}
+            purpose_pay={0}
+            fine={true}
+            income_part_id={row.part_id}
+            income_source_id={row.id}
+        />
+    </div>
 }
 
 const NextPayRow = props => {
@@ -274,7 +311,7 @@ const PayRowColumn = props => {
 
 const AddPayForm = props => {
 
-    const { show, close, setRow } = props;
+    const { show, close, setRow, fine } = props;
     const { date, sum, purpose_pay, income_part_id, income_source_id } = props;
     const { nextPayRow, lostPayRow } = props;
 
@@ -285,7 +322,7 @@ const AddPayForm = props => {
     React.useEffect(() => {
 
         if (show) {
-            setFormdata({ date, sum, purpose_pay, income_part_id, income_source_id });
+            setFormdata({ date, sum, purpose_pay, income_part_id, income_source_id, fine });
         }
 
     }, [show]);
@@ -369,8 +406,8 @@ const AddPayForm = props => {
         style={{
             position: "absolute",
             right: 0,
-            bottom: nextPayRow ? 1 : 0,
-            top: nextPayRow ? 1 : 0,
+            bottom: (nextPayRow || fine) ? 1 : 0,
+            top: (nextPayRow || fine) ? 1 : 0,
             left: 0,
             background: "#ffffffe6",
         }}

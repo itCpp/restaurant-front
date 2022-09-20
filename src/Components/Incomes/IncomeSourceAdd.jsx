@@ -154,8 +154,8 @@ const IncomeSourceAdd = props => {
 
                     <Form.Field width={6}>
                         <Form.Input
-                            label="ИНН"
-                            placeholder="Введите ИНН организации"
+                            label="ИНН/ОГРН"
+                            placeholder="Введите ИНН и ОГРН организации"
                             name="inn"
                             value={formdata?.inn || ""}
                             onChange={handleChange}

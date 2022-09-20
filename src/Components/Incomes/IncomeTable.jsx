@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Dropdown, Icon, Table } from "semantic-ui-react";
+import { Button, Dropdown, Icon, Popup, Table } from "semantic-ui-react";
 import moment from "moment";
 import { useDispatch } from "react-redux";
 import { setShowAdd, setIncomeSourceAdd, setShowIncomes, setPartAdd } from "../../store/incomes/actions";
@@ -28,7 +28,7 @@ const IncomeTable = props => {
                     <Table.HeaderCell>Кабинет</Table.HeaderCell>
                     <Table.HeaderCell>Компания</Table.HeaderCell>
                     <Table.HeaderCell>Контактное лицо</Table.HeaderCell>
-                    <Table.HeaderCell>ИНН</Table.HeaderCell>
+                    <Table.HeaderCell></Table.HeaderCell>
                     <Table.HeaderCell>Площадь, м²</Table.HeaderCell>
                     <Table.HeaderCell>Стоимость 1м²</Table.HeaderCell>
                     <Table.HeaderCell>Цена</Table.HeaderCell>
@@ -120,6 +120,9 @@ const TableRowSource = props => {
         <Table.Cell
             content={<div>
                 <div>{row.name}</div>
+                {Boolean(row.inn) && <div>
+                    <small><b>ИНН/ОГРН</b>{' '}{row.inn}</small>
+                </div>}
                 {Boolean(row.settings?.comment) && <div>
                     <small><Icon name="comment" disabled />{row.settings.comment}</small>
                 </div>}
@@ -129,7 +132,16 @@ const TableRowSource = props => {
             {row.contact_person && <div>{row.contact_person}</div>}
             {row.contact_number && <div><a href={`tel:${row.contact_number}`}>{row.contact_number}</a></div>}
         </Table.Cell>
-        <Table.Cell>{row.inn}</Table.Cell>
+        <Table.Cell>
+            <div className="d-flex">
+                {row.is_free && <PopupIcon content="Свободное помещение" trigger={<Icon name="check" color="green" />} />}
+                {Boolean(row.fine) && <PopupIcon content="Имеется неоплаченная пеня" trigger={<Icon name="ban" color="red" />} />}
+                {row.overdue && <PopupIcon content="Просроченный платеж" trigger={<Icon name="usd" color="red" />} />}
+                {row.is_overdue && <PopupIcon content="Имеется просроченный платеж более ранних периодов" trigger={<Icon name="calendar" color="red" />} />}
+                {row.is_parking && <PopupIcon content="Аренда парковочного места" trigger={<Icon name="car" color="blue" />} />}
+                {row.is_internet && <PopupIcon content="Услуги интернета" trigger={<Icon name="world" color="blue" />} />}
+            </div>
+        </Table.Cell>
         <Table.Cell>{row.space}</Table.Cell>
         <Table.Cell>{row.price}</Table.Cell>
         <Table.Cell>{price > 0 ? price.toFixed(2) : null}</Table.Cell>
@@ -258,6 +270,14 @@ const TableRowSource = props => {
         </Table.Cell>
     </Table.Row>
 
+}
+
+const PopupIcon = props => {
+    return <Popup
+        size="mini"
+        inverted
+        {...props}
+    />
 }
 
 export default IncomeTable;

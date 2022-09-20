@@ -12,7 +12,7 @@ const Tenant = () => {
     const { id } = useParams();
     const navigate = useNavigate();
 
-    const [loading, setLoadgin] = useState(true);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [row, setRow] = useState({});
 
@@ -27,10 +27,10 @@ const Tenant = () => {
                 setRow({ ...data.row, pays: data.pays });
             })
             .catch(e => setError(axios.getError(e)))
-            .then(() => setLoadgin(false));
+            .then(() => setLoading(false));
 
         return () => {
-            setLoadgin(true);
+            setLoading(true);
         }
 
     }, []);
@@ -110,7 +110,7 @@ const Tenant = () => {
 
                             <Segment className="d-flex align-items-center justify-content-between">
                                 <Header
-                                    as="h5"
+                                    as="h2"
                                     content={row.name}
                                     subheader={row?.settings?.comment}
                                     className="mb-0"

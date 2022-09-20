@@ -22,8 +22,9 @@ const TenantData = props => {
 
             <div>
                 {row.is_free && <Icon name="check" color="green" title="Свободное помещение" />}
-                {row.overdue && <Icon name="money" color="red" title="Просроченный платеж" />}
-                {row.is_overdue && <Icon name="calendar" color="red" title="Имеется просроченный платеж c сранних периодов" />}
+                {Boolean(row.fine) && <Icon name="ban" color="red" title="Имеется неоплаченная пеня" />}
+                {row.overdue && <Icon name="usd" color="red" title="Просроченный платеж" />}
+                {row.is_overdue && <Icon name="calendar" color="red" title="Имеется просроченный платеж более ранних периодов" />}
                 {row.is_parking && <Icon name="car" color="blue" title="Аренда парковочного места" />}
                 {row.is_internet && <Icon name="world" color="blue" title="Услуги интернета" />}
 
