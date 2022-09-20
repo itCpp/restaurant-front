@@ -7,7 +7,7 @@ import { axios } from "../../system";
 
 const IncomeSourceAdd = props => {
 
-    const { setRows } = props;
+    const { setRow, setRows } = props;
     const dispatch = useDispatch();
     const { id } = useParams();
     const { showSourceAdd } = useSelector(s => s.incomes);
@@ -73,7 +73,8 @@ const IncomeSourceAdd = props => {
 
             axios.put('incomes/source/save', formdata)
                 .then(({ data }) => {
-                    setRows(p => {
+
+                    typeof setRows == "function" && setRows(p => {
                         let parts = [...p];
                         parts.map((p, k) => {
                             let add = true;
@@ -87,7 +88,11 @@ const IncomeSourceAdd = props => {
                         });
                         return parts;
                     });
+
+                    typeof setRow == "function" && setRow(p => ({ ...p, ...data.row }));
+
                     dispatch(setIncomeSourceAdd(false));
+
                 })
                 .catch(e => {
                     setSave(false);
@@ -330,7 +335,7 @@ const IncomeSourceAdd = props => {
 
                 <hr />
 
-                <Form.Group widths={2} className="align-items-center">
+                <Form.Group widths={3} className="align-items-center">
 
                     <Form.Checkbox
                         label="Интернет услуги"
@@ -354,6 +359,18 @@ const IncomeSourceAdd = props => {
                         onChange={handleChange}
                         disabled={save || !Boolean(formdata?.part_id) || !Boolean(formdata?.is_internet)}
                         error={Boolean(saveErrors.internet_price)}
+                    />
+
+                    <Form.Input
+                        label="Дата начала использования"
+                        placeholder="Введите дату"
+                        prename="settings"
+                        name="internet_date"
+                        type="date"
+                        value={formdata?.settings?.internet_date || ""}
+                        onChange={handleChange}
+                        disabled={save || !Boolean(formdata?.part_id) || !Boolean(formdata?.is_internet)}
+                        error={Boolean(saveErrors.internet_date)}
                     />
 
                 </Form.Group>

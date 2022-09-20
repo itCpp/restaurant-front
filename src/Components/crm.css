@@ -183,3 +183,10 @@
     opacity: .4;
     text-decoration: line-through;
 }
+
+.grid-absolute {
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    top: -6px;
+}

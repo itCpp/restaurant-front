@@ -57,31 +57,7 @@ const NextPayRow = props => {
 
     const { row, setRow } = props;
     const { income_part_id, income_source_id } = props;
-
     const [addReady, setAddReady] = React.useState(false);
-    const [formdata, setFormdata] = React.useState({});
-    const [save, setSave] = React.useState(false);
-    const [saveError, setSaveError] = React.useState(false);
-
-    React.useEffect(() => {
-
-        if (addReady) {
-
-            setSave(false);
-            setSaveError(false);
-
-            setFormdata({
-                date: moment().format("YYYY-MM-DD"),
-                sum: row.price,
-                purpose_pay: row.type,
-                income_part_id,
-                income_source_id
-            });
-
-        }
-
-    }, [addReady]);
-
 
     return <div className="position-relative pay-row-tenant px-3" style={{ minHeight: 31 }}>
 
@@ -310,7 +286,6 @@ const AddPayForm = props => {
 
         if (show) {
             setFormdata({ date, sum, purpose_pay, income_part_id, income_source_id });
-            console.log(props);
         }
 
     }, [show]);
