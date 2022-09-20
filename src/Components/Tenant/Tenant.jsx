@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Grid, GridRow, Header, Label, Loader, Message } from "semantic-ui-react";
+import { Button, Grid, GridRow, Header, Label, Loader, Message } from "semantic-ui-react";
 import Segment from "../UI/Segment";
 import { axios } from "../../system";
 import TenantData from "./TenantData";
@@ -57,11 +57,21 @@ const Tenant = () => {
                                     subheader={row?.settings?.comment}
                                     className="mb-0"
                                 />
-                                {row.cabinet && <Label
-                                    content={row.cabinet}
-                                    color="yellow"
-                                    title="Кабинет"
-                                />}
+                                <div>
+                                    {row.cabinet && <Label
+                                        content={row.cabinet}
+                                        color="yellow"
+                                        title="Кабинет"
+                                        className="me-2"
+                                    />}
+                                    <Button
+                                        icon="archive"
+                                        basic
+                                        circular
+                                        title="Отправить в архив"
+                                        disabled
+                                    />
+                                </div>
                             </Segment>
 
                         </Grid.Column>
