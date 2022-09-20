@@ -1,17 +1,24 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Button, Grid, GridRow, Header, Label, Loader, Message } from "semantic-ui-react";
+import { Button, Grid, Header, Icon, Label, Loader, Message, Modal } from "semantic-ui-react";
 import Segment from "../UI/Segment";
 import { axios } from "../../system";
 import TenantData from "./TenantData";
 import TenantPays from "./TenantPays";
+import { useNavigate } from "react-router-dom";
 
 const Tenant = () => {
 
     const { id } = useParams();
+    const navigate = useNavigate();
+
     const [loading, setLoadgin] = useState(true);
     const [error, setError] = useState(null);
     const [row, setRow] = useState({});
+
+    const [archive, setArchive] = useState(false);
+    const [drop, setDrop] = useState(false);
+    const [dropError, setDropError] = useState(false);
 
     useEffect(() => {
 
@@ -28,7 +35,58 @@ const Tenant = () => {
 
     }, []);
 
+    useEffect(() => {
+
+        if (archive) {
+            return () => {
+                setDropError(false);
+            }
+        }
+
+    }, [archive]);
+
+    useEffect(() => {
+
+        if (drop) {
+
+            axios.post('tenant/drop', { id: Number(id) })
+                .then(({ data }) => {
+                    navigate("/income/" + data.buildingId);
+                })
+                .catch(e => {
+                    setDropError(axios.getError(e));
+                    setDrop(false);
+                });
+        }
+
+    }, [drop]);
+
     return <div>
+
+        <Modal
+            open={archive}
+            basic
+            centered={false}
+            size="mini"
+        >
+            <Header icon>
+                <Icon name="archive" />
+            </Header>
+
+            <Modal.Content>
+                <p className="text-center">Вы действительно хотите отправить карточку в архив?</p>
+                {dropError && <p className="text-center text-danger"><b>Ошибка</b>{' '}{dropError}</p>}
+            </Modal.Content>
+            <Modal.Actions className="text-center">
+                <Button basic color="red" inverted onClick={() => setArchive(false)} disabled={drop}>
+                    <Icon name="remove" /> Нет
+                </Button>
+                <Button color="green" inverted onClick={() => setDrop(true)} loading={drop} disabled={drop}>
+                    <Icon name="checkmark" /> Да
+                </Button>
+            </Modal.Actions>
+
+        </Modal>
 
         {loading && <Loader active inline="centered" className="mt-3" />}
 
@@ -69,7 +127,7 @@ const Tenant = () => {
                                         basic
                                         circular
                                         title="Отправить в архив"
-                                        disabled
+                                        onClick={() => setArchive(true)}
                                     />
                                 </div>
                             </Segment>
