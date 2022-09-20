@@ -93,6 +93,7 @@ const Employees = props => {
                     key={row.id}
                     row={row}
                     setEdit={setEdit}
+                    setRows={setRows}
                 />)}
             </Table.Body>}
 

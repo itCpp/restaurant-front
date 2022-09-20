@@ -1,10 +1,11 @@
 import React from "react";
 import moment from "moment";
-import { Dropdown, Form, Icon, Table } from "semantic-ui-react";
+import { Dimmer, Dropdown, Form, Icon, Loader, Table } from "semantic-ui-react";
+import { axios } from "../../system";
 
 const EmployeesTableRow = props => {
 
-    const { row, setEdit } = props;
+    const { row, setEdit, setRows } = props;
 
     return <Table.Row>
         <Table.Cell>
@@ -33,7 +34,7 @@ const EmployeesTableRow = props => {
             <div className="d-flex align-items-center">
                 <span className="flex-grow-1">{row.salary}</span>
                 <span>
-                    <ChangeSalaryDropdown row={row} />
+                    <ChangeSalaryDropdown row={row} setRows={setRows} />
                 </span>
             </div>
         </Table.Cell>
@@ -57,8 +58,49 @@ const EmployeesTableRow = props => {
 
 const ChangeSalaryDropdown = props => {
 
-    const { row } = props;
+    const { row, setRows } = props;
     const [open, setOpen] = React.useState(false);
+    const [formdata, setFormdata] = React.useState({});
+    const [save, setSave] = React.useState(false);
+    const [error, setError] = React.useState(null);
+
+    React.useEffect(() => {
+
+        return () => {
+            setFormdata({
+                id: row.id,
+                date: row.salary_date,
+                salary: Number(row.salary) ? row.salary : null,
+            });
+            setSave(false);
+            setError(null);
+        }
+
+    }, [open]);
+
+    React.useEffect(() => {
+
+        if (save) {
+            axios.post('employees/salary/set', formdata)
+                .then(({ data }) => {
+                    setRows(p => {
+                        let rows = [];
+                        p.forEach(r => {
+                            let row = { ...r };
+                            if (r.id === data.row.id) row = { ...r, ...data.row }
+                            rows.push(row);
+                        });
+                        return rows;
+                    });
+                    setOpen(false);
+                })
+                .catch(e => {
+                    setSave(false);
+                    setError(axios.getError(e));
+                });
+        }
+
+    }, [save]);
 
     return <Dropdown
         open={open}
@@ -73,35 +115,57 @@ const ChangeSalaryDropdown = props => {
         pointing="top right"
 
     >
-        <Dropdown.Menu>
+        <Dropdown.Menu style={{ maxWidth: 200 }}>
             <div className="px-2 py-2">
                 <strong>Сменить оклад:</strong>
             </div>
             <Dropdown.Divider className="my-0" />
-            <Form className="p-1">
+
+            <Form className="p-1 mb-0">
                 <Form.Input
                     type="date"
                     size="mini"
                     className="mb-1"
+                    value={formdata?.date || ""}
+                    onChange={(e, { value }) => setFormdata(p => ({ ...p, date: value }))}
                 />
                 <Form.Input
                     size="mini"
                     placeholder="Укажите размер оклада"
+                    type="number"
+                    step="0.01"
+                    value={formdata?.salary || ""}
+                    onChange={(e, { value }) => setFormdata(p => ({ ...p, salary: value }))}
+                    className="mb-0"
                 />
+
+                <Dimmer active={save} inverted><Loader size="small" /></Dimmer>
+
+                {error && <div className="text-danger px-1 pb-0">
+                    <small><b>Ошибка</b>{' '}{error}</small>
+                </div>}
+
             </Form>
+
             <div className="px-2 pb-2 d-flex justify-content-between">
                 <Icon
                     name="cancel"
-                    link
+                    link={!save}
                     onClick={() => setOpen(false)}
                     title="Отмена"
+                    disabled={save}
                 />
                 <Icon
                     name="save"
-                    disabled
+                    disabled={(!Boolean(formdata?.date) || !Boolean(formdata?.salary)) || save}
                     title="Сохранить"
+                    fitted
+                    color="green"
+                    link={!save}
+                    onClick={() => setSave(true)}
                 />
             </div>
+
         </Dropdown.Menu>
     </Dropdown>
 
