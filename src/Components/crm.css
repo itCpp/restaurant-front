@@ -169,3 +169,17 @@
     color: #ffffff;
     background-color: var(--bs-red);
 }
+
+.pay-row-tenant .buttons-row {
+    /* display: none; */
+    transition: .2s;
+}
+.pay-row-tenant:hover .buttons-row {
+    display: flex;
+    transition: .2s;
+}
+
+.pay-row-tenant.deleted-pay * {
+    opacity: .4;
+    text-decoration: line-through;
+}

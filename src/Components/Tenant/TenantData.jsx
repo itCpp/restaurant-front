@@ -1,14 +1,26 @@
 import moment from "moment/moment";
-import { Grid, Header } from "semantic-ui-react";
+import { Grid, Header, Icon } from "semantic-ui-react";
 import Segment from "../UI/Segment";
 
 const TenantData = props => {
 
     const { row, setRow } = props;
 
-    return <Segment>
+    return <Segment className="pb-4">
 
-        <Header as="h5" className="mb-5">Основные данные</Header>
+        <div className="mb-4 d-flex align-items-center">
+
+            <Header as="h3" className="mb-0 flex-grow-1">Основные данные</Header>
+
+            <div>
+                {row.is_free && <Icon name="check" color="green" title="Свободное помещение" />}
+                {row.overdue && <Icon name="money" color="red" title="Просроченный платеж" />}
+                {row.is_overdue && <Icon name="calendar" color="red" title="Имеется просроченный платеж c сранних периодов" />}
+                {row.is_parking && <Icon name="car" color="blue" title="Аренда парковочного места" />}
+                {row.is_internet && <Icon name="world" color="blue" title="Услуги интернета" />}
+            </div>
+
+        </div>
 
         <Grid>
 
