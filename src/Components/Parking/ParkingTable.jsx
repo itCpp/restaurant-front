@@ -1,6 +1,7 @@
 import moment from "moment";
 import React from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { Button, Icon, Table } from "semantic-ui-react";
 import { setParkingPlaceAdd, setIncomeSourceAdd } from "../../store/incomes/actions";
 
@@ -51,6 +52,7 @@ const ParkingTableSource = props => {
 
     const { row } = props;
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const rows = row.parking || [];
 
     return <>
@@ -72,6 +74,13 @@ const ParkingTableSource = props => {
 
                         <div>
                             <Button
+                                icon="plus"
+                                basic
+                                size="mini"
+                                title="Добавить парковочное место"
+                                onClick={() => dispatch(setParkingPlaceAdd({ source_id: row.id }))}
+                            />
+                            <Button
                                 icon="pencil"
                                 basic
                                 color="green"
@@ -80,11 +89,11 @@ const ParkingTableSource = props => {
                                 onClick={() => dispatch(setIncomeSourceAdd(row))}
                             />
                             <Button
-                                icon="plus"
+                                icon="chevron right"
                                 basic
                                 size="mini"
-                                title="Добавить парковочное место"
-                                onClick={() => dispatch(setParkingPlaceAdd({ source_id: row.id }))}
+                                title="Перейти на страницу помещения"
+                                onClick={() => navigate("/tenant/" + row.id)}
                             />
                         </div>
 

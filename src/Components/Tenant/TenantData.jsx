@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { Button, Grid, Header, Icon } from "semantic-ui-react";
 import { setIncomeSourceAdd } from "../../store/incomes/actions";
 import IncomeSourceAdd from "../Incomes/IncomeSourceAdd";
+import ParkingSourceAdd from "../Parking/ParkingSourceAdd";
 import Segment from "../UI/Segment";
 
 const TenantData = props => {
@@ -12,9 +13,10 @@ const TenantData = props => {
 
     return <Segment className="pb-4">
 
-        <IncomeSourceAdd
-            setRow={setRow}
-        />
+        {row.is_rent
+            ? <IncomeSourceAdd setRow={setRow} />
+            : <ParkingSourceAdd setRow={setRow} />
+        }
 
         <div className="mb-4 d-flex align-items-center">
 
@@ -22,11 +24,15 @@ const TenantData = props => {
 
             <div>
                 {row.is_free && <Icon name="check" color="green" title="Свободное помещение" />}
-                {Boolean(row.fine) && <Icon name="ban" color="red" title="Имеется неоплаченная пеня" />}
-                {row.overdue && <Icon name="usd" color="red" title="Просроченный платеж" />}
-                {row.is_overdue && <Icon name="calendar" color="red" title="Имеется просроченный платеж более ранних периодов" />}
-                {row.is_parking && <Icon name="car" color="blue" title="Аренда парковочного места" />}
-                {row.is_internet && <Icon name="world" color="blue" title="Услуги интернета" />}
+
+                {!row.is_free && <>
+                    {row.is_rent && <Icon name="building" color="blue" title="Аренда помещения" />}
+                    {Boolean(row.fine) && <Icon name="ban" color="red" title="Имеется неоплаченная пеня" />}
+                    {row.overdue && <Icon name="usd" color="red" title="Просроченный платеж" />}
+                    {row.is_overdue && <Icon name="calendar" color="red" title="Имеется просроченный платеж более ранних периодов" />}
+                    {row.is_parking && <Icon name="car" color="blue" title="Аренда парковочного места" />}
+                    {row.is_internet && <Icon name="world" color="blue" title="Услуги интернета" />}
+                </>}
 
                 <Button
                     icon="pencil"
@@ -43,7 +49,7 @@ const TenantData = props => {
 
         <Grid>
 
-            <Grid.Row columns="equal" className="py-2">
+            {row.is_free && <Grid.Row columns="equal" className="py-2">
 
                 <Grid.Column>
                     <strong>Кабинет</strong>
@@ -53,7 +59,7 @@ const TenantData = props => {
                     {row.cabinet}
                 </Grid.Column>
 
-            </Grid.Row>
+            </Grid.Row>}
 
             <Grid.Row columns="equal" className="py-2">
 
@@ -93,7 +99,7 @@ const TenantData = props => {
 
             </Grid.Row>
 
-            <Grid.Row columns="equal" className="py-2">
+            {row.is_free && <Grid.Row columns="equal" className="py-2">
 
                 <Grid.Column>
                     <strong>Дата аренды</strong>
@@ -107,9 +113,9 @@ const TenantData = props => {
                     {Boolean(row?.settings?.comment_date) && <div><small>{row.settings.comment_date}</small></div>}
                 </Grid.Column>
 
-            </Grid.Row>
+            </Grid.Row>}
 
-            <Grid.Row columns="equal" className="py-2">
+            {row.is_free && <Grid.Row columns="equal" className="py-2">
 
                 <Grid.Column>
                     <strong>Площадь{' '}</strong>
@@ -126,7 +132,7 @@ const TenantData = props => {
                     <span>{Number(row.space) * Number(row.price)}</span>
                 </Grid.Column>
 
-            </Grid.Row>
+            </Grid.Row>}
 
             <Grid.Row columns="equal" className="py-2">
 
@@ -156,7 +162,23 @@ const TenantData = props => {
 
                 </Grid.Row>}
 
-                {Boolean(row?.settings?.parking_price) && <Grid.Row columns="equal" className="py-2">
+                {typeof row.parking == "object" && row.parking.map(p => <Grid.Row key={p.id} columns="equal" className="py-1">
+
+                    <Grid.Column>
+                        <strong>{p.parking_place}</strong>
+                    </Grid.Column>
+
+                    <Grid.Column width={12}>
+                        <div>{p.date_from}</div>
+                        <span>{p.car}{' '}</span>
+                        <span>{p.car_number}{' '}</span>
+                        <span>{p.owner_name}{' '}</span>
+                        <span>{p.owner_phone}{' '}</span>
+                    </Grid.Column>
+
+                </Grid.Row>)}
+
+                {/* {Boolean(row?.settings?.parking_price) && <Grid.Row columns="equal" className="py-2">
                     <Grid.Column><strong>Стоимость аренды</strong></Grid.Column>
                     <Grid.Column width={12}>{row.settings.parking_price}</Grid.Column>
                 </Grid.Row>}
@@ -169,7 +191,7 @@ const TenantData = props => {
                 {Boolean(row?.settings?.car_number) && <Grid.Row columns="equal" className="py-2">
                     <Grid.Column><strong>Гос. номер</strong></Grid.Column>
                     <Grid.Column width={12}>{row.settings.car_number}</Grid.Column>
-                </Grid.Row>}
+                </Grid.Row>} */}
 
             </>}
 

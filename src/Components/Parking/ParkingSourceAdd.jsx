@@ -63,6 +63,7 @@ const IncomeSourceAdd = props => {
         }
 
         return () => {
+            setLoading(true);
             setFormdata({});
             setSave(false);
             setSaveError(null);
@@ -103,6 +104,8 @@ const IncomeSourceAdd = props => {
 
                         return rows;
                     });
+
+                    typeof setRow == "function" && setRow(p => ({ ...p, ...data.row }));
 
                     dispatch(setIncomeSourceAdd(false));
 

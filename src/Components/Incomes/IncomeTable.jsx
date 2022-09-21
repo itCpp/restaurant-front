@@ -134,12 +134,66 @@ const TableRowSource = props => {
         </Table.Cell>
         <Table.Cell>
             <div className="d-flex">
-                {row.is_free && <PopupIcon content="Свободное помещение" trigger={<Icon name="check" color="green" />} />}
-                {Boolean(row.fine) && <PopupIcon content="Имеется неоплаченная пеня" trigger={<Icon name="ban" color="red" />} />}
-                {row.overdue && <PopupIcon content="Просроченный платеж" trigger={<Icon name="usd" color="red" />} />}
-                {row.is_overdue && <PopupIcon content="Имеется просроченный платеж более ранних периодов" trigger={<Icon name="calendar" color="red" />} />}
-                {row.is_parking && <PopupIcon content="Аренда парковочного места" trigger={<Icon name="car" color="blue" />} />}
-                {row.is_internet && <PopupIcon content="Услуги интернета" trigger={<Icon name="world" color="blue" />} />}
+
+                {row.is_free && <PopupIcon
+                    content="Свободное помещение"
+                    trigger={<Icon
+                        name="check"
+                        color="green"
+                    />}
+                />}
+
+                {!row.is_free && <>
+
+                    {Boolean(row.is_rent) && <PopupIcon
+                        content="Аренда помещения"
+                        trigger={<Icon
+                            name="building"
+                            color="blue"
+                        />}
+                    />}
+
+                    {Boolean(row.fine) && <PopupIcon
+                        content="Имеется неоплаченная пеня"
+                        trigger={<Icon
+                            name="ban"
+                            color="red"
+                        />}
+                    />}
+
+                    {row.overdue && <PopupIcon
+                        content="Просроченный платеж"
+                        trigger={<Icon
+                            name="usd"
+                            color="red"
+                        />}
+                    />}
+
+                    {row.is_overdue && <PopupIcon
+                        content="Имеется просроченный платеж более ранних периодов"
+                        trigger={<Icon
+                            name="calendar"
+                            color="red"
+                        />}
+                    />}
+
+                    {row.is_parking && <PopupIcon
+                        content="Аренда парковочного места"
+                        trigger={<Icon
+                            name="car"
+                            color="blue"
+                        />}
+                    />}
+
+                    {row.is_internet && <PopupIcon
+                        content="Услуги интернета"
+                        trigger={<Icon
+                            name="world"
+                            color="blue"
+                        />}
+                    />}
+                </>}
+
             </div>
         </Table.Cell>
         <Table.Cell>{row.space}</Table.Cell>
