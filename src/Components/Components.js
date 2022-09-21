@@ -4,6 +4,7 @@ import Income from "./Incomes";
 import Main from "./Main";
 import Employees from "./Employees";
 import Tenant from "./Tenant";
+import Parking from "./Parking";
 
 export {
     Employees,
@@ -12,4 +13,5 @@ export {
     Income,
     Main,
     Tenant,
+    Parking,
 }

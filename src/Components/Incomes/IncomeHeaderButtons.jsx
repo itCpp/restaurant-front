@@ -31,7 +31,7 @@ const IncomeHeaderButtons = () => {
                     onClick={() => dispatch(setPartAdd(true))}
                 />
                 <Dropdown.Item
-                    content="Добавить помещение"
+                    content="Добавить арендатора"
                     icon="plus square"
                     onClick={() => dispatch(setIncomeSourceAdd(true))}
                 />

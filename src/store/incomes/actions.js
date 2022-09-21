@@ -21,3 +21,10 @@ export const setPartAdd = data => ({
     type: INCOMES_PART_ADD,
     payload: data
 });
+
+
+export const INCOMES_PARKING_PLACE_ADD = "INCOMES_PARKING_PLACE_ADD";
+export const setParkingPlaceAdd = data => ({
+    type: INCOMES_PARKING_PLACE_ADD,
+    payload: data
+});

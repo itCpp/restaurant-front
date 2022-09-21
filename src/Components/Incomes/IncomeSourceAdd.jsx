@@ -266,7 +266,7 @@ const IncomeSourceAdd = props => {
 
                 <hr />
 
-                <Form.Group widths={2} className="align-items-center">
+                <Form.Group widths={2} className="align-items-center pt-1">
 
                     <Form.Checkbox
                         label="Аренда парковки"
@@ -278,7 +278,7 @@ const IncomeSourceAdd = props => {
                         error={Boolean(saveErrors.is_parking)}
                     />
 
-                    <Form.Input
+                    {/* <Form.Input
                         label="Стоимость парковки"
                         placeholder="Введите сумму"
                         type="number"
@@ -290,11 +290,11 @@ const IncomeSourceAdd = props => {
                         onChange={handleChange}
                         disabled={save || !Boolean(formdata?.part_id) || !Boolean(formdata?.is_parking)}
                         error={Boolean(saveErrors.parking_price)}
-                    />
+                    /> */}
 
                 </Form.Group>
 
-                <Form.Group widths={3} className="align-items-center">
+                {/* <Form.Group widths={3} className="align-items-center">
 
                     <Form.Input
                         label="Дата начала аренды парковки"
@@ -331,7 +331,7 @@ const IncomeSourceAdd = props => {
                         error={Boolean(saveErrors.car_number)}
                     />
 
-                </Form.Group>
+                </Form.Group> */}
 
                 <hr />
 

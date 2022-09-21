@@ -1,33 +1,17 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import { axios } from "../../system";
 import { Loader } from "semantic-ui-react";
-import IncomeTable from "./IncomeTable";
-import IncomeAdd from "./IncomeAdd";
-import IncomeSourceAdd from "./IncomeSourceAdd";
-import IncomesView from "./IncomesView";
-import IncomePartAdd from "./IncomePartAdd";
-import { useParams } from "react-router-dom";
-import { Parking } from "../Components";
+import ParkingTable from "./ParkingTable";
+import ParkingPlaceAdd from "./ParkingPlaceAdd";
+import ParkingSourceAdd from "./ParkingSourceAdd";
 
-const Income = () => {
-
-    const { id } = useParams();
-
-    if (id === "parking")
-        return <Parking id={id} />
-
-    return <IncomeBuilding id={id} />
-
-}
-
-const IncomeBuilding = props => {
+const ParkingMain = props => {
 
     const { id } = props;
     const [loading, setLoading] = React.useState(false);
     const [rows, setRows] = React.useState([]);
 
-    const getIncomes = React.useCallback(() => {
+    const getRows = React.useCallback(() => {
 
         setLoading(true);
 
@@ -44,7 +28,7 @@ const IncomeBuilding = props => {
 
     React.useEffect(() => {
 
-        getIncomes();
+        getRows();
 
         return () => {
             setRows([]);
@@ -54,10 +38,8 @@ const IncomeBuilding = props => {
 
     return <div className="p-2">
 
-        <IncomeAdd setRows={setRows} />
-        <IncomePartAdd setRows={setRows} />
-        <IncomeSourceAdd setRows={setRows} />
-        <IncomesView setSourceRows={setRows} />
+        <ParkingPlaceAdd setRows={setRows} />
+        <ParkingSourceAdd setRows={setRows} />
 
         {loading && <Loader inline="centered" active className="mt-4" />}
 
@@ -65,9 +47,9 @@ const IncomeBuilding = props => {
             <strong className="opacity-40">Данных ещё нет</strong>
         </div>}
 
-        {!loading && rows.length > 0 && <IncomeTable rows={rows} />}
+        {!loading && rows.length > 0 && <ParkingTable rows={rows} setRows={setRows} />}
 
     </div>
 }
 
-export default Income;
+export default ParkingMain;
