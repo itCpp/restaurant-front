@@ -74,19 +74,19 @@ const ParkingTableSource = props => {
 
                         <div>
                             <Button
-                                icon="plus"
-                                basic
-                                size="mini"
-                                title="Добавить парковочное место"
-                                onClick={() => dispatch(setParkingPlaceAdd({ source_id: row.id }))}
-                            />
-                            <Button
                                 icon="pencil"
                                 basic
                                 color="green"
                                 size="mini"
                                 title="Изменить данные арендатора"
                                 onClick={() => dispatch(setIncomeSourceAdd(row))}
+                            />
+                            <Button
+                                icon="plus"
+                                basic
+                                size="mini"
+                                title="Добавить парковочное место"
+                                onClick={() => dispatch(setParkingPlaceAdd({ source_id: row.id }))}
                             />
                             <Button
                                 icon="chevron right"
@@ -129,7 +129,11 @@ const ParkingPlaceRow = props => {
     const { row } = props;
     const dispatch = useDispatch();
 
-    return <Table.Row>
+    const className = ["income-table-row"];
+    row.is_overdue && className.push("overdue");
+    !row.is_overdue && className.push('not-free');
+
+    return <Table.Row className={className.join(" ")}>
         <Table.Cell>{row.parking_place}</Table.Cell>
         <Table.Cell>{row.car}</Table.Cell>
         <Table.Cell>{row.car_number}</Table.Cell>
@@ -147,7 +151,11 @@ const ParkingPlaceRow = props => {
         </Table.Cell>
         <Table.Cell>{row.price}</Table.Cell>
         <Table.Cell>{row.comment}</Table.Cell>
-        <Table.Cell></Table.Cell>
+        <Table.Cell>
+            {row.last_pay && <div className="text-nowrap">
+                {moment(row.last_pay?.date).format("DD.MM.YYYY")}{' - '}{row.last_pay?.sum || 0}
+            </div>}
+        </Table.Cell>
         <Table.Cell>
 
             <div className="d-flex justify-content-center align-items-center">
