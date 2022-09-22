@@ -104,7 +104,7 @@ const TenantData = props => {
                 <Grid.Column width={12}>{row?.settings?.pay_day || 20} число месяца</Grid.Column>
             </Grid.Row>
 
-            {row.is_free && <Grid.Row columns="equal" className="py-2">
+            {!row.is_free && row.is_rent && <Grid.Row columns="equal" className="py-2">
 
                 <Grid.Column>
                     <strong>Дата аренды</strong>
@@ -120,7 +120,7 @@ const TenantData = props => {
 
             </Grid.Row>}
 
-            {row.is_free && <Grid.Row columns="equal" className="py-2">
+            {!row.is_free && row.is_rent && <Grid.Row columns="equal" className="py-2">
 
                 <Grid.Column>
                     <strong>Площадь{' '}</strong>
@@ -134,7 +134,7 @@ const TenantData = props => {
 
                 <Grid.Column>
                     <strong>Цена{' '}</strong>
-                    <span>{Number(row.space) * Number(row.price)}</span>
+                    <span>{Number(Number(row.space) * Number(row.price)).toFixed(2)}</span>
                 </Grid.Column>
 
             </Grid.Row>}

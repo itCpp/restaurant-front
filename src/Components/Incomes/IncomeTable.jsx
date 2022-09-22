@@ -143,6 +143,22 @@ const TableRowSource = props => {
                     />}
                 />}
 
+                {Boolean(row.is_deposit) && <PopupIcon
+                    content="Депозит оплачен"
+                    trigger={<Icon
+                        name="money"
+                        color="green"
+                    />}
+                />}
+
+                {Boolean(row.is_legal_address) && <PopupIcon
+                    content="Юридический адрес оплачен"
+                    trigger={<Icon
+                        name="point"
+                        color="green"
+                    />}
+                />}
+
                 {!row.is_free && <>
 
                     {Boolean(row.is_rent) && <PopupIcon
