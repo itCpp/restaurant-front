@@ -119,6 +119,7 @@ const ExpenseTableRow = props => {
                     title="Удалить"
                     link={!drop}
                     disabled={drop}
+                    className="ms-3"
                 />}
                 direction="left"
             >
