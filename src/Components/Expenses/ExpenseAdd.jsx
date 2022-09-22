@@ -29,8 +29,6 @@ const ExpenseAdd = props => {
 
             setLoading(true);
 
-
-
             axios.post('expenses/get', {
                 ...(typeof showAdd == "object" ? showAdd : {}),
                 modalData: true,
@@ -172,7 +170,7 @@ const ExpenseAdd = props => {
 
                 <Form.Group>
 
-                    <Form.Field width={8}>
+                    <Form.Field width={6}>
                         <Form.Input
                             label="Сумма расхода"
                             placeholder="Введите сумму"
@@ -188,7 +186,7 @@ const ExpenseAdd = props => {
                         />
                     </Form.Field>
 
-                    <Form.Field width={8}>
+                    <Form.Field width={6}>
                         <Form.Input
                             label="Дата расхода"
                             placeholder="Укажите дату"
@@ -197,6 +195,22 @@ const ExpenseAdd = props => {
                             value={formdata?.date || ""}
                             onChange={handleChange}
                             error={Boolean(saveErrors?.date)}
+                            disabled={save}
+                        />
+                    </Form.Field>
+
+                    <Form.Field width={6}>
+                        <Form.Select
+                            label="Тип платежа"
+                            placeholder="Выберите тип"
+                            name="type_pay"
+                            options={[
+                                { key: 0, value: 1, text: "Наличные" },
+                                { key: 1, value: 2, text: "Безналичне", icon: "credit card" },
+                            ]}
+                            value={formdata?.type_pay || null}
+                            onChange={handleChange}
+                            error={Boolean(saveErrors?.type_pay)}
                             disabled={save}
                         />
                     </Form.Field>

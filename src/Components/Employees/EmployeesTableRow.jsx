@@ -32,7 +32,7 @@ const EmployeesTableRow = props => {
         </Table.Cell>
         <Table.Cell>
             <div className="d-flex align-items-center">
-                <span className="flex-grow-1">{row.salary}</span>
+                <span className="flex-grow-1">{row.salary}{row.salary_one_day ? "/день" : ""}</span>
                 <span>
                     <ChangeSalaryDropdown row={row} setRows={setRows} />
                 </span>
@@ -66,12 +66,17 @@ const ChangeSalaryDropdown = props => {
 
     React.useEffect(() => {
 
-        return () => {
+        if (open) {
             setFormdata({
                 id: row.id,
                 date: row.salary_date,
                 salary: Number(row.salary) ? row.salary : null,
+                is_one_day: row.salary_one_day || false,
             });
+        }
+
+        return () => {
+            setFormdata({});
             setSave(false);
             setError(null);
         }
@@ -136,7 +141,14 @@ const ChangeSalaryDropdown = props => {
                     step="0.01"
                     value={formdata?.salary || ""}
                     onChange={(e, { value }) => setFormdata(p => ({ ...p, salary: value }))}
+                    className="mb-1"
+                />
+
+                <Form.Checkbox
+                    label="Оклад в день"
                     className="mb-0"
+                    checked={Boolean(formdata?.is_one_day)}
+                    onChange={(e, { checked }) => setFormdata(p => ({ ...p, is_one_day: checked }))}
                 />
 
                 <Dimmer active={save} inverted><Loader size="small" /></Dimmer>
