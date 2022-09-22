@@ -179,8 +179,7 @@
     transition: .2s;
 }
 
-.pay-row-tenant.deleted-pay * {
-    opacity: .4;
+.pay-row-tenant.deleted-pay .for-name {
     text-decoration: line-through;
 }
 

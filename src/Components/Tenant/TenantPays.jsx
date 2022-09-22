@@ -161,7 +161,12 @@ const PayRowColumn = props => {
                     (source.pays || []).forEach((m, i) => {
                         if (m.month === data.month) {
                             m.rows.forEach((r, k) => {
-                                if (data.row?.purpose_id && r?.purpose_id === data.row?.purpose_id) {
+                                if (
+                                    data.row?.purpose_id
+                                    && r?.purpose_id === data.row?.purpose_id
+                                    && r?.income_source_parking_id === data.row?.income_source_parking_id
+                                ) {
+                                    console.log(r);
                                     source.pays[i].rows[k] = { ...r, ...data.row };
                                 }
                             });
@@ -189,8 +194,12 @@ const PayRowColumn = props => {
                         if (m.month === data.month) {
                             m.rows.forEach((r, k) => {
                                 if (r.id === data.row.id) {
-                                    source.pays[i].rows[k] = { ...r, ...data.row };
-                                    console.log(source.pays[i].rows[k]);
+                                    source.pays[i].rows[k] = {
+                                        ...r,
+                                        ...data.row,
+                                        sum: 0,
+                                        pay_sum: data.row.sum,
+                                    };
                                 }
                             });
                         }
@@ -222,8 +231,8 @@ const PayRowColumn = props => {
 
         </div>
 
-        <div className="me-3">{row.purpose_name}</div>
-        <div className="flex-grow-1">{row.sum}</div>
+        <div className="me-3 for-name">{row.purpose_name}</div>
+        <div className="flex-grow-1 for-name">{row.sum || row.pay_sum}</div>
 
         <div className="buttons-row">
 
@@ -286,6 +295,7 @@ const PayRowColumn = props => {
                             month: month,
                             purpose: row?.purpose?.id,
                             source_id: source?.id,
+                            parking_id: row?.parking?.id,
                         })}
                     />
                 </span>
@@ -298,11 +308,12 @@ const PayRowColumn = props => {
             close={() => setAddPay(false)}
             setRow={setRow}
             date={moment(row.date).format("YYYY-MM-DD")}
-            sum={Number(row?.source?.price) * Number(row?.source?.space)}
+            sum={row.pay_sum || Number(row?.source?.price) * Number(row?.source?.space)}
             purpose_pay={row.purpose_pay}
             income_part_id={row?.source?.part_id}
             income_source_id={row.income_source_id}
             lostPayRow={row}
+            parking_id={row?.parking?.id}
         />}
 
     </div>
@@ -312,7 +323,7 @@ const PayRowColumn = props => {
 const AddPayForm = props => {
 
     const { show, close, setRow, fine } = props;
-    const { date, sum, purpose_pay, income_part_id, income_source_id } = props;
+    const { date, sum, purpose_pay, income_part_id, income_source_id, parking_id } = props;
     const { nextPayRow, lostPayRow } = props;
 
     const [formdata, setFormdata] = React.useState({});
@@ -322,7 +333,15 @@ const AddPayForm = props => {
     React.useEffect(() => {
 
         if (show) {
-            setFormdata({ date, sum, purpose_pay, income_part_id, income_source_id, fine });
+            setFormdata({
+                date,
+                sum,
+                purpose_pay,
+                income_part_id,
+                income_source_id,
+                fine,
+                parking_id
+            });
         }
 
     }, [show]);
@@ -377,6 +396,7 @@ const AddPayForm = props => {
                                     && !Boolean(rr.sum)
                                     && month === data.pay.month
                                     && rr.purpose_pay === data.pay.purpose_pay
+                                    && rr.income_source_parking_id === data.pay.income_source_parking_id
                                 ) return;
 
                                 monthRows.push(rr);

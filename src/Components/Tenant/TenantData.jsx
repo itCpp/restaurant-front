@@ -169,11 +169,18 @@ const TenantData = props => {
                     </Grid.Column>
 
                     <Grid.Column width={12}>
-                        <div>{p.date_from}</div>
-                        <span>{p.car}{' '}</span>
-                        <span>{p.car_number}{' '}</span>
-                        <span>{p.owner_name}{' '}</span>
-                        <span>{p.owner_phone}{' '}</span>
+                        <div>
+                            {p.date_from && <span>с {moment(p.date_from).format("DD.MM.YYYY")}{' '}</span>}
+                            {p.date_to && <span>{' '}по {moment(p.date_to).format("DD.MM.YYYY")}</span>}
+                        </div>
+                        <div>
+                            <small>
+                                {p.car && <span>{p.car}{' '}</span>}
+                                {p.car_number && <span>{p.car_number}{' '}</span>}
+                                {p.owner_name && <span>{p.owner_name}{' '}</span>}
+                                {p.owner_phone && <span>{p.owner_phone}{' '}</span>}
+                            </small>
+                        </div>
                     </Grid.Column>
 
                 </Grid.Row>)}
