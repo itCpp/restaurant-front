@@ -1,7 +1,7 @@
 import moment from "moment";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { Dropdown, Icon, Table } from "semantic-ui-react";
+import { Button, Dropdown, Icon, Table } from "semantic-ui-react";
 import { setShowAdd } from "../../store/expenses/actions";
 import { axios } from "../../system";
 
@@ -96,14 +96,14 @@ const ExpenseTableRow = props => {
                 onClick={() => dispatch(setShowAdd(row))}
                 link
             />
-            {!deleted && <Icon
+            {/* {!deleted && <Icon
                 name="trash"
                 color="red"
                 title="Удалить"
                 link={!drop}
                 disabled={drop}
                 onClick={() => setDrop(true)}
-            />}
+            />} */}
             <Icon
                 name="file"
                 color={row.files > 0 ? "blue" : null}
@@ -111,6 +111,37 @@ const ExpenseTableRow = props => {
                 title={`Файлы (${row.files || 0})`}
                 onClick={() => setShowFiles(row)}
             />
+            {!deleted && <Dropdown
+                icon={null}
+                trigger={<Icon
+                    name="trash"
+                    color="red"
+                    title="Удалить"
+                    link={!drop}
+                    disabled={drop}
+                />}
+                direction="left"
+            >
+                <Dropdown.Menu>
+                    <div className="px-2 py-1" style={{ maxWidth: 200 }}>
+                        <div className="mb-2" style={{ wordWrap: "normal", whiteSpace: "normal" }}>Вы действительно хотите удалить платёж?</div>
+                        <div className="d-flex">
+                            <Button
+                                content="Нет"
+                                size="mini"
+                                fluid
+                            />
+                            <Button
+                                content="Да"
+                                color="red"
+                                onClick={() => setDrop(true)}
+                                size="mini"
+                                fluid
+                            />
+                        </div>
+                    </div>
+                </Dropdown.Menu>
+            </Dropdown>}
         </Table.Cell>
 
     </Table.Row>
