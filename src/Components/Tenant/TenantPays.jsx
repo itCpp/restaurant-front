@@ -102,6 +102,8 @@ const NextPayRow = props => {
 
         <div><Icon name={row.icon} /></div>
 
+
+
         <div className="flex-grow-1">{row.title}</div>
 
         <span>
@@ -124,6 +126,7 @@ const NextPayRow = props => {
             income_part_id={income_part_id}
             income_source_id={income_source_id}
             nextPayRow={row}
+            parking_id={row.income_source_parking_id}
         />
 
     </div>
@@ -337,10 +340,10 @@ const AddPayForm = props => {
                 date,
                 sum,
                 purpose_pay,
-                income_part_id,
+                income_part_id: income_part_id || 0,
                 income_source_id,
                 fine,
-                parking_id
+                parking_id: parking_id || null,
             });
         }
 
@@ -351,8 +354,6 @@ const AddPayForm = props => {
         if (save) {
             axios.post('/incomes/save', formdata)
                 .then(({ data }) => {
-
-                    typeof close == "function" && close();
 
                     typeof setRow == "function" && setRow(p => {
 
@@ -367,8 +368,12 @@ const AddPayForm = props => {
                             source.next_pays = [];
 
                             next_pays.forEach(r => {
-                                if (nextPayRow.date != r.date)
+
+                                console.log(r, `${r.income_source_parking_id} !== ${data.row.income_source_parking_id} && ${r.type} !== ${data.row.purpose_id}`);
+
+                                if ((r.type === data.row.purpose_id && r.income_source_parking_id !== data.row.income_source_parking_id) || r.type !== data.row.purpose_id) {
                                     source.next_pays.push(r);
+                                }
                             });
                         } else {
                             source.next_pays = next_pays;
@@ -412,6 +417,8 @@ const AddPayForm = props => {
 
                         return source;
                     });
+
+                    typeof close == "function" && close();
                 })
                 .catch(e => setSaveError(axios.post(e)))
                 .then(() => setSave(false));

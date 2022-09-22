@@ -90,13 +90,18 @@ const TenantData = props => {
             <Grid.Row columns="equal" className="py-2">
 
                 <Grid.Column>
-                    <strong>ИНН</strong>
+                    <strong>ИНН/ОГРН</strong>
                 </Grid.Column>
 
                 <Grid.Column width={12}>
                     {row.inn}
                 </Grid.Column>
 
+            </Grid.Row>
+
+            <Grid.Row columns="equal" className="py-2">
+                <Grid.Column><strong>Дата оплаты</strong></Grid.Column>
+                <Grid.Column width={12}>{row?.settings?.pay_day || 20} число месяца</Grid.Column>
             </Grid.Row>
 
             {row.is_free && <Grid.Row columns="equal" className="py-2">
