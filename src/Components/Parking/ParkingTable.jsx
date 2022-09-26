@@ -154,6 +154,11 @@ const ParkingPlaceRow = props => {
         <Table.Cell>
             {row.last_pay && <div className="text-nowrap">
                 {moment(row.last_pay?.date).format("DD.MM.YYYY")}{' - '}{row.last_pay?.sum || 0}
+                <Icon name="check" color="green" className="ms-1 me-0" />
+            </div>}
+            {row.next_pay && <div className="text-nowrap">
+                {moment(row.next_pay?.date).format("DD.MM.YYYY")}{' - '}{row.last_pay?.sum || 0}
+                <Icon name="close" color="red" className="ms-1 me-0" title="Не оплачено" disabled />
             </div>}
         </Table.Cell>
         <Table.Cell>

@@ -15,7 +15,8 @@ const ExpenseTable = props => {
 
             <Table.Header>
                 <Table.Row>
-                    <Table.HeaderCell>Дата</Table.HeaderCell>
+                    <Table.HeaderCell>Дата платежа</Table.HeaderCell>
+                    <Table.HeaderCell>Дата внесения</Table.HeaderCell>
                     <Table.HeaderCell>Тип</Table.HeaderCell>
                     <Table.HeaderCell>Наименование</Table.HeaderCell>
                     <Table.HeaderCell>Сумма</Table.HeaderCell>
@@ -57,6 +58,8 @@ const ExpenseTableRow = props => {
     }, [drop]);
 
     return <Table.Row disabled={Boolean(row.deleted_at) || deleted}>
+
+        <Table.Cell>{moment(row.date).format("DD.MM.YYYY")}</Table.Cell>
 
         <Table.Cell>{moment(row.created_at).format("DD.MM.YYYY HH:mm")}</Table.Cell>
 

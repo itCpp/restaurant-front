@@ -12,7 +12,7 @@ const IncomeSourceAdd = props => {
     const { id } = useParams();
     const { showSourceAdd } = useSelector(s => s.incomes);
 
-    const [loading, setLoading] = React.useState(false);
+    const [loading, setLoading] = React.useState(true);
     const [formdata, setFormdata] = React.useState({});
     const [parts, setParts] = React.useState([]);
 

@@ -187,5 +187,11 @@
     position: absolute;
     left: 10px;
     right: 10px;
-    top: -6px;
+    top: -10px;
+    border-color: var(--bs-gray-200);
+}
+
+.grid-data-tenant > *:hover {
+    background-color: var(--bs-gray-100);
+    cursor: default;
 }

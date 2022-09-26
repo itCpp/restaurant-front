@@ -47,9 +47,9 @@ const TenantData = props => {
 
         </div>
 
-        <Grid>
+        <Grid className="grid-data-tenant">
 
-            {row.is_free && <Grid.Row columns="equal" className="py-2">
+            {row.is_free && <Grid.Row columns="equal" className="py-1 my-1">
 
                 <Grid.Column>
                     <strong>Кабинет</strong>
@@ -61,7 +61,7 @@ const TenantData = props => {
 
             </Grid.Row>}
 
-            <Grid.Row columns="equal" className="py-2">
+            <Grid.Row columns="equal" className="py-1 my-1">
 
                 <Grid.Column>
                     <strong>Компания</strong>
@@ -74,7 +74,7 @@ const TenantData = props => {
 
             </Grid.Row>
 
-            <Grid.Row columns="equal" className="py-2">
+            <Grid.Row columns="equal" className="py-1 my-1">
 
                 <Grid.Column>
                     <strong>Контактное лицо</strong>
@@ -87,7 +87,7 @@ const TenantData = props => {
 
             </Grid.Row>
 
-            <Grid.Row columns="equal" className="py-2">
+            <Grid.Row columns="equal" className="py-1 my-1">
 
                 <Grid.Column>
                     <strong>ИНН/ОГРН</strong>
@@ -99,12 +99,12 @@ const TenantData = props => {
 
             </Grid.Row>
 
-            <Grid.Row columns="equal" className="py-2">
+            <Grid.Row columns="equal" className="py-1 my-1">
                 <Grid.Column><strong>Дата оплаты</strong></Grid.Column>
                 <Grid.Column width={12}>{row?.settings?.pay_day || 20} число месяца</Grid.Column>
             </Grid.Row>
 
-            {!row.is_free && row.is_rent && <Grid.Row columns="equal" className="py-2">
+            {!row.is_free && row.is_rent && <Grid.Row columns="equal" className="py-1 my-1">
 
                 <Grid.Column>
                     <strong>Дата аренды</strong>
@@ -120,7 +120,7 @@ const TenantData = props => {
 
             </Grid.Row>}
 
-            {!row.is_free && row.is_rent && <Grid.Row columns="equal" className="py-2">
+            {!row.is_free && row.is_rent && <Grid.Row columns="equal" className="py-1 my-1">
 
                 <Grid.Column>
                     <strong>Площадь{' '}</strong>
@@ -139,12 +139,12 @@ const TenantData = props => {
 
             </Grid.Row>}
 
-            <Grid.Row columns="equal" className="py-2">
+            <Grid.Row columns="equal" className="py-1 my-1">
 
                 <hr className="grid-absolute" />
 
                 <Grid.Column>
-                    <strong><Icon name="car" disabled />Парковка</strong>
+                    <strong><Icon name="car" disabled={!Boolean(row.is_parking)} color={row.is_parking ? "green" : null} />Парковка</strong>
                 </Grid.Column>
 
                 <Grid.Column width={12}>
@@ -155,7 +155,7 @@ const TenantData = props => {
 
             {row.is_parking && <>
 
-                {Boolean(row?.settings?.parking_date) && <Grid.Row columns="equal" className="py-2">
+                {Boolean(row?.settings?.parking_date) && <Grid.Row columns="equal" className="py-1 my-1">
 
                     <Grid.Column>
                         <strong>Дата начала</strong>
@@ -174,14 +174,16 @@ const TenantData = props => {
                     </Grid.Column>
 
                     <Grid.Column width={12}>
-                        <div>
-                            {p.date_from && <span>с {moment(p.date_from).format("DD.MM.YYYY")}{' '}</span>}
-                            {p.date_to && <span>{' '}по {moment(p.date_to).format("DD.MM.YYYY")}</span>}
+                        <div className="d-flex">
+                            {p.date_from && <span className="me-1">с {moment(p.date_from).format("DD.MM.YYYY")}</span>}
+                            {p.date_to && <span className="me-1">по {moment(p.date_to).format("DD.MM.YYYY")}</span>}
+                            <small className="opacity-50">
+                                {p.car && <span>{p.car}{' '}</span>}
+                                {p.car_number && <span>{p.car_number}{' '}</span>}
+                            </small>
                         </div>
                         <div>
                             <small>
-                                {p.car && <span>{p.car}{' '}</span>}
-                                {p.car_number && <span>{p.car_number}{' '}</span>}
                                 {p.owner_name && <span>{p.owner_name}{' '}</span>}
                                 {p.owner_phone && <span>{p.owner_phone}{' '}</span>}
                             </small>
@@ -190,29 +192,29 @@ const TenantData = props => {
 
                 </Grid.Row>)}
 
-                {/* {Boolean(row?.settings?.parking_price) && <Grid.Row columns="equal" className="py-2">
+                {/* {Boolean(row?.settings?.parking_price) && <Grid.Row columns="equal" className="py-1 my-1">
                     <Grid.Column><strong>Стоимость аренды</strong></Grid.Column>
                     <Grid.Column width={12}>{row.settings.parking_price}</Grid.Column>
                 </Grid.Row>}
 
-                {Boolean(row?.settings?.parking_count) && <Grid.Row columns="equal" className="py-2">
+                {Boolean(row?.settings?.parking_count) && <Grid.Row columns="equal" className="py-1 my-1">
                     <Grid.Column><strong>Машиномест</strong></Grid.Column>
                     <Grid.Column width={12}>{row.settings.parking_count}</Grid.Column>
                 </Grid.Row>}
 
-                {Boolean(row?.settings?.car_number) && <Grid.Row columns="equal" className="py-2">
+                {Boolean(row?.settings?.car_number) && <Grid.Row columns="equal" className="py-1 my-1">
                     <Grid.Column><strong>Гос. номер</strong></Grid.Column>
                     <Grid.Column width={12}>{row.settings.car_number}</Grid.Column>
                 </Grid.Row>} */}
 
             </>}
 
-            <Grid.Row columns="equal" className="py-2">
+            <Grid.Row columns="equal" className="py-1 my-1">
 
                 <hr className="grid-absolute" />
 
                 <Grid.Column>
-                    <strong><Icon name="world" disabled />Интернет</strong>
+                    <strong><Icon name="world" disabled={!Boolean(row.is_internet)} color={row.is_internet ? "green" : null} />Интернет</strong>
                 </Grid.Column>
 
                 <Grid.Column width={12}>
@@ -223,7 +225,7 @@ const TenantData = props => {
 
             {row.is_internet && <>
 
-                {Boolean(row?.settings?.internet_date) && <Grid.Row columns="equal" className="py-2">
+                {Boolean(row?.settings?.internet_date) && <Grid.Row columns="equal" className="py-1 my-1">
 
                     <Grid.Column>
                         <strong>Дата начала</strong>
@@ -235,7 +237,7 @@ const TenantData = props => {
 
                 </Grid.Row>}
 
-                {Boolean(row?.settings?.internet_price) && <Grid.Row columns="equal" className="py-2">
+                {Boolean(row?.settings?.internet_price) && <Grid.Row columns="equal" className="py-1 my-1">
                     <Grid.Column><strong>Стоимость</strong></Grid.Column>
                     <Grid.Column width={12}>{row.settings.internet_price}</Grid.Column>
                 </Grid.Row>}
