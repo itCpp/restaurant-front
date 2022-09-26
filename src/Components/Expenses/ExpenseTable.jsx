@@ -59,7 +59,10 @@ const ExpenseTableRow = props => {
 
     return <Table.Row disabled={Boolean(row.deleted_at) || deleted}>
 
-        <Table.Cell>{moment(row.date).format("DD.MM.YYYY")}</Table.Cell>
+        <Table.Cell>
+            <span>{moment(row.date).format("DD.MM.YYYY")}</span>
+            {row.type_pay === 2 && <Icon name="credit card" color="green" className="ms-2 me-0" title="Безналичный расчет" />}
+        </Table.Cell>
 
         <Table.Cell>{moment(row.created_at).format("DD.MM.YYYY HH:mm")}</Table.Cell>
 
