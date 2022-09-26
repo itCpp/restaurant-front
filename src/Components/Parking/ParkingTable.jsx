@@ -2,8 +2,9 @@ import moment from "moment";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Button, Icon, Table } from "semantic-ui-react";
+import { Button, Dimmer, Dropdown, Form, Icon, Input, Loader, Table } from "semantic-ui-react";
 import { setParkingPlaceAdd, setIncomeSourceAdd } from "../../store/incomes/actions";
+import { axios } from "../../system";
 
 const ParkingTable = props => {
 
@@ -40,6 +41,7 @@ const ParkingTable = props => {
 
         {rows.map(row => <ParkingTableSource
             key={row.id}
+            {...props}
             row={row}
         />)}
 
@@ -72,29 +74,37 @@ const ParkingTableSource = props => {
                             {Boolean(row?.settings?.comment) && <div><small>{row.settings.comment}</small></div>}
                         </div>
 
-                        <div>
-                            <Button
-                                icon="pencil"
-                                basic
-                                color="green"
-                                size="mini"
-                                title="Изменить данные арендатора"
-                                onClick={() => dispatch(setIncomeSourceAdd(row))}
-                            />
-                            <Button
-                                icon="plus"
-                                basic
-                                size="mini"
-                                title="Добавить парковочное место"
-                                onClick={() => dispatch(setParkingPlaceAdd({ source_id: row.id }))}
-                            />
-                            <Button
-                                icon="chevron right"
-                                basic
-                                size="mini"
-                                title="Перейти на страницу помещения"
-                                onClick={() => navigate("/tenant/" + row.id)}
-                            />
+                        <div className="d-flex align-items-center">
+
+                            <span>
+                                <Icon
+                                    name="pencil"
+                                    link
+                                    color="green"
+                                    title="Изменить данные арендатора"
+                                    onClick={() => dispatch(setIncomeSourceAdd(row))}
+                                    className="me-2"
+                                />
+                            </span>
+                            <span>
+                                <Icon
+                                    name="plus"
+                                    link
+                                    title="Добавить парковочное место"
+                                    onClick={() => dispatch(setParkingPlaceAdd({ source_id: row.id }))}
+                                    className="me-2"
+                                />
+                            </span>
+                            <span>
+                                <Icon
+                                    name="chevron right"
+                                    link
+                                    title="Перейти на страницу помещения"
+                                    onClick={() => navigate("/tenant/" + row.id)}
+                                    className="me-2"
+                                />
+                            </span>
+
                         </div>
 
                     </div>}
@@ -116,6 +126,7 @@ const ParkingTableSource = props => {
 
             {rows.map(row => <ParkingPlaceRow
                 key={row.id}
+                {...props}
                 row={row}
             />)}
 
@@ -164,20 +175,153 @@ const ParkingPlaceRow = props => {
         <Table.Cell>
 
             <div className="d-flex justify-content-center align-items-center">
-                <Button
-                    size="mini"
-                    basic
-                    icon="pencil"
-                    title="Редактировать"
-                    onClick={() => dispatch(setParkingPlaceAdd({
-                        id: row.id,
-                        source_id: row.source_id
-                    }))}
-                />
+
+                <span>
+                    <Icon
+                        name="pencil"
+                        link
+                        title="Редактировать"
+                        onClick={() => dispatch(setParkingPlaceAdd({
+                            id: row.id,
+                            source_id: row.source_id
+                        }))}
+                        className="mx-1"
+                    />
+                </span>
+
+                <span>
+                    <AddNextPayParking
+                        {...props}
+                        pay={row.next_pay || {}}
+                        row={row}
+                    />
+                </span>
+
             </div>
 
         </Table.Cell>
     </Table.Row>
+}
+
+const AddNextPayParking = props => {
+
+    const { row, pay, setRows } = props;
+    const [active, setActive] = React.useState(false);
+    const [loading, setLoading] = React.useState(false);
+    const [formdata, setFormdata] = React.useState({});
+    const [save, setSave] = React.useState(false);
+    const [error, setError] = React.useState(null);
+
+    React.useEffect(() => {
+
+        if (active) {
+            setFormdata({
+                date: pay.date || "",
+                sum: pay.pay_sum || "",
+                parking_id: row.id,
+            });
+        }
+
+        return () => {
+            setSave(false);
+            setLoading(false);
+            setError(null);
+        }
+
+    }, [active]);
+
+    React.useEffect(() => {
+
+        if (save) {
+
+            setLoading(true);
+
+            axios.put('incomes/parking/save', formdata)
+                .then(({ data }) => {
+                    typeof setRows == "function" && setRows(p => {
+                        let rows = [];
+                        p.forEach(row => {
+                            let m = { ...row };
+                            m.parking.forEach((p, i) => {
+                                m.parking[i] = p.id === data.row.id ? { ...p, ...data.row } : { ...p };
+                            });
+                            rows.push(m);
+                        });
+                        return rows;
+                    });
+                    setActive(false);
+                })
+                .catch(e => {
+                    setError(axios.getError(e));
+                })
+                .then(() => {
+                    setSave(false);
+                    setLoading(false);
+                });
+        }
+
+    }, [save]);
+
+    return <Dropdown
+        open={active}
+        icon={null}
+        direction="left"
+        trigger={<Icon.Group link title="Добавить платеж" onClick={() => setActive(p => !p)}>
+            <Icon name="ruble" link />
+            <Icon corner name="add" link />
+        </Icon.Group>}
+        className="mx-1"
+    >
+        <Dropdown.Menu className="px-2 py-1">
+            <Form style={{ maxWidth: 200 }}>
+                <Form.Input
+                    label="Дата платежа"
+                    type="date"
+                    size="mini"
+                    className="mb-1"
+                    value={formdata.date || ""}
+                    onChange={(e, { value }) => setFormdata(p => ({ ...p, date: value }))}
+                />
+                <Form.Input
+                    label="Сумма платежа"
+                    placeholder="Введите сумму"
+                    size="mini"
+                    type="number"
+                    className="mb-1"
+                    value={formdata.sum || ""}
+                    onChange={(e, { value }) => setFormdata(p => ({ ...p, sum: value }))}
+                />
+
+                {error && <div className="text-danger">
+                    <small><b>Ошибка</b>{' '}{error}</small>
+                </div>}
+
+                <div className="d-flex align-items-center justify-content-between">
+                    <span>
+                        <Icon
+                            name="close"
+                            link
+                            onClick={() => setActive(false)}
+                        />
+                    </span>
+                    <span>
+                        <Icon
+                            name="save"
+                            color="green"
+                            link={Number(formdata.sum || "") > 0}
+                            disabled={!Number(formdata.sum || "")}
+                            fitted
+                            onClick={() => setSave(true)}
+                        />
+                    </span>
+                </div>
+
+                <Dimmer active={loading} inverted>
+                    <Loader />
+                </Dimmer>
+            </Form>
+        </Dropdown.Menu>
+    </Dropdown>
 }
 
 export default ParkingTable;
