@@ -219,6 +219,7 @@ const AddNextPayParking = props => {
                 date: pay.date || "",
                 sum: pay.pay_sum || "",
                 parking_id: row.id,
+                type_pay: 1,
             });
         }
 
@@ -287,10 +288,24 @@ const AddNextPayParking = props => {
                     placeholder="Введите сумму"
                     size="mini"
                     type="number"
-                    className="mb-1"
+                    className="mb-2"
                     value={formdata.sum || ""}
                     onChange={(e, { value }) => setFormdata(p => ({ ...p, sum: value }))}
                 />
+                <Button.Group size="mini" fluid className="mb-1">
+                    <Button
+                        content="Нал."
+                        active={formdata.type_pay === 1}
+                        color={formdata.type_pay === 1 ? "green" : null}
+                        onClick={() => setFormdata(p => ({ ...p, type_pay: 1 }))}
+                    />
+                    <Button
+                        content="Безнал."
+                        active={formdata.type_pay === 2}
+                        color={formdata.type_pay === 2 ? "green" : null}
+                        onClick={() => setFormdata(p => ({ ...p, type_pay: 2 }))}
+                    />
+                </Button.Group>
 
                 {error && <div className="text-danger">
                     <small><b>Ошибка</b>{' '}{error}</small>

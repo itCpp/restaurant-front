@@ -344,6 +344,7 @@ const AddPayForm = props => {
                 income_source_id,
                 fine,
                 parking_id: parking_id || null,
+                type_pay: 1,
             });
         }
 
@@ -440,6 +441,20 @@ const AddPayForm = props => {
         }}
         className="d-flex justify-content-end"
     >
+        <Button.Group size="mini" className="me-1">
+            <Button
+                content="Нал."
+                active={formdata.type_pay === 1}
+                color={formdata.type_pay === 1 ? "green" : null}
+                onClick={() => setFormdata(p => ({ ...p, type_pay: 1 }))}
+            />
+            <Button
+                content="Безнал."
+                active={formdata.type_pay === 2}
+                color={formdata.type_pay === 2 ? "green" : null}
+                onClick={() => setFormdata(p => ({ ...p, type_pay: 2 }))}
+            />
+        </Button.Group>
         <Input
             size="mini"
             type="date"
