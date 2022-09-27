@@ -369,9 +369,6 @@ const AddPayForm = props => {
                             source.next_pays = [];
 
                             next_pays.forEach(r => {
-
-                                console.log(r, `${r.income_source_parking_id} !== ${data.row.income_source_parking_id} && ${r.type} !== ${data.row.purpose_id}`);
-
                                 if ((r.type === data.row.purpose_id && r.income_source_parking_id !== data.row.income_source_parking_id) || r.type !== data.row.purpose_id) {
                                     source.next_pays.push(r);
                                 }

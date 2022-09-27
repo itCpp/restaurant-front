@@ -5,6 +5,7 @@ import Main from "./Main";
 import Employees from "./Employees";
 import Tenant from "./Tenant";
 import Parking from "./Parking";
+import Cashbox from "./Cashbox";
 
 export {
     Employees,
@@ -14,4 +15,5 @@ export {
     Main,
     Tenant,
     Parking,
+    Cashbox,
 }
