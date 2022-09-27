@@ -126,6 +126,7 @@
 .income-table-row.not-free {
     background-color: #baffb8;
 }
+
 .income-table-row.not-free:hover {
     background-color: #9fffa2;
 }
@@ -133,16 +134,17 @@
 .income-table-row.overdue {
     background-color: #ffd2d2;
 }
+
 .income-table-row.overdue:hover {
     background-color: #ffc0c0;
 }
 
-.pay-row.no-pay > *:not(.not-colors) {
+.pay-row.no-pay>*:not(.not-colors) {
     background-color: #da3939 !important;
     color: #ffffff !important;
 }
 
-.pay-row.one-pay > *:not(.not-colors) {
+.pay-row.one-pay>*:not(.not-colors) {
     background-color: #d0d0d0 !important;
     /* color: #ffffff !important; */
 }
@@ -158,6 +160,7 @@
     align-items: center;
     cursor: default;
 }
+
 .pay-row-tenant:not(:last-child) {
     border-bottom: 1px solid var(--bs-gray-200);
 }
@@ -165,6 +168,7 @@
 .pay-row-type-one {
     background-color: var(--bs-gray-400);
 }
+
 .pay-row-no-pay {
     color: #ffffff;
     background-color: var(--bs-red);
@@ -174,6 +178,7 @@
     /* display: none; */
     transition: .2s;
 }
+
 .pay-row-tenant:hover .buttons-row {
     display: flex;
     transition: .2s;
@@ -191,7 +196,13 @@
     border-color: var(--bs-gray-200);
 }
 
-.grid-data-tenant > *:hover {
+.grid-data-tenant>*:hover {
     background-color: var(--bs-gray-100);
     cursor: default;
+}
+
+.search-select .menu {
+    margin-top: 35px !important;
+    left: -1px !important;
+    right: 0 !important;
 }

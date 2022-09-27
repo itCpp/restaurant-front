@@ -19,6 +19,7 @@ const ExpenseTable = props => {
                     <Table.HeaderCell>Дата внесения</Table.HeaderCell>
                     <Table.HeaderCell>Тип</Table.HeaderCell>
                     <Table.HeaderCell>Наименование</Table.HeaderCell>
+                    <Table.HeaderCell>Комментарий</Table.HeaderCell>
                     <Table.HeaderCell>Сумма</Table.HeaderCell>
                     <Table.HeaderCell />
                 </Table.Row>
@@ -70,6 +71,9 @@ const ExpenseTableRow = props => {
 
         <Table.Cell>
             <div>{row.name_type || row.name}</div>
+        </Table.Cell>
+
+        <Table.Cell>
             {Boolean(row.name_type) && Boolean(row.name) && <div>
                 <small>{row.name}</small>
             </div>}
@@ -111,7 +115,7 @@ const ExpenseTableRow = props => {
                 onClick={() => setDrop(true)}
             />} */}
             <Icon
-                name="file"
+                name={row.files > 0 ? "folder open" : "folder"}
                 color={row.files > 0 ? "blue" : null}
                 link
                 title={`Файлы (${row.files || 0})`}

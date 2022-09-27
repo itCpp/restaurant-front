@@ -266,7 +266,7 @@ const AddNextPayParking = props => {
         open={active}
         icon={null}
         direction="left"
-        trigger={<Icon.Group link title="Добавить платеж" onClick={() => setActive(p => !p)}>
+        trigger={<Icon.Group title="Добавить платеж" onClick={() => setActive(p => !p)}>
             <Icon name="ruble" link />
             <Icon corner name="add" link />
         </Icon.Group>}
