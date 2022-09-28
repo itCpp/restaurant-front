@@ -5,7 +5,10 @@ const CashboxDataTableRow = props => {
 
     const { row } = props;
 
-    return <Table.Row>
+    return <Table.Row
+        positive={row.sum > 0}
+        negative={row.sum < 0}
+    >
 
         <Table.Cell
             textAlign="center"

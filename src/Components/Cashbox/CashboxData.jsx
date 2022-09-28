@@ -1,11 +1,11 @@
 import React from "react";
-import { Table } from "semantic-ui-react";
+import { Loader, Table } from "semantic-ui-react";
 import MySegment from "../UI/Segment";
 import CashboxDataTableRow from "./CashboxDataTableRow";
 
 const CashboxData = props => {
 
-    const { rows } = props;
+    const { rows, loading, end } = props;
 
     return <MySegment>
 
@@ -33,6 +33,12 @@ const CashboxData = props => {
             </Table.Body>
 
         </Table>
+
+        {end && <div className="text-center opacity-50">
+            <small>Это все данные</small>
+        </div>}
+
+        {loading && <Loader active inline="centered" size="tiny" />}
 
     </MySegment>
 }
