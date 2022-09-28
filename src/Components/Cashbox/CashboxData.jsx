@@ -17,17 +17,19 @@ const CashboxData = props => {
                     <Table.HeaderCell>Приход</Table.HeaderCell>
                     <Table.HeaderCell>Расход</Table.HeaderCell>
                     <Table.HeaderCell>Тип</Table.HeaderCell>
-                    <Table.HeaderCell>Дата внесения</Table.HeaderCell>
+                    <Table.HeaderCell>Период</Table.HeaderCell>
+                    {/* <Table.HeaderCell>Дата внесения</Table.HeaderCell> */}
                     <Table.HeaderCell />
                 </Table.Row>
             </Table.Header>
 
             <Table.Body>
 
-                {rows.map(row => <CashboxDataTableRow
+                {rows.map((row, i) => <CashboxDataTableRow
                     key={row.id}
                     row={row}
                     stats={stats}
+                    keyId={i}
                 />)}
 
             </Table.Body>

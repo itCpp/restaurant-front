@@ -212,6 +212,11 @@
     padding-left: 0.25rem !important;
     padding-right: 0.25rem !important;
 }
+
 .celled-cashbox td:last-child {
     border-right: 1px solid rgba(34, 36, 38, 0.1) !important;
+}
+
+.cashbox-date-row td, .cashbox-date-row.active td {
+    background: #d9e1f2 !important;
 }
