@@ -5,7 +5,7 @@ import CashboxDataTableRow from "./CashboxDataTableRow";
 
 const CashboxData = props => {
 
-    const { rows, loading, end } = props;
+    const { rows, loading, end, stats } = props;
 
     return <MySegment>
 
@@ -13,10 +13,9 @@ const CashboxData = props => {
 
             <Table.Header>
                 <Table.Row>
-                    <Table.HeaderCell />
+                    <Table.HeaderCell>Наименование</Table.HeaderCell>
                     <Table.HeaderCell>Приход</Table.HeaderCell>
                     <Table.HeaderCell>Расход</Table.HeaderCell>
-                    <Table.HeaderCell>Наименование</Table.HeaderCell>
                     <Table.HeaderCell>Тип</Table.HeaderCell>
                     <Table.HeaderCell>Дата внесения</Table.HeaderCell>
                     <Table.HeaderCell />
@@ -28,6 +27,7 @@ const CashboxData = props => {
                 {rows.map(row => <CashboxDataTableRow
                     key={row.id}
                     row={row}
+                    stats={stats}
                 />)}
 
             </Table.Body>

@@ -10,6 +10,7 @@ const Cashbox = () => {
     const [error, setError] = React.useState(null);
     const [load, setLoad] = React.useState(false);
     const [rows, setRows] = React.useState([]);
+    const [stats, setStats] = React.useState({});
 
     const [page, setPage] = React.useState(null);
     const [pages, setPages] = React.useState(null);
@@ -27,6 +28,7 @@ const Cashbox = () => {
                 setPage(data.page || null);
                 setEnd(data.end);
                 setPages(data.pages);
+                setStats(p => ({ ...p, ...data.statistics }));
             })
             .catch(e => setError(axios.getError(e)))
             .then(() => {
@@ -88,6 +90,7 @@ const Cashbox = () => {
             setRows={setRows}
             loading={!loading && load}
             end={end}
+            stats={stats}
         />}
 
     </div>

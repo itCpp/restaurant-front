@@ -206,3 +206,12 @@
     left: -1px !important;
     right: 0 !important;
 }
+
+.celled-cashbox td {
+    border-left: 1px solid rgba(34, 36, 38, 0.1) !important;
+    padding-left: 0.25rem !important;
+    padding-right: 0.25rem !important;
+}
+.celled-cashbox td:last-child {
+    border-right: 1px solid rgba(34, 36, 38, 0.1) !important;
+}
