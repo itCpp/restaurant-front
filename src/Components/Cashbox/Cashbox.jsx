@@ -12,11 +12,12 @@ const Cashbox = () => {
     const [rows, setRows] = React.useState([]);
 
     const [page, setPage] = React.useState(null);
+    const [pages, setPages] = React.useState(null);
     const [end, setEnd] = React.useState(false);
 
-    const getRows = param => {
+    const getRows = (param = {}) => {
 
-        if (load || end) return;
+        if (load || end || (typeof pages == "number" && pages < Number(param?.page))) return;
 
         setLoad(true);
 
@@ -25,6 +26,7 @@ const Cashbox = () => {
                 setRows(p => Number(data.page) > 1 ? [...p, ...data.rows] : data.rows);
                 setPage(data.page || null);
                 setEnd(data.end);
+                setPages(data.pages);
             })
             .catch(e => setError(axios.getError(e)))
             .then(() => {
@@ -40,6 +42,7 @@ const Cashbox = () => {
         return () => {
             setLoading(true);
             setPage(null);
+            setPages(null);
             setEnd(false);
         }
 
@@ -58,7 +61,7 @@ const Cashbox = () => {
             if (end || load || !page || threshold >= position) return;
 
             getRows({ page: (page || 1) + 1 });
-        }, 500);
+        }, 700);
 
         window.addEventListener('scroll', scrollHandle);
 

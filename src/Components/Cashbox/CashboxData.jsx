@@ -14,8 +14,8 @@ const CashboxData = props => {
             <Table.Header>
                 <Table.Row>
                     <Table.HeaderCell />
-                    <Table.HeaderCell>Сумма</Table.HeaderCell>
-                    <Table.HeaderCell>Дата</Table.HeaderCell>
+                    <Table.HeaderCell>Приход</Table.HeaderCell>
+                    <Table.HeaderCell>Расход</Table.HeaderCell>
                     <Table.HeaderCell>Наименование</Table.HeaderCell>
                     <Table.HeaderCell>Тип</Table.HeaderCell>
                     <Table.HeaderCell>Дата внесения</Table.HeaderCell>

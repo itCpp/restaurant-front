@@ -7,7 +7,7 @@ import EmployeeEdit from "./EmployeeEdit";
 
 const Employees = props => {
 
-    const [loading, setLoading] = React.useState(false);
+    const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState(null);
     const [rows, setRows] = React.useState([]);
     const [add, setAdd] = React.useState(false);
@@ -42,6 +42,7 @@ const Employees = props => {
 
         return () => {
             setError(null);
+            setLoading(true);
             setRows([]);
         }
 

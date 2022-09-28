@@ -1,4 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
+import CashboxHeaderButtons from "./Cashbox/CashboxHeaderButtons";
 import { ExpenseHeaderButtons } from "./Expenses";
 import { IncomeHeaderButtons } from "./Incomes";
 
@@ -25,6 +26,7 @@ const Header = () => {
             {pathname.indexOf("/expenses") >= 0 && <ExpenseHeaderButtons />}
             {pathname.indexOf("/income/1") >= 0 && <IncomeHeaderButtons />}
             {pathname.indexOf("/income/2") >= 0 && <IncomeHeaderButtons />}
+            {pathname.indexOf("/cashbox") >= 0 && <CashboxHeaderButtons />}
 
         </div>
 
