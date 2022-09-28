@@ -24,10 +24,14 @@ const CashboxDataTableRow = props => {
         <Table.Cell>{row.name}</Table.Cell>
 
         <Table.Cell>
-            {row.purpose && <PurposeType data={row.purpose} />}
+            <div className="d-flex align-items-center">
+                {row.purpose && <PurposeType data={row.purpose} />}
+                {(row.purpose && row.comment) && <span className="mx-2">/</span>}
+                {row.comment && <span><small className="opacity-80">{row.comment}</small></span>}
+            </div>
         </Table.Cell>
 
-        <Table.Cell>{row.comment}</Table.Cell>
+        {/* <Table.Cell><small className="opacity-80">{row.comment}</small></Table.Cell> */}
 
         <Table.Cell>
             <small className="opacity-50">{moment(row.created_at).format("DD.MM.YYYY в HH:mm")}</small>
@@ -43,7 +47,7 @@ const PurposeType = props => {
 
     const { data } = props;
 
-    return <div className="d-flex">
+    return <span className="d-flex">
         {data.icon && <span>
             <Icon
                 name={data.icon}
@@ -53,7 +57,7 @@ const PurposeType = props => {
             />
         </span>}
         <span>{data.name}</span>
-    </div>
+    </span>
 
 }
 

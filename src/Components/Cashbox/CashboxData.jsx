@@ -18,7 +18,6 @@ const CashboxData = props => {
                     <Table.HeaderCell>Дата</Table.HeaderCell>
                     <Table.HeaderCell>Наименование</Table.HeaderCell>
                     <Table.HeaderCell>Тип</Table.HeaderCell>
-                    <Table.HeaderCell>Заметка</Table.HeaderCell>
                     <Table.HeaderCell>Дата внесения</Table.HeaderCell>
                     <Table.HeaderCell />
                 </Table.Row>

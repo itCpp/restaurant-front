@@ -18,6 +18,7 @@ const Header = () => {
         <NavLink to="/income/parking" className="header-link">Парковка</NavLink>
         <NavLink to="/expenses" className="header-link">Раcходы</NavLink>
         <NavLink to="/employees" className="header-link">Сотрудники</NavLink>
+        <NavLink to="/cashbox" className="header-link">Касса</NavLink>
 
         <div className="flex-grow-1">
 

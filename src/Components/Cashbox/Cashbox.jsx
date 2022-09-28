@@ -37,7 +37,7 @@ const Cashbox = () => {
 
     return <div className="px-2 py-1">
 
-        {loading && <Loader active inline="centered" />}
+        {loading && <Loader active inline="centered" className="mt-3" />}
 
         {!loading && error && <Message
             error
