@@ -3,6 +3,7 @@ import { Loader, Message } from "semantic-ui-react";
 import { axios } from "../../system";
 import CashboxData from "./CashboxData";
 import _ from "lodash"
+import CashboxRowEdit from "./CashboxRowEdit";
 
 const Cashbox = () => {
 
@@ -74,6 +75,8 @@ const Cashbox = () => {
     }, [page, load, end])
 
     return <div className="px-2 py-1">
+
+        <CashboxRowEdit />
 
         {loading && <Loader active inline="centered" className="mt-3" />}
 

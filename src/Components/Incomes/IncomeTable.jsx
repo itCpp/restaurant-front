@@ -28,7 +28,7 @@ const IncomeTable = props => {
                     <Table.HeaderCell>Кабинет</Table.HeaderCell>
                     <Table.HeaderCell>Компания</Table.HeaderCell>
                     <Table.HeaderCell>Контактное лицо</Table.HeaderCell>
-                    <Table.HeaderCell></Table.HeaderCell>
+                    <Table.HeaderCell />
                     <Table.HeaderCell>Площадь, м²</Table.HeaderCell>
                     <Table.HeaderCell>Стоимость 1м²</Table.HeaderCell>
                     <Table.HeaderCell>Цена</Table.HeaderCell>

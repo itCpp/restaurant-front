@@ -1,5 +1,7 @@
 import moment from "moment";
-import { Icon, Table } from "semantic-ui-react";
+import { useDispatch } from "react-redux";
+import { Dropdown, Icon, Table } from "semantic-ui-react";
+import { setShowCashboxRowEdit } from "../../store/cashbox/actions";
 
 let dateChange = null;
 const colspan = 7;
@@ -115,7 +117,9 @@ const CashboxDataTableRow = props => {
                 <small className="opacity-50">{moment(row.created_at).format("DD.MM.YYYY в HH:mm")}</small>
             </Table.Cell> */}
 
-            <Table.Cell></Table.Cell>
+            <Table.Cell textAlign="center">
+                <DropdownRowMenu row={row} />
+            </Table.Cell>
 
         </Table.Row>
     </>
@@ -138,6 +142,29 @@ const PurposeType = props => {
         <span>{data.name}</span>
     </span>
 
+}
+
+const DropdownRowMenu = props => {
+
+    const dispatch = useDispatch();
+    const { row } = props;
+
+    return <Dropdown
+        icon={null}
+        trigger={<Icon
+            name="ellipsis vertical"
+            link
+        />}
+        direction="left"
+    >
+        <Dropdown.Menu>
+            <Dropdown.Item
+                icon="pencil"
+                content="Изменить"
+                onClick={() => dispatch(setShowCashboxRowEdit(row))}
+            />
+        </Dropdown.Menu>
+    </Dropdown>
 }
 
 export default CashboxDataTableRow;

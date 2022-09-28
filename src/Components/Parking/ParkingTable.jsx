@@ -5,54 +5,67 @@ import { useNavigate } from "react-router-dom";
 import { Button, Dimmer, Dropdown, Form, Icon, Input, Loader, Table } from "semantic-ui-react";
 import { setParkingPlaceAdd, setIncomeSourceAdd } from "../../store/incomes/actions";
 import { axios } from "../../system";
+import IncomeFiles from "../Incomes/IncomeFiles";
 
 const ParkingTable = props => {
 
     const { rows } = props;
     const dispatch = useDispatch();
 
-    return <Table compact celled>
+    const [showFiles, setShowFiles] = React.useState(null);
 
-        <Table.Header>
-            <Table.Row>
-                <Table.HeaderCell>Место</Table.HeaderCell>
-                <Table.HeaderCell>Авто</Table.HeaderCell>
-                <Table.HeaderCell>Гос. номер</Table.HeaderCell>
-                <Table.HeaderCell>Период аренды</Table.HeaderCell>
-                <Table.HeaderCell>Контакт</Table.HeaderCell>
-                <Table.HeaderCell>Стоимость</Table.HeaderCell>
-                <Table.HeaderCell>Комментарий</Table.HeaderCell>
-                <Table.HeaderCell>Платежи</Table.HeaderCell>
-                <Table.HeaderCell
-                    content={<div className="text-center">
-                        <Button
-                            icon="plus"
-                            color="green"
-                            size="mini"
-                            basic
-                            title="Создать арендатора"
-                            className="mx-0"
-                            onClick={() => dispatch(setIncomeSourceAdd(true))}
-                        />
-                    </div>}
-                />
-            </Table.Row>
-        </Table.Header>
+    return <>
 
-        {rows.map(row => <ParkingTableSource
-            key={row.id}
-            {...props}
-            row={row}
-        />)}
+        <IncomeFiles
+            show={showFiles}
+            setShowFiles={setShowFiles}
+        />
 
-    </Table>
+        <Table compact celled>
+
+            <Table.Header>
+                <Table.Row>
+                    <Table.HeaderCell>Место</Table.HeaderCell>
+                    <Table.HeaderCell>Авто</Table.HeaderCell>
+                    <Table.HeaderCell>Гос. номер</Table.HeaderCell>
+                    <Table.HeaderCell>Период аренды</Table.HeaderCell>
+                    <Table.HeaderCell>Контакт</Table.HeaderCell>
+                    <Table.HeaderCell>Стоимость</Table.HeaderCell>
+                    <Table.HeaderCell>Комментарий</Table.HeaderCell>
+                    <Table.HeaderCell>Платежи</Table.HeaderCell>
+                    <Table.HeaderCell
+                        content={<div className="text-center">
+                            <Button
+                                icon="plus"
+                                color="green"
+                                size="mini"
+                                basic
+                                title="Создать арендатора"
+                                className="mx-0"
+                                onClick={() => dispatch(setIncomeSourceAdd(true))}
+                            />
+                        </div>}
+                    />
+                </Table.Row>
+            </Table.Header>
+
+            {rows.map(row => <ParkingTableSource
+                key={row.id}
+                {...props}
+                row={row}
+                setShowFiles={setShowFiles}
+            />)}
+
+        </Table>
+
+    </>
 }
 
 const colSpan = 9;
 
 const ParkingTableSource = props => {
 
-    const { row } = props;
+    const { row, setShowFiles } = props;
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const rows = row.parking || [];
@@ -83,6 +96,15 @@ const ParkingTableSource = props => {
                                     color="green"
                                     title="Изменить данные арендатора"
                                     onClick={() => dispatch(setIncomeSourceAdd(row))}
+                                    className="me-2"
+                                />
+                            </span>
+                            <span>
+                                <Icon
+                                    name={Number(row.files) > 0 ? "folder open" : "folder"}
+                                    link
+                                    title="Файлы арендатора"
+                                    onClick={() => setShowFiles(row)}
                                     className="me-2"
                                 />
                             </span>
