@@ -76,7 +76,7 @@ const Cashbox = () => {
 
     return <div className="px-2 py-1">
 
-        <CashboxRowEdit />
+        <CashboxRowEdit setRows={setRows} setStats={setStats} />
 
         {loading && <Loader active inline="centered" className="mt-3" />}
 

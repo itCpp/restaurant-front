@@ -4,8 +4,9 @@ import { Dimmer, Form, Icon, Loader, Modal } from "semantic-ui-react";
 import { setShowCashboxRowEdit } from "../../store/cashbox/actions";
 import { axios } from "../../system";
 
-const CashboxRowEdit = () => {
+const CashboxRowEdit = props => {
 
+    const { setRows, setStats } = props;
     const store = useSelector(s => s);
     const { showCashboxRowEdit } = store.cashbox;
     const { payTypes } = store.main;
@@ -117,8 +118,34 @@ const CashboxRowEdit = () => {
             axios.post('cashbox/save', formdata)
                 .then(({ data }) => {
 
+                    typeof setStats == "function" && setStats(p => ({ ...p, ...data.statistics }));
+
+                    typeof setRows == "function" && setRows(p => {
+
+                        let rows = [],
+                            add = true;
+
+                        p.forEach(r => {
+
+                            if (r.id === data.row.id) {
+                                r = { ...r, ...data.row };
+                                add = false;
+                            }
+
+                            rows.push(r);
+                        });
+
+                        add && rows.unshift(data.row);
+
+                        return rows;
+                    });
+
+                    close();
                 })
-                .catch(e => setSaveError(axios.getError(e)))
+                .catch(e => {
+                    setSaveError(axios.getError(e));
+                    setErrors(axios.getErrors(e));
+                })
                 .then(() => {
                     setSave(false);
                 });
@@ -153,6 +180,7 @@ const CashboxRowEdit = () => {
                             [value]: true
                         }))}
                         required
+                        error={Boolean(errors?.is_income) || Boolean(errors?.is_expense)}
                     />
 
                     <Form.Input
@@ -162,6 +190,7 @@ const CashboxRowEdit = () => {
                         value={Boolean(formdata?.sum) ? Math.abs(formdata.sum) : ""}
                         onChange={handleChange}
                         required
+                        error={Boolean(errors?.sum)}
                     />
 
                     <Form.Select
@@ -171,6 +200,7 @@ const CashboxRowEdit = () => {
                         name="type_pay"
                         value={formdata?.type_pay || null}
                         onChange={handleChange}
+                        error={Boolean(errors?.type_pay)}
                     />
 
                 </Form.Group>
@@ -184,6 +214,7 @@ const CashboxRowEdit = () => {
                         value={formdata?.date || ""}
                         onChange={handleChange}
                         required
+                        error={Boolean(errors?.date)}
                     />
 
                     <Form.Input
@@ -192,6 +223,7 @@ const CashboxRowEdit = () => {
                         name="month"
                         value={formdata?.month || ""}
                         onChange={handleChange}
+                        error={Boolean(errors?.month)}
                     />
 
                     <Form.Input
@@ -200,6 +232,7 @@ const CashboxRowEdit = () => {
                         name="period_start"
                         value={formdata?.period_start || ""}
                         onChange={handleChange}
+                        error={Boolean(errors?.period_start)}
                     />
 
                     <Form.Input
@@ -208,6 +241,7 @@ const CashboxRowEdit = () => {
                         name="period_stop"
                         value={formdata?.period_stop || ""}
                         onChange={handleChange}
+                        error={Boolean(errors?.period_stop)}
                     />
 
                 </Form.Group>
@@ -226,6 +260,7 @@ const CashboxRowEdit = () => {
                                 setFormdata(p => ({ ...p, [name]: value, expense_subtype_id: null }))
                             }}
                             required
+                            error={Boolean(errors?.expense_type_id)}
                         />
 
                         <Form.Dropdown
@@ -243,7 +278,6 @@ const CashboxRowEdit = () => {
                             onChange={handleChange}
                             loading={loadingExpenseTypes}
                             disabled={loadingExpenseTypes}
-                            error={Boolean(errors.expense_subtype_id)}
                             search
                             selection
                             allowAdditions
@@ -256,6 +290,7 @@ const CashboxRowEdit = () => {
                                 }));
                                 setFormdata(p => ({ ...p, [name]: value }));
                             }}
+                            error={Boolean(errors.expense_subtype_id)}
                         />
 
                     </Form.Group>
@@ -266,6 +301,7 @@ const CashboxRowEdit = () => {
                         name="name"
                         value={formdata?.name || ""}
                         onChange={handleChange}
+                        error={Boolean(errors.name)}
                     />
 
                 </>}
@@ -292,6 +328,7 @@ const CashboxRowEdit = () => {
                             search
                             noResultsMessage="Ничего не найдено"
                             required
+                            error={Boolean(errors.income_source_id)}
                         />
 
                     </Form.Group>
@@ -311,6 +348,7 @@ const CashboxRowEdit = () => {
                             value={formdata.purpose_pay || null}
                             onChange={handleChange}
                             required
+                            error={Boolean(errors.purpose_pay)}
                         />
 
                         <Form.Select
