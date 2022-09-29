@@ -1,7 +1,8 @@
 import * as ACTIONS from "./actions";
 
 const defaultState = {
-    showCashboxRowEdit: false,
+    showCashboxRowEdit: false, // {boolean|object}
+    calendar: false, // {boolean}
 };
 
 export const cashboxReducer = (state = defaultState, action) => {
@@ -10,6 +11,9 @@ export const cashboxReducer = (state = defaultState, action) => {
 
         case ACTIONS.CASHBOX_ROW_EDIT:
             return { ...state, showCashboxRowEdit: action.payload }
+
+        case ACTIONS.CASHBOX_SHOW_CALENDAR:
+            return { ...state, calendar: action.payload }
 
         default:
             return state;

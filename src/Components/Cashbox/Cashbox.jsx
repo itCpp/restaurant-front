@@ -4,8 +4,18 @@ import { axios } from "../../system";
 import CashboxData from "./CashboxData";
 import _ from "lodash"
 import CashboxRowEdit from "./CashboxRowEdit";
+import { useSelector } from "react-redux";
+import CashboxCalendar from "./CashboxCalendar";
 
 const Cashbox = () => {
+
+    const { calendar } = useSelector(s => s.cashbox);
+
+    return Boolean(calendar) ? <CashboxCalendar /> : <CashboxRows />;
+
+}
+
+const CashboxRows = () => {
 
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState(null);
