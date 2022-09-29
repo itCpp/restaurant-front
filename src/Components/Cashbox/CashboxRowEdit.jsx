@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Form, Icon, Modal } from "semantic-ui-react";
+import { Dimmer, Form, Icon, Loader, Modal } from "semantic-ui-react";
 import { setShowCashboxRowEdit } from "../../store/cashbox/actions";
 import { axios } from "../../system";
 
@@ -14,6 +14,13 @@ const CashboxRowEdit = () => {
     const [formdata, setFormdata] = React.useState({});
     const [options, setOptions] = React.useState({});
     const [loading, setLoading] = React.useState(true);
+    const [loadingExpenseTypes, setLoadingExpenseTypes] = React.useState(false);
+    const [loadingIncomeSourceParkings, setLoadingIncomeSourceParkings] = React.useState(false);
+
+    const [save, setSave] = React.useState(false);
+    const [error, setError] = React.useState(null);
+    const [errors, setErrors] = React.useState({});
+    const [saveError, setSaveError] = React.useState(null);
 
     const close = React.useCallback(() => dispatch(setShowCashboxRowEdit(false)), []);
 
@@ -34,6 +41,9 @@ const CashboxRowEdit = () => {
                         ...p,
                         expense_types: data.expense_types,
                         expense_subtypes: data.expense_subtypes,
+                        income_sources: data.income_sources,
+                        income_source_parkings: data.income_source_parkings,
+                        purpose: data.purpose,
                     }))
                 })
                 .catch(e => {
@@ -49,9 +59,72 @@ const CashboxRowEdit = () => {
         return () => {
             setFormdata({});
             setLoading(true);
+            setLoadingExpenseTypes(false);
+            setLoadingIncomeSourceParkings(false);
+            setSave(false);
+            setError(null);
+            setSaveError(null);
+            setErrors({});
         }
 
     }, [showCashboxRowEdit]);
+
+    React.useEffect(() => {
+
+        if (!loading) {
+
+            if (Boolean(formdata?.expense_type_id)) {
+                setLoadingExpenseTypes(true);
+                axios.post('expenses/types', { id: formdata.expense_type_id })
+                    .then(({ data }) => {
+                        setOptions(p => ({ ...p, expense_subtypes: data }));
+                        setErrors(p => ({ ...p, expense_subtype_id: null }));
+                    })
+                    .catch(e => setErrors(p => ({ ...p, expense_subtype_id: [axios.getError(e)] })))
+                    .then(() => setLoadingExpenseTypes(false));
+            } else {
+                setOptions(p => ({ ...p, expense_subtypes: [] }));
+            }
+
+        }
+
+    }, [formdata?.expense_type_id]);
+
+    React.useEffect(() => {
+
+        if (!loading) {
+
+            if (Boolean(formdata?.income_source_id)) {
+                setLoadingIncomeSourceParkings(true);
+                axios.post('parking/list', { id: formdata.income_source_id })
+                    .then(({ data }) => {
+                        setOptions(p => ({ ...p, income_source_parkings: data }));
+                        setErrors(p => ({ ...p, income_source_parking_id: null }));
+                    })
+                    .catch(e => setErrors(p => ({ ...p, income_source_parking_id: [axios.getError(e)] })))
+                    .then(() => setLoadingIncomeSourceParkings(false));
+            } else {
+                setOptions(p => ({ ...p, income_source_parkings: [] }));
+            }
+
+        }
+
+    }, [formdata?.income_source_id]);
+
+    React.useEffect(() => {
+
+        if (save) {
+            axios.post('cashbox/save', formdata)
+                .then(({ data }) => {
+
+                })
+                .catch(e => setSaveError(axios.getError(e)))
+                .then(() => {
+                    setSave(false);
+                });
+        }
+
+    }, [save]);
 
     return <Modal
         open={Boolean(showCashboxRowEdit)}
@@ -73,7 +146,12 @@ const CashboxRowEdit = () => {
                             { key: 1, text: "Расход", value: "is_expense" },
                         ]}
                         value={formdata?.is_income ? "is_income" : (formdata?.is_expense ? "is_expense" : null)}
-                        onChange={(e, { value }) => setFormdata(p => ({ ...p, is_income: false, is_expense: false, [value]: true }))}
+                        onChange={(e, { value }) => setFormdata(p => ({
+                            ...p,
+                            is_income: false,
+                            is_expense: false,
+                            [value]: true
+                        }))}
                         required
                     />
 
@@ -116,10 +194,6 @@ const CashboxRowEdit = () => {
                         onChange={handleChange}
                     />
 
-                </Form.Group>
-
-                <Form.Group widths="equal">
-
                     <Form.Input
                         label="Начало периода"
                         type="date"
@@ -148,17 +222,40 @@ const CashboxRowEdit = () => {
                             options={options?.expense_types || []}
                             name="expense_type_id"
                             value={formdata?.expense_type_id || null}
-                            onChange={handleChange}
+                            onChange={(e, { name, value }) => {
+                                setFormdata(p => ({ ...p, [name]: value, expense_subtype_id: null }))
+                            }}
                             required
                         />
 
-                        <Form.Select
+                        <Form.Dropdown
                             label="Фиксированное наименование"
-                            placeholder="Выберите фиксированное наименование расхода"
-                            options={options?.expense_subtypes || []}
+                            placeholder="Выберите или добавьте наименование"
+                            options={[
+                                { text: "Не выбрано", value: null },
+                                ...(options?.expense_subtypes || [])
+                            ].map((r, i) => ({
+                                ...r,
+                                key: i,
+                            }))}
                             name="expense_subtype_id"
                             value={formdata?.expense_subtype_id || null}
                             onChange={handleChange}
+                            loading={loadingExpenseTypes}
+                            disabled={loadingExpenseTypes}
+                            error={Boolean(errors.expense_subtype_id)}
+                            search
+                            selection
+                            allowAdditions
+                            additionLabel="Добавить в список: "
+                            noResultsMessage="Ничего не найдено..."
+                            onAddItem={(e, { name, value }) => {
+                                setOptions(p => ({
+                                    ...p,
+                                    expense_subtypes: [...(p.expense_subtypes || []), { text: value, value }]
+                                }));
+                                setFormdata(p => ({ ...p, [name]: value }));
+                            }}
                         />
 
                     </Form.Group>
@@ -173,9 +270,95 @@ const CashboxRowEdit = () => {
 
                 </>}
 
+                {formdata.is_income && <>
+
+                    <Form.Group widths="equal">
+
+                        <Form.Dropdown
+                            label="Арендатор"
+                            placeholder="Выберите арендатора"
+                            selection
+                            options={[{ id: null, name: "Не выбрано" }, ...(options.income_sources || [])].map(r => ({
+                                key: r.id,
+                                text: r.name,
+                                value: r.id,
+                                description: r?.settings?.comment || null,
+                            }))}
+                            name="income_source_id"
+                            value={formdata.income_source_id || null}
+                            onChange={(e, { name, value }) => {
+                                setFormdata(p => ({ ...p, [name]: value, income_source_parking_id: null }))
+                            }}
+                            search
+                            noResultsMessage="Ничего не найдено"
+                            required
+                        />
+
+                    </Form.Group>
+
+                    <Form.Group widths="equal">
+
+                        <Form.Select
+                            label="Назначение платежа"
+                            placeholder="Выберите назначение платежа"
+                            options={[{ id: null, name: "Не выбрано" }, ...(options.purpose || [])].map(r => ({
+                                key: r.id,
+                                text: r.name,
+                                value: r.id,
+                                icon: r.icon || null,
+                            }))}
+                            name="purpose_pay"
+                            value={formdata.purpose_pay || null}
+                            onChange={handleChange}
+                            required
+                        />
+
+                        <Form.Select
+                            label="Парковочное место"
+                            placeholder="Выберите парковочное место"
+                            options={options.income_source_parkings || []}
+                            name="income_source_parking_id"
+                            value={formdata.income_source_parking_id || null}
+                            onChange={handleChange}
+                            disabled={formdata?.purpose_pay !== 2 || loadingIncomeSourceParkings || (options.income_source_parkings || []).length === 0}
+                            loading={loadingIncomeSourceParkings}
+                            error={Boolean(errors.income_source_parking_id)}
+                            required={formdata?.purpose_pay === 2}
+                        />
+
+                    </Form.Group>
+
+                </>}
+
+                {saveError && <div className="text-danger">
+                    <strong>Ошибка</strong>{' '}{saveError}
+                </div>}
+
+                <Dimmer active={loading || save} inverted>
+                    <Loader />
+                </Dimmer>
+
             </Form>
 
         </div>}
+        actions={[
+            {
+                key: 0,
+                content: "Отмена",
+                onClick: () => close(),
+                size: "mini",
+            },
+            {
+                key: 1,
+                content: "Сохранить",
+                color: "green",
+                labelPosition: "right",
+                icon: "save",
+                disabled: loading || save,
+                onClick: () => setSave(true),
+                size: "mini",
+            }
+        ]}
     />
 }
 
