@@ -31,11 +31,11 @@ const CashboxRowEdit = props => {
 
     React.useEffect(() => {
 
-        if (typeof showCashboxRowEdit == "object") {
+        if (showCashboxRowEdit) {
 
-            setFormdata({ ...showCashboxRowEdit });
+            typeof showCashboxRowEdit == "object" && setFormdata({ ...showCashboxRowEdit });
 
-            axios.post('cashbox/get', { id: showCashboxRowEdit.id })
+            axios.post('cashbox/get', { id: showCashboxRowEdit?.id })
                 .then(({ data }) => {
                     setFormdata(data.row);
                     setOptions(p => ({

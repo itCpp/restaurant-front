@@ -6,9 +6,9 @@ import { setShowCashboxRowEdit } from "../../store/cashbox/actions";
 let dateChange = null;
 const colspan = 7;
 
-const typePayCash = <Icon name="ruble" className="ms-0 me-2" title="Наличные" />;
-const typePayCard = <Icon name="credit card" className="ms-0 me-2" title="Безналичные" />;
-const typePayCheckingAccount = <Icon name="file text" className="ms-0 me-2" title="Расчетный счет" />;
+export const typePayCash = <Icon name="ruble" className="ms-0 me-2" title="Наличные" />;
+export const typePayCard = <Icon name="credit card" className="ms-0 me-2" title="Безналичные" />;
+export const typePayCheckingAccount = <Icon name="file text" className="ms-0 me-2" title="Расчетный счет" />;
 
 const CashboxDataTableRow = props => {
 
@@ -111,7 +111,14 @@ const CashboxDataTableRow = props => {
                 </div>
             </Table.Cell>
 
-            <Table.Cell></Table.Cell>
+            <Table.Cell>
+                {Boolean(row.period_start && row.period_stop)
+                    ? <div className="d-flex text-nowrap">
+                    <div className="me-1">с {moment(row.period_start).format("DD.MM.YYYY")}</div>
+                    <div>по {moment(row.period_stop).format("DD.MM.YYYY")}</div>
+                </div>
+                : (row.month && <div>{moment(row.month).format("MMMM YYYY")}</div>)}
+            </Table.Cell>
 
             {/* <Table.Cell>
                 <small className="opacity-50">{moment(row.created_at).format("DD.MM.YYYY в HH:mm")}</small>
