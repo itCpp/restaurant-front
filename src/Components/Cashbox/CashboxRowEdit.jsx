@@ -165,24 +165,6 @@ const CashboxRowEdit = props => {
 
                 <Form.Group widths="equal">
 
-                    <Form.Select
-                        label="Тип платежа"
-                        placeholder="Выберите тип платежа"
-                        options={[
-                            { key: 0, text: "Приход", value: "is_income" },
-                            { key: 1, text: "Расход", value: "is_expense" },
-                        ]}
-                        value={formdata?.is_income ? "is_income" : (formdata?.is_expense ? "is_expense" : null)}
-                        onChange={(e, { value }) => setFormdata(p => ({
-                            ...p,
-                            is_income: false,
-                            is_expense: false,
-                            [value]: true
-                        }))}
-                        required
-                        error={Boolean(errors?.is_income) || Boolean(errors?.is_expense)}
-                    />
-
                     <Form.Input
                         label="Сумма"
                         placeholder="Укажите сумму"
@@ -201,6 +183,24 @@ const CashboxRowEdit = props => {
                         value={formdata?.type_pay || null}
                         onChange={handleChange}
                         error={Boolean(errors?.type_pay)}
+                    />
+
+                    <Form.Select
+                        label="Тип платежа"
+                        placeholder="Выберите тип платежа"
+                        options={[
+                            { key: 0, text: "Приход", value: "is_income" },
+                            { key: 1, text: "Расход", value: "is_expense" },
+                        ]}
+                        value={formdata?.is_income ? "is_income" : (formdata?.is_expense ? "is_expense" : null)}
+                        onChange={(e, { value }) => setFormdata(p => ({
+                            ...p,
+                            is_income: false,
+                            is_expense: false,
+                            [value]: true
+                        }))}
+                        required
+                        error={Boolean(errors?.is_income) || Boolean(errors?.is_expense)}
                     />
 
                 </Form.Group>

@@ -7,6 +7,7 @@ import TenantData from "./TenantData";
 import TenantPays from "./TenantPays";
 import { useNavigate } from "react-router-dom";
 import TenantFiles from "./TenantFiles";
+import TenantAdditionalServices from "./TenantAdditionalServices";
 
 const Tenant = () => {
 
@@ -105,7 +106,7 @@ const Tenant = () => {
 
                 <Grid>
 
-                    <Grid.Row className="p-1">
+                    <Grid.Row>
 
                         <Grid.Column>
 
@@ -137,7 +138,7 @@ const Tenant = () => {
 
                     </Grid.Row>
 
-                    <Grid.Row className="p-1" columns={2} stretched>
+                    <Grid.Row columns={2} stretched>
 
                         <Grid.Column>
                             <TenantData row={row} setRow={setRow} />
@@ -149,10 +150,14 @@ const Tenant = () => {
 
                     </Grid.Row>
 
-                    <Grid.Row className="p-1" columns={2} stretched>
+                    <Grid.Row columns={2} stretched>
 
                         <Grid.Column>
                             <TenantFiles row={row} setRow={setRow} />
+                        </Grid.Column>
+
+                        <Grid.Column>
+                            <TenantAdditionalServices row={row} setRow={setRow} />
                         </Grid.Column>
 
                     </Grid.Row>
