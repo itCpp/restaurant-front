@@ -140,7 +140,7 @@ const Calendar = props => {
         <Grid divided>
 
             {calendar.map((r, i) => {
-                return <Grid.Row columns={7} className="calendar-row" key={i}>{r.map(row => <CalendarDay
+                return <Grid.Row columns={7} className="calendar-row p-0" key={i}>{r.map(row => <CalendarDay
                     key={row.date}
                     {...props}
                     row={row}
@@ -157,14 +157,23 @@ const CalendarDay = props => {
 
     const { data, row } = props;
     const dateKey = moment(row.date).format("YYYYMMDD");
+    const dataRow = typeof data[dateKey] == "object" ? data[dateKey] : {};
 
-    return <Grid.Column className="calendar-cell">
+    const isGood = Math.abs(Number(dataRow.expense || 0)) < Number(dataRow.incoming || 0);
+    const isBad = Math.abs(Number(dataRow.expense || 0)) > Number(dataRow.incoming || 0);
 
-        <div className="text-center" style={{ fontSize: "130%" }}>
+    const className = ["calendar-cell"];
+
+    isGood && className.push("is_good");
+    isBad && className.push("is_bad");
+
+    return <Grid.Column className={className.join(" ")}>
+
+        <div className="text-center mt-2" style={{ fontSize: "130%" }}>
             <strong className={row.toMonth ? "opacity-100" : "opacity-30"}>{moment(row.date).format("DD")}</strong>
         </div>
 
-        <StatDayCell data={typeof data[dateKey] == "object" ? data[dateKey] : {}} />
+        <StatDayCell data={dataRow} />
 
     </Grid.Column>;
 }

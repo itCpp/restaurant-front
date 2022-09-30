@@ -2,3 +2,10 @@
     font-size: 80% !important;
     cursor: default;
 }
+
+.calendar-cell.is_bad {
+    background-color: #ffdddd !important;
+}
+.calendar-cell.is_good {
+    background-color: #e4ffea !important;
+}
