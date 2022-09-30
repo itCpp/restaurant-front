@@ -6,6 +6,7 @@ import { axios } from "../../system";
 import TenantData from "./TenantData";
 import TenantPays from "./TenantPays";
 import { useNavigate } from "react-router-dom";
+import TenantFiles from "./TenantFiles";
 
 const Tenant = () => {
 
@@ -144,6 +145,14 @@ const Tenant = () => {
 
                         <Grid.Column>
                             <TenantPays row={row} setRow={setRow} />
+                        </Grid.Column>
+
+                    </Grid.Row>
+
+                    <Grid.Row className="p-1" columns={2} stretched>
+
+                        <Grid.Column>
+                            <TenantFiles row={row} setRow={setRow} />
                         </Grid.Column>
 
                     </Grid.Row>

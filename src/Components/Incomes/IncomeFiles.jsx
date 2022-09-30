@@ -7,6 +7,27 @@ import useUpload from "../Expenses/useUpload";
 const IncomeFiles = props => {
 
     const { show, setShowFiles } = props;
+    const [uploading, setUloading] = React.useState(false);
+
+    return <Modal
+        open={Boolean(show)}
+        header={`Файлы ${show?.name_type || show?.name}`}
+        centered={false}
+        closeIcon={uploading ? null : { name: "close", onClick: () => setShowFiles(false) }}
+        content={{
+            scrolling: true,
+            content: <div className="position-relative" style={{ minHeight: "5rem" }}>
+
+                <IncomeFilesComponent show={show} setUloading={setUloading} />
+
+            </div>
+        }}
+    />
+}
+
+export const IncomeFilesComponent = props => {
+
+    const { show, setUloading } = props;
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState(null);
     const [files, setFiles] = React.useState([]);
@@ -46,67 +67,62 @@ const IncomeFiles = props => {
 
     }, [show]);
 
-    return <Modal
-        open={Boolean(show)}
-        header={`Файлы ${show?.name_type || show?.name}`}
-        centered={false}
-        closeIcon={uploading ? null : { name: "close", onClick: () => setShowFiles(false) }}
-        content={{
-            scrolling: true,
-            content: <div className="position-relative" style={{ minHeight: "5rem" }}>
+    React.useEffect(() => {
+        typeof setUloading == "function" && setUloading(uploading);
+    }, [uploading]);
 
-                <FileRename
-                    data={rename}
-                    close={() => setRename(false)}
-                    setFiles={setFiles}
-                />
+    return <>
 
-                <FileDrop
-                    data={dropFile}
-                    close={() => setDropFile(false)}
-                    setFiles={setFiles}
-                />
+        <FileRename
+            data={rename}
+            close={() => setRename(false)}
+            setFiles={setFiles}
+        />
 
-                {!loading && error && <div className="position-absolute-all d-flex align-items-center justify-content-center py-4">
-                    <div className="text-danger text-center"><strong>{error}</strong></div>
-                </div>}
+        <FileDrop
+            data={dropFile}
+            close={() => setDropFile(false)}
+            setFiles={setFiles}
+        />
 
-                {!loading && !error && <>
+        {!loading && error && <div className="position-absolute-all d-flex align-items-center justify-content-center py-4">
+            <div className="text-danger text-center"><strong>{error}</strong></div>
+        </div>}
 
-                    <div className="position-relative">
-                        <FileUploader />
-                        <Dimmer active={uploading} inverted><Loader /></Dimmer>
-                    </div>
+        {!loading && !error && <>
 
-                    {files.length === 0 && <div className="text-center mt-4">
-                        <div className="opacity-40">Файлов еще нет</div>
-                    </div>}
-
-                    {files.length > 0 && <div className="mt-4">
-
-                        <div className="file-list">
-                            {files.map(row => <ExpenseFileRow
-                                key={row.id}
-                                row={row}
-                                uploadProcess={uploadProcess}
-                                setRename={setRename}
-                                setDropFile={setDropFile}
-                                setFiles={setFiles}
-                                income
-                            />)}
-                        </div>
-
-                    </div>}
-
-                </>}
-
-                <Dimmer active={loading} inverted>
-                    <Loader />
-                </Dimmer>
-
+            <div className="position-relative">
+                <FileUploader />
+                <Dimmer active={uploading} inverted><Loader /></Dimmer>
             </div>
-        }}
-    />
+
+            {files.length === 0 && <div className="text-center mt-4">
+                <div className="opacity-40">Файлов еще нет</div>
+            </div>}
+
+            {files.length > 0 && <div className="mt-4">
+
+                <div className="file-list">
+                    {files.map(row => <ExpenseFileRow
+                        key={row.id}
+                        row={row}
+                        uploadProcess={uploadProcess}
+                        setRename={setRename}
+                        setDropFile={setDropFile}
+                        setFiles={setFiles}
+                        income
+                    />)}
+                </div>
+
+            </div>}
+
+        </>}
+
+        <Dimmer active={loading} inverted>
+            <Loader />
+        </Dimmer>
+
+    </>
 }
 
 export const FileRename = props => {

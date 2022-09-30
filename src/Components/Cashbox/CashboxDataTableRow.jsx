@@ -1,6 +1,7 @@
 import moment from "moment";
+import React from "react";
 import { useDispatch } from "react-redux";
-import { Dropdown, Icon, Table } from "semantic-ui-react";
+import { Button, Dropdown, Header, Icon, Portal, Segment, Table } from "semantic-ui-react";
 import { setShowCashboxRowEdit } from "../../store/cashbox/actions";
 
 let dateChange = null;
@@ -13,6 +14,7 @@ export const typePayCheckingAccount = <Icon name="file text" className="ms-0 me-
 const CashboxDataTableRow = props => {
 
     const { row, stats, keyId } = props;
+    const [drop, setDrop] = React.useState(false);
 
     let toDate = false,
         typePay = null,
@@ -114,10 +116,10 @@ const CashboxDataTableRow = props => {
             <Table.Cell>
                 {Boolean(row.period_start && row.period_stop)
                     ? <div className="d-flex text-nowrap">
-                    <div className="me-1">с {moment(row.period_start).format("DD.MM.YYYY")}</div>
-                    <div>по {moment(row.period_stop).format("DD.MM.YYYY")}</div>
-                </div>
-                : (row.month && <div>{moment(row.month).format("MMMM YYYY")}</div>)}
+                        <div className="me-1">с {moment(row.period_start).format("DD.MM.YYYY")}</div>
+                        <div>по {moment(row.period_stop).format("DD.MM.YYYY")}</div>
+                    </div>
+                    : (row.month && <div>{moment(row.month).format("MMMM YYYY")}</div>)}
             </Table.Cell>
 
             {/* <Table.Cell>
@@ -125,7 +127,7 @@ const CashboxDataTableRow = props => {
             </Table.Cell> */}
 
             <Table.Cell textAlign="center">
-                <DropdownRowMenu row={row} />
+                <DropdownRowMenu row={row} setDrop={setDrop} />
             </Table.Cell>
 
         </Table.Row>
@@ -154,7 +156,7 @@ const PurposeType = props => {
 const DropdownRowMenu = props => {
 
     const dispatch = useDispatch();
-    const { row } = props;
+    const { row, setDrop } = props;
 
     return <Dropdown
         icon={null}
@@ -169,6 +171,12 @@ const DropdownRowMenu = props => {
                 icon="pencil"
                 content="Изменить"
                 onClick={() => dispatch(setShowCashboxRowEdit(row))}
+            />
+            <Dropdown.Item
+                icon="trash"
+                content="Удалить"
+                onClick={() => setDrop(row)}
+                disabled
             />
         </Dropdown.Menu>
     </Dropdown>
