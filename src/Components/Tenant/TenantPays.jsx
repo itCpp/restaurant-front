@@ -1,7 +1,8 @@
 import React from "react";
-import { Button, Dropdown, Grid, Header, Icon, Input, Portal } from "semantic-ui-react";
+import { Button, Dropdown, Grid, Header, Icon, Input } from "semantic-ui-react";
 import Segment from "../UI/Segment";
 import { axios, moment } from "../../system";
+import TenantPaysAddPay from "./TenantPaysAddPay";
 
 const ucFirst = str => {
     if (!str) return str;
@@ -68,15 +69,26 @@ const FineRow = props => {
         <div><Icon name="ban" /></div>
         <div className="flex-grow-1">Пеня за просроченные платежи <b>{row.fine} р.</b></div>
         <span>
-            <Icon
-                name="plus"
-                fitted
-                link
-                title="Добавить оплату пени"
-                onClick={() => setAddReady(true)}
+            <TenantPaysAddPay
+                show={addReady}
+                close={() => setAddReady(false)}
+                setRow={setRow}
+                date={moment().format("YYYY-MM-DD")}
+                sum={row.fine}
+                purpose_pay={0}
+                fine={true}
+                income_part_id={row.part_id}
+                income_source_id={row.id}
+                trigger={<Icon
+                    name="plus"
+                    fitted
+                    link
+                    title="Добавить оплату пени"
+                    onClick={() => setAddReady(true)}
+                />}
             />
         </span>
-        <AddPayForm
+        {/* <AddPayForm
             show={addReady}
             close={() => setAddReady(false)}
             setRow={setRow}
@@ -86,7 +98,7 @@ const FineRow = props => {
             fine={true}
             income_part_id={row.part_id}
             income_source_id={row.id}
-        />
+        /> */}
     </div>
 }
 
@@ -102,21 +114,31 @@ const NextPayRow = props => {
 
         <div><Icon name={row.icon} /></div>
 
-
-
         <div className="flex-grow-1">{row.title}</div>
 
         <span>
-            <Icon
-                name="plus"
-                fitted
-                link
-                title="Добавить платеж"
-                onClick={() => setAddReady(true)}
+            <TenantPaysAddPay
+                show={addReady}
+                close={() => setAddReady(false)}
+                setRow={setRow}
+                date={moment().format("YYYY-MM-DD")}
+                sum={row.price}
+                purpose_pay={row.type}
+                income_part_id={income_part_id}
+                income_source_id={income_source_id}
+                nextPayRow={row}
+                parking_id={row.income_source_parking_id}
+                trigger={<Icon
+                    name="plus"
+                    fitted
+                    link
+                    title="Добавить платеж"
+                    onClick={() => setAddReady(true)}
+                />}
             />
         </span>
 
-        <AddPayForm
+        {/* <AddPayForm
             show={addReady}
             close={() => setAddReady(false)}
             setRow={setRow}
@@ -127,7 +149,7 @@ const NextPayRow = props => {
             income_source_id={income_source_id}
             nextPayRow={row}
             parking_id={row.income_source_parking_id}
-        />
+        /> */}
 
     </div>
 }
@@ -280,12 +302,25 @@ const PayRowColumn = props => {
             {!Boolean(row.sum) && <>
 
                 <span>
-                    <Icon
-                        name="plus"
-                        link
-                        title="Добавить платеж"
-                        onClick={() => setAddPay(true)}
+                    <TenantPaysAddPay
+                        show={addPay}
+                        close={() => setAddPay(false)}
+                        setRow={setRow}
+                        date={moment(row.date).format("YYYY-MM-DD")}
+                        sum={row.pay_sum || Number(row?.source?.price) * Number(row?.source?.space)}
+                        purpose_pay={row.purpose_pay}
+                        income_part_id={row?.source?.part_id}
+                        income_source_id={row.income_source_id}
+                        lostPayRow={row}
+                        parking_id={row?.parking?.id}
+                        trigger={<Icon
+                            name="plus"
+                            link
+                            title="Добавить платеж"
+                            onClick={() => setAddPay(true)}
+                        />}
                     />
+
                 </span>
 
                 <span>
@@ -306,7 +341,7 @@ const PayRowColumn = props => {
             </>}
         </div>
 
-        {!Boolean(row.sum) && <AddPayForm
+        {/* {!Boolean(row.sum) && <AddPayForm
             show={addPay}
             close={() => setAddPay(false)}
             setRow={setRow}
@@ -317,7 +352,7 @@ const PayRowColumn = props => {
             income_source_id={row.income_source_id}
             lostPayRow={row}
             parking_id={row?.parking?.id}
-        />}
+        />} */}
 
     </div>
 
