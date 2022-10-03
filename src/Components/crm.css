@@ -217,6 +217,17 @@
     border-right: 1px solid rgba(34, 36, 38, 0.1) !important;
 }
 
-.cashbox-date-row td, .cashbox-date-row.active td {
+.cashbox-date-row td,
+.cashbox-date-row.active td {
     background: #d9e1f2 !important;
+}
+
+.additional-service-row {
+    padding: .25rem 1rem;
+    cursor: default;
+}
+
+.additional-service-row:hover {
+    background: var(--bs-gray-100);
+    border-radius: .25rem;
 }
