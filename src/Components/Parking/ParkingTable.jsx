@@ -169,7 +169,7 @@ const ParkingPlaceRow = props => {
     return <Table.Row className={className.join(" ")}>
         <Table.Cell>{row.parking_place}</Table.Cell>
         <Table.Cell>{row.car}</Table.Cell>
-        <Table.Cell>{row.car_number}</Table.Cell>
+        <Table.Cell>{row.car_number && String(row.car_number).replace(/ /ig, "")}</Table.Cell>
         <Table.Cell>
             <div>
                 {row.date_from && <span>с {moment(row.date_from).format("DD.MM.YYYY")}</span>}
