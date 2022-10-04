@@ -65,7 +65,7 @@ export const IncomeFilesComponent = props => {
             setFiles([]);
         }
 
-    }, [show]);
+    }, [JSON.stringify(typeof show == "object" ? show : {})]);
 
     React.useEffect(() => {
         typeof setUloading == "function" && setUloading(uploading);
