@@ -75,13 +75,24 @@ const TenantPaysAddPay = props => {
 
                             r.rows.forEach(rr => {
 
+                                let rrMonth = moment(rr.date || new Date).format("YYYY-MM");
+
                                 if (
                                     month
                                     && !Boolean(rr.sum)
-                                    && month === data.pay.month
+                                    && rrMonth === data.pay.month
                                     && rr.purpose_pay === data.pay.purpose_pay
                                     && rr.income_source_parking_id === data.pay.income_source_parking_id
-                                ) return;
+                                ) {
+                                    return;
+                                } else if (
+                                    month
+                                    && !Boolean(rr.sum)
+                                    && rrMonth === data.pay.month
+                                    && rr.purpose_pay === data.pay.purpose_pay
+                                ) {
+                                    return;
+                                }
 
                                 monthRows.push(rr);
                             });

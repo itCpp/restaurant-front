@@ -13,7 +13,12 @@ const TenantFiles = props => {
         </div>
 
         <div className="position-relative" style={{ minHeight: 70 }}>
-            <IncomeFilesComponent show={props.row} />
+            <IncomeFilesComponent
+                show={{
+                    id: props?.row?.id,
+                    name: props?.row?.name
+                }}
+            />
         </div>
 
     </Segment>
