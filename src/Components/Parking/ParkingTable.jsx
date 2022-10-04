@@ -240,6 +240,7 @@ const AddNextPayParking = props => {
         if (active) {
             setFormdata({
                 date: pay?.date || moment().format("YYYY-MM-DD"),
+                month: pay?.month || moment().format("YYYY-MM"),
                 sum: pay?.pay_sum || "",
                 parking_id: row?.id,
                 type_pay: 1,
@@ -308,6 +309,15 @@ const AddNextPayParking = props => {
                     value={formdata.date || ""}
                     onChange={(e, { value }) => setFormdata(p => ({ ...p, date: value }))}
                     error={Boolean(errors?.date)}
+                />
+                <Form.Input
+                    label="Отчетный месяц"
+                    type="month"
+                    size="mini"
+                    className="mb-1"
+                    value={formdata.month || ""}
+                    onChange={(e, { value }) => setFormdata(p => ({ ...p, month: value }))}
+                    error={Boolean(errors?.month)}
                 />
                 <Form.Input
                     label="Сумма платежа"
