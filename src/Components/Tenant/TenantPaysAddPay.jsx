@@ -11,6 +11,7 @@ const TenantPaysAddPay = props => {
     const [formdata, setFormdata] = React.useState({});
     const [save, setSave] = React.useState(false);
     const [saveError, setSaveError] = React.useState(false);
+    const [saveErrors, setSaveErrors] = React.useState({});
 
     React.useEffect(() => {
 
@@ -98,7 +99,10 @@ const TenantPaysAddPay = props => {
 
                     typeof close == "function" && close();
                 })
-                .catch(e => setSaveError(axios.post(e)))
+                .catch(e => {
+                    setSaveError(axios.getError(e));
+                    setSaveErrors(axios.getErrors(e));
+                })
                 .then(() => setSave(false));
         }
 
@@ -134,6 +138,7 @@ const TenantPaysAddPay = props => {
                     disabled={save}
                     fluid
                     className="mb-1"
+                    error={Boolean(saveErrors?.date)}
                 />
 
                 <label className="px-1"><small><b>Отчетный месяц</b></small></label>
@@ -146,6 +151,7 @@ const TenantPaysAddPay = props => {
                     disabled={save}
                     fluid
                     className="mb-1"
+                    error={Boolean(saveErrors?.month)}
                 />
 
                 <label className="px-1"><small><b>Сумма</b></small></label>
@@ -159,6 +165,7 @@ const TenantPaysAddPay = props => {
                     disabled={save}
                     fluid
                     className="mb-1"
+                    error={Boolean(saveErrors?.sum)}
                 />
 
                 <Button.Group size="mini" fluid>
