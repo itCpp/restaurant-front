@@ -18,31 +18,30 @@ const TenantPays = props => {
 
         <Header as="h3" className="mb-4">Платежи</Header>
 
-        {Boolean(row.fine) && <FineRow
-            row={row}
-            setRow={setRow}
-        />}
+        <Grid padded divided="vertically" style={{ cursor: "default" }}>
 
-        {(row.next_pays || []).length > 0 && <div className="mb-2">
-            {row.next_pays.map((pay, i) => <NextPayRow
+            {Boolean(row.fine) && <FineRow
+                row={row}
+                setRow={setRow}
+            />}
+
+            {(row.next_pays || []).map((pay, i) => <NextPayRow
                 key={i}
                 row={pay}
                 income_part_id={row.part_id}
                 income_source_id={row.id}
                 setRow={setRow}
             />)}
-            <span></span>
-        </div>}
-
-        {pays.length > 0 && <Grid padded>
 
             {pays.map(pay => <Grid.Row key={pay.month} stretched columns="equal" className="py-1">
 
-                <Grid.Column>
-                    <span className="py-1">{ucFirst(moment(pay.month).format("MMMM YYYY"))}</span>
+                <Grid.Column className="my-0">
+                    <span className="py-1 px-2">
+                        {ucFirst(moment(pay.month).format("MMMM YYYY"))}
+                    </span>
                 </Grid.Column>
 
-                <Grid.Column width={12}>
+                <Grid.Column width={12} className="my-0">
                     {pay.rows.map((item, key) => <PayRowColumn
                         key={`${pay.month}_${key}`}
                         row={item}
@@ -54,7 +53,7 @@ const TenantPays = props => {
 
             </Grid.Row>)}
 
-        </Grid>}
+        </Grid>
 
     </Segment>
 }
@@ -64,42 +63,81 @@ const FineRow = props => {
     const { row, setRow } = props;
     const [addReady, setAddReady] = React.useState(false);
 
-    return <div className="pay-row-tenant px-3 text-danger position-relative">
-        <div className="me-3 opacity-60">{moment().format("DD.MM.YYYY")}</div>
-        <div><Icon name="ban" /></div>
-        <div className="flex-grow-1">Пеня за просроченные платежи <b>{row.fine} р.</b></div>
-        <span>
-            <TenantPaysAddPay
-                show={addReady}
-                close={() => setAddReady(false)}
-                setRow={setRow}
-                date={moment().format("YYYY-MM-DD")}
-                sum={row.fine}
-                purpose_pay={0}
-                fine={true}
-                income_part_id={row.part_id}
-                income_source_id={row.id}
-                trigger={<Icon
-                    name="plus"
-                    fitted
-                    link
-                    title="Добавить оплату пени"
-                    onClick={() => setAddReady(true)}
-                />}
-            />
-        </span>
-        {/* <AddPayForm
-            show={addReady}
-            close={() => setAddReady(false)}
-            setRow={setRow}
-            date={moment().format("YYYY-MM-DD")}
-            sum={row.fine}
-            purpose_pay={0}
-            fine={true}
-            income_part_id={row.part_id}
-            income_source_id={row.id}
-        /> */}
-    </div>
+    return <Grid.Row stretched columns="equal" className="py-1">
+
+        <Grid.Column className="my-0">
+            <div className="py-1 px-2 d-flex align-items-center">
+
+                <span className="opacity-60 me-3">
+                    {moment().format("DD.MM.YYYY")}
+                </span>
+
+                <div><Icon name="ban" color="red" /></div>
+
+                <div className="flex-grow-1 text-danger">Пеня за просроченные платежи <b>{row.fine} ₽</b></div>
+
+                <span>
+                    <TenantPaysAddPay
+                        show={addReady}
+                        close={() => setAddReady(false)}
+                        setRow={setRow}
+                        date={moment().format("YYYY-MM-DD")}
+                        sum={row.fine}
+                        purpose_pay={0}
+                        fine={true}
+                        income_part_id={row.part_id}
+                        income_source_id={row.id}
+                        trigger={<Icon
+                            name="plus"
+                            fitted
+                            link
+                            title="Добавить оплату пени"
+                            onClick={() => setAddReady(true)}
+                        />}
+                    />
+                </span>
+
+            </div>
+        </Grid.Column>
+
+    </Grid.Row>
+
+    // return <div className="pay-row-tenant px-3 text-danger position-relative">
+    //     <div className="me-3 opacity-60">{moment().format("DD.MM.YYYY")}</div>
+    //     <div><Icon name="ban" /></div>
+    //     <div className="flex-grow-1">Пеня за просроченные платежи <b>{row.fine} р.</b></div>
+    //     <span>
+    //         <TenantPaysAddPay
+    //             show={addReady}
+    //             close={() => setAddReady(false)}
+    //             setRow={setRow}
+    //             date={moment().format("YYYY-MM-DD")}
+    //             sum={row.fine}
+    //             purpose_pay={0}
+    //             fine={true}
+    //             income_part_id={row.part_id}
+    //             income_source_id={row.id}
+    //             trigger={<Icon
+    //                 name="plus"
+    //                 fitted
+    //                 link
+    //                 title="Добавить оплату пени"
+    //                 onClick={() => setAddReady(true)}
+    //             />}
+    //         />
+    //     </span>
+    //     {/* <AddPayForm
+    //         show={addReady}
+    //         close={() => setAddReady(false)}
+    //         setRow={setRow}
+    //         date={moment().format("YYYY-MM-DD")}
+    //         sum={row.fine}
+    //         purpose_pay={0}
+    //         fine={true}
+    //         income_part_id={row.part_id}
+    //         income_source_id={row.id}
+    //     /> */}
+    // </div>
 }
 
 const NextPayRow = props => {
@@ -108,50 +146,90 @@ const NextPayRow = props => {
     const { income_part_id, income_source_id } = props;
     const [addReady, setAddReady] = React.useState(false);
 
-    return <div className="position-relative pay-row-tenant px-3" style={{ minHeight: 31 }}>
+    return <Grid.Row stretched columns="equal" className="py-1">
 
-        <div className="me-3 opacity-60">{moment(row.date).format("DD.MM.YYYY")}</div>
+        <Grid.Column className="my-0">
+            <div className="py-1 px-2 d-flex align-items-center">
 
-        <div><Icon name={row.icon} /></div>
+                <span className="opacity-60 me-3">
+                    {moment(row.date).format("DD.MM.YYYY")}
+                </span>
 
-        <div className="flex-grow-1">{row.title}</div>
+                <div><Icon name={row.icon} /></div>
 
-        <span>
-            <TenantPaysAddPay
-                show={addReady}
-                close={() => setAddReady(false)}
-                setRow={setRow}
-                date={moment().format("YYYY-MM-DD")}
-                sum={row.price}
-                purpose_pay={row.type}
-                income_part_id={income_part_id}
-                income_source_id={income_source_id}
-                nextPayRow={row}
-                parking_id={row.income_source_parking_id}
-                trigger={<Icon
-                    name="plus"
-                    fitted
-                    link
-                    title="Добавить платеж"
-                    onClick={() => setAddReady(true)}
-                />}
-            />
-        </span>
+                <div className="flex-grow-1">{row.title}</div>
 
-        {/* <AddPayForm
-            show={addReady}
-            close={() => setAddReady(false)}
-            setRow={setRow}
-            date={moment().format("YYYY-MM-DD")}
-            sum={row.price}
-            purpose_pay={row.type}
-            income_part_id={income_part_id}
-            income_source_id={income_source_id}
-            nextPayRow={row}
-            parking_id={row.income_source_parking_id}
-        /> */}
+                <span>
+                    <TenantPaysAddPay
+                        show={addReady}
+                        close={() => setAddReady(false)}
+                        setRow={setRow}
+                        date={moment().format("YYYY-MM-DD")}
+                        sum={row.price}
+                        purpose_pay={row.type}
+                        income_part_id={income_part_id}
+                        income_source_id={income_source_id}
+                        nextPayRow={row}
+                        parking_id={row.income_source_parking_id}
+                        trigger={<Icon
+                            name="plus"
+                            fitted
+                            link
+                            title="Добавить платеж"
+                            onClick={() => setAddReady(true)}
+                        />}
+                    />
+                </span>
 
-    </div>
+            </div>
+        </Grid.Column>
+
+    </Grid.Row>
+
+    // return <div className="position-relative pay-row-tenant px-3" style={{ minHeight: 31 }}>
+
+    //     <div className="me-3 opacity-60">{moment(row.date).format("DD.MM.YYYY")}</div>
+
+    //     <div><Icon name={row.icon} /></div>
+
+    //     <div className="flex-grow-1">{row.title}</div>
+
+    //     <span>
+    //         <TenantPaysAddPay
+    //             show={addReady}
+    //             close={() => setAddReady(false)}
+    //             setRow={setRow}
+    //             date={moment().format("YYYY-MM-DD")}
+    //             sum={row.price}
+    //             purpose_pay={row.type}
+    //             income_part_id={income_part_id}
+    //             income_source_id={income_source_id}
+    //             nextPayRow={row}
+    //             parking_id={row.income_source_parking_id}
+    //             trigger={<Icon
+    //                 name="plus"
+    //                 fitted
+    //                 link
+    //                 title="Добавить платеж"
+    //                 onClick={() => setAddReady(true)}
+    //             />}
+    //         />
+    //     </span>
+
+    //     {/* <AddPayForm
+    //         show={addReady}
+    //         close={() => setAddReady(false)}
+    //         setRow={setRow}
+    //         date={moment().format("YYYY-MM-DD")}
+    //         sum={row.price}
+    //         purpose_pay={row.type}
+    //         income_part_id={income_part_id}
+    //         income_source_id={income_source_id}
+    //         nextPayRow={row}
+    //         parking_id={row.income_source_parking_id}
+    //     /> */}
+
+    // </div>
 }
 
 const PayRowColumn = props => {

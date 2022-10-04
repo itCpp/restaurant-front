@@ -166,7 +166,8 @@
 }
 
 .pay-row-type-one {
-    background-color: var(--bs-gray-400);
+    background-color: #89f489;
+    color: #004300;
 }
 
 .pay-row-no-pay {
