@@ -14,8 +14,8 @@ const TenantData = props => {
     return <Segment className="pb-4">
 
         {row.is_rent
-            ? <IncomeSourceAdd setRow={setRow} />
-            : <ParkingSourceAdd setRow={setRow} />
+            ? <IncomeSourceAdd setRow={setRow} toPays />
+            : <ParkingSourceAdd setRow={setRow} toPays />
         }
 
         <div className="mb-4 d-flex align-items-center">

@@ -7,7 +7,7 @@ import { axios } from "../../system";
 
 const IncomeSourceAdd = props => {
 
-    const { setRow, setRows } = props;
+    const { setRow, setRows, toPays } = props;
     const dispatch = useDispatch();
     const { id } = useParams();
     const { showSourceAdd } = useSelector(s => s.incomes);
@@ -80,8 +80,11 @@ const IncomeSourceAdd = props => {
                 ...formdata,
                 toParking: true,
                 is_parking: true,
+                toPays,
             })
                 .then(({ data }) => {
+
+                    const dataRow = toPays ? { ...data.row, pays: data.pays } : data.row;
 
                     typeof setRows == "function" && setRows(p => {
 
@@ -92,20 +95,20 @@ const IncomeSourceAdd = props => {
 
                             let row = { ...r };
 
-                            if (row.id === data.row.id) {
-                                row = { ...row, ...data.row };
+                            if (row.id === dataRow.id) {
+                                row = { ...row, ...dataRow };
                                 add = false;
                             }
 
                             rows.push(row);
                         });
 
-                        add && rows.push(data.row);
+                        add && rows.push(dataRow);
 
                         return rows;
                     });
 
-                    typeof setRow == "function" && setRow(p => ({ ...p, ...data.row }));
+                    typeof setRow == "function" && setRow(p => ({ ...p, ...dataRow }));
 
                     dispatch(setIncomeSourceAdd(false));
 
