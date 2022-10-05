@@ -197,6 +197,7 @@ const CashboxRowEdit = props => {
                             ...p,
                             is_income: false,
                             is_expense: false,
+                            income_type_pay: null,
                             [value]: true
                         }))}
                         required
@@ -308,63 +309,80 @@ const CashboxRowEdit = props => {
 
                 {formdata.is_income && <>
 
-                    <Form.Group widths="equal">
+                    <Form.Select
+                        label="Вид оплаты"
+                        placeholder="Выберите вид оплаты"
+                        options={[
+                            { key: 0, value: "tenant", text: "Платеж от арендатора" },
+                            { key: 1, value: "parking_one", text: "Оплата гостевой парковки" },
+                        ]}
+                        name="income_type_pay"
+                        value={formdata.income_type_pay || null}
+                        onChange={handleChange}
+                        required
+                    />
 
-                        <Form.Dropdown
-                            label="Арендатор"
-                            placeholder="Выберите арендатора"
-                            selection
-                            options={[{ id: null, name: "Не выбрано" }, ...(options.income_sources || [])].map(r => ({
-                                key: r.id,
-                                text: r.name,
-                                value: r.id,
-                                description: r?.settings?.comment || null,
-                            }))}
-                            name="income_source_id"
-                            value={formdata.income_source_id || null}
-                            onChange={(e, { name, value }) => {
-                                setFormdata(p => ({ ...p, [name]: value, income_source_parking_id: null }))
-                            }}
-                            search
-                            noResultsMessage="Ничего не найдено"
-                            required
-                            error={Boolean(errors.income_source_id)}
-                        />
+                    {formdata?.income_type_pay == "tenant" && <>
 
-                    </Form.Group>
+                        <Form.Group widths="equal">
 
-                    <Form.Group widths="equal">
+                            <Form.Dropdown
+                                label="Арендатор"
+                                placeholder="Выберите арендатора"
+                                selection
+                                options={[{ id: null, name: "Не выбрано" }, ...(options.income_sources || [])].map(r => ({
+                                    key: r.id,
+                                    text: r.name,
+                                    value: r.id,
+                                    description: r?.settings?.comment || null,
+                                }))}
+                                name="income_source_id"
+                                value={formdata.income_source_id || null}
+                                onChange={(e, { name, value }) => {
+                                    setFormdata(p => ({ ...p, [name]: value, income_source_parking_id: null }))
+                                }}
+                                search
+                                noResultsMessage="Ничего не найдено"
+                                required
+                                error={Boolean(errors.income_source_id)}
+                            />
 
-                        <Form.Select
-                            label="Назначение платежа"
-                            placeholder="Выберите назначение платежа"
-                            options={[{ id: null, name: "Не выбрано" }, ...(options.purpose || [])].map(r => ({
-                                key: r.id,
-                                text: r.name,
-                                value: r.id,
-                                icon: r.icon || null,
-                            }))}
-                            name="purpose_pay"
-                            value={formdata.purpose_pay || null}
-                            onChange={handleChange}
-                            required
-                            error={Boolean(errors.purpose_pay)}
-                        />
+                        </Form.Group>
 
-                        <Form.Select
-                            label="Парковочное место"
-                            placeholder="Выберите парковочное место"
-                            options={options.income_source_parkings || []}
-                            name="income_source_parking_id"
-                            value={formdata.income_source_parking_id || null}
-                            onChange={handleChange}
-                            disabled={formdata?.purpose_pay !== 2 || loadingIncomeSourceParkings || (options.income_source_parkings || []).length === 0}
-                            loading={loadingIncomeSourceParkings}
-                            error={Boolean(errors.income_source_parking_id)}
-                            required={formdata?.purpose_pay === 2}
-                        />
+                        <Form.Group widths="equal">
 
-                    </Form.Group>
+                            <Form.Select
+                                label="Назначение платежа"
+                                placeholder="Выберите назначение платежа"
+                                options={[{ id: null, name: "Не выбрано" }, ...(options.purpose || [])].map(r => ({
+                                    key: r.id,
+                                    text: r.name,
+                                    value: r.id,
+                                    icon: r.icon || null,
+                                }))}
+                                name="purpose_pay"
+                                value={formdata.purpose_pay || null}
+                                onChange={handleChange}
+                                required
+                                error={Boolean(errors.purpose_pay)}
+                            />
+
+                            <Form.Select
+                                label="Парковочное место"
+                                placeholder="Выберите парковочное место"
+                                options={options.income_source_parkings || []}
+                                name="income_source_parking_id"
+                                value={formdata.income_source_parking_id || null}
+                                onChange={handleChange}
+                                disabled={formdata?.purpose_pay !== 2 || loadingIncomeSourceParkings || (options.income_source_parkings || []).length === 0}
+                                loading={loadingIncomeSourceParkings}
+                                error={Boolean(errors.income_source_parking_id)}
+                                required={formdata?.purpose_pay === 2}
+                            />
+
+                        </Form.Group>
+
+                    </>}
 
                 </>}
 
