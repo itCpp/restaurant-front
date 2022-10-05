@@ -107,3 +107,62 @@ hr {
   right: 0;
   bottom: 0;
 }
+
+.header-body {
+  display: block;
+  background-color: #000000c4;
+  position: fixed;
+  top: 0;
+  left: -100vw;
+  bottom: 0;
+  width: 100%;
+  z-index: 10000;
+  transition: .1s;
+  opacity: 0;
+}
+
+.header-menu {
+  position: absolute;
+  top: 0;
+  left: -500px;
+  bottom: 0;
+  width: 250px;
+  background-color: #173461;
+  transition: .3s;
+  color: #ffffff;
+  border-right: 1px solid #1a3c6f;
+}
+
+.header-menu .header-header {
+  height: 50px;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid #1a3c6f;
+}
+
+.header-menu a {
+  color: #ffffff;
+}
+
+.header-menu .header-link {
+  display: block;
+  padding: .5rem 1rem;
+}
+
+.header-menu .header-link.active {
+  color: #ffbbbb;
+  background-color: #183054;
+}
+
+.header-menu .header-link:hover {
+  background-color: #1a3c6f;
+}
+
+.header-body.show {
+  display: block;
+  left: 0;
+  opacity: 1;
+}
+
+.header-body.show>.header-menu {
+  left: 0;
+}
