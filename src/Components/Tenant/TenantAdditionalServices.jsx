@@ -156,7 +156,7 @@ export const SelectAdditionalServices = props => {
         if (open) {
 
             if (Boolean(toEdit?.id)) {
-                setFormdata(toEdit);
+                setFormdata(p => ({ ...p, ...toEdit }));
             }
 
             setLoading(true);
@@ -178,7 +178,7 @@ export const SelectAdditionalServices = props => {
         return () => {
             setLoading(true);
             setError(null);
-            setFormdata({});
+            setFormdata({ type_pay: 4 });
             setSaveError(null);
             setSaveErrors({});
         }
@@ -290,6 +290,7 @@ export const SelectAdditionalServices = props => {
                     value={formdata?.type_pay || null}
                     onChange={(e, { value }) => setFormdata(p => ({ ...p, type_pay: value }))}
                     error={Boolean(saveErrors?.type_pay)}
+                    disabled
                 />
 
             </Form>

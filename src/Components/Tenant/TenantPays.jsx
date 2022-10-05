@@ -18,7 +18,7 @@ const TenantPays = props => {
 
         <Header as="h3" className="mb-4">Платежи</Header>
 
-        <Grid padded divided="vertically" style={{ cursor: "default" }}>
+        <Grid padded divided="vertically" style={{ cursor: "default" }} className="pb-3">
 
             {Boolean(row.fine) && <FineRow
                 row={row}
@@ -389,6 +389,7 @@ const PayRowColumn = props => {
                         purpose_pay={row.purpose_pay}
                         income_part_id={row?.source?.part_id}
                         income_source_id={row.income_source_id}
+                        service_id={row?.income_source_service_id}
                         lostPayRow={row}
                         parking_id={row?.parking?.id}
                         trigger={<Icon
@@ -436,172 +437,172 @@ const PayRowColumn = props => {
 
 }
 
-const AddPayForm = props => {
+// const AddPayForm = props => {
 
-    const { show, close, setRow, fine } = props;
-    const { date, sum, purpose_pay, income_part_id, income_source_id, parking_id } = props;
-    const { nextPayRow, lostPayRow } = props;
+//     const { show, close, setRow, fine } = props;
+//     const { date, sum, purpose_pay, income_part_id, income_source_id, parking_id } = props;
+//     const { nextPayRow, lostPayRow } = props;
 
-    const [formdata, setFormdata] = React.useState({});
-    const [save, setSave] = React.useState(false);
-    const [saveError, setSaveError] = React.useState(false);
+//     const [formdata, setFormdata] = React.useState({});
+//     const [save, setSave] = React.useState(false);
+//     const [saveError, setSaveError] = React.useState(false);
 
-    React.useEffect(() => {
+//     React.useEffect(() => {
 
-        if (show) {
-            setFormdata({
-                date,
-                sum,
-                purpose_pay,
-                income_part_id: income_part_id || 0,
-                income_source_id,
-                fine,
-                parking_id: parking_id || null,
-                type_pay: 1,
-            });
-        }
+//         if (show) {
+//             setFormdata({
+//                 date,
+//                 sum,
+//                 purpose_pay,
+//                 income_part_id: income_part_id || 0,
+//                 income_source_id,
+//                 fine,
+//                 parking_id: parking_id || null,
+//                 type_pay: 1,
+//             });
+//         }
 
-    }, [show]);
+//     }, [show]);
 
-    React.useEffect(() => {
+//     React.useEffect(() => {
 
-        if (save) {
-            axios.post('/incomes/save', formdata)
-                .then(({ data }) => {
+//         if (save) {
+//             axios.post('/incomes/save', formdata)
+//                 .then(({ data }) => {
 
-                    typeof setRow == "function" && setRow(p => {
+//                     typeof setRow == "function" && setRow(p => {
 
-                        let source = { ...p, ...data.source },
-                            pays = [...(p.pays || [])],
-                            next_pays = [...(p.next_pays || [])];
+//                         let source = { ...p, ...data.source },
+//                             pays = [...(p.pays || [])],
+//                             next_pays = [...(p.next_pays || [])];
 
-                        source.pays = [];
+//                         source.pays = [];
 
-                        if (nextPayRow) {
+//                         if (nextPayRow) {
 
-                            source.next_pays = [];
+//                             source.next_pays = [];
 
-                            next_pays.forEach(r => {
-                                if ((r.type === data.row.purpose_id && r.income_source_parking_id !== data.row.income_source_parking_id) || r.type !== data.row.purpose_id) {
-                                    source.next_pays.push(r);
-                                }
-                            });
-                        } else {
-                            source.next_pays = next_pays;
-                        }
+//                             next_pays.forEach(r => {
+//                                 if ((r.type === data.row.purpose_id && r.income_source_parking_id !== data.row.income_source_parking_id) || r.type !== data.row.purpose_id) {
+//                                     source.next_pays.push(r);
+//                                 }
+//                             });
+//                         } else {
+//                             source.next_pays = next_pays;
+//                         }
 
-                        let add = true,
-                            month = null;
+//                         let add = true,
+//                             month = null;
 
-                        if (lostPayRow)
-                            month = moment(lostPayRow.date).format("YYYY-MM");
+//                         if (lostPayRow)
+//                             month = moment(lostPayRow.date).format("YYYY-MM");
 
-                        pays.forEach(r => {
+//                         pays.forEach(r => {
 
-                            let monthRows = [];
+//                             let monthRows = [];
 
-                            if (r.month === data.row.month) {
-                                add = false;
-                                monthRows.push(data.pay);
-                            }
+//                             if (r.month === data.row.month) {
+//                                 add = false;
+//                                 monthRows.push(data.pay);
+//                             }
 
-                            r.rows.forEach(rr => {
+//                             r.rows.forEach(rr => {
 
-                                if (
-                                    month
-                                    && !Boolean(rr.sum)
-                                    && month === data.pay.month
-                                    && rr.purpose_pay === data.pay.purpose_pay
-                                    && rr.income_source_parking_id === data.pay.income_source_parking_id
-                                ) return;
+//                                 if (
+//                                     month
+//                                     && !Boolean(rr.sum)
+//                                     && month === data.pay.month
+//                                     && rr.purpose_pay === data.pay.purpose_pay
+//                                     && rr.income_source_parking_id === data.pay.income_source_parking_id
+//                                 ) return;
 
-                                monthRows.push(rr);
-                            });
+//                                 monthRows.push(rr);
+//                             });
 
-                            source.pays.push({ ...r, rows: monthRows });
-                        });
+//                             source.pays.push({ ...r, rows: monthRows });
+//                         });
 
-                        add && source.pays.unshift({
-                            month: data.row.month,
-                            rows: [data.pay],
-                        });
+//                         add && source.pays.unshift({
+//                             month: data.row.month,
+//                             rows: [data.pay],
+//                         });
 
-                        return source;
-                    });
+//                         return source;
+//                     });
 
-                    typeof close == "function" && close();
-                })
-                .catch(e => setSaveError(axios.post(e)))
-                .then(() => setSave(false));
-        }
+//                     typeof close == "function" && close();
+//                 })
+//                 .catch(e => setSaveError(axios.post(e)))
+//                 .then(() => setSave(false));
+//         }
 
-    }, [save]);
+//     }, [save]);
 
-    if (!show)
-        return null;
+//     if (!show)
+//         return null;
 
-    return <div
-        style={{
-            position: "absolute",
-            right: 0,
-            bottom: (nextPayRow || fine) ? 1 : 0,
-            top: (nextPayRow || fine) ? 1 : 0,
-            left: 0,
-            background: "#ffffffe6",
-        }}
-        className="d-flex justify-content-end"
-    >
-        <Button.Group size="mini" className="me-1">
-            <Button
-                content="Нал."
-                active={formdata.type_pay === 1}
-                color={formdata.type_pay === 1 ? "green" : null}
-                onClick={() => setFormdata(p => ({ ...p, type_pay: 1 }))}
-            />
-            <Button
-                content="Безнал."
-                active={formdata.type_pay === 2}
-                color={formdata.type_pay === 2 ? "green" : null}
-                onClick={() => setFormdata(p => ({ ...p, type_pay: 2 }))}
-            />
-        </Button.Group>
-        <Input
-            size="mini"
-            type="date"
-            className="me-1"
-            style={{ maxHeight: "100%" }}
-            value={formdata.date || ""}
-            onChange={(e, { value }) => setFormdata(p => ({ ...p, date: value }))}
-            disabled={save}
-        />
-        <Input
-            size="mini"
-            placeholder="Введите сумму"
-            type="number"
-            step="0.01"
-            value={formdata.sum || ""}
-            onChange={(e, { value }) => setFormdata(p => ({ ...p, sum: value }))}
-            className="me-1"
-            disabled={save}
-        />
-        <Button
-            icon="save"
-            size="mini"
-            color={saveError ? "red" : "green"}
-            onClick={() => setSave(true)}
-            loading={save}
-            disabled={save}
-            className="me-1"
-        />
-        <Button
-            icon="cancel"
-            size="mini"
-            className="me-0"
-            onClick={() => close()}
-            disabled={save}
-        />
-    </div>
+//     return <div
+//         style={{
+//             position: "absolute",
+//             right: 0,
+//             bottom: (nextPayRow || fine) ? 1 : 0,
+//             top: (nextPayRow || fine) ? 1 : 0,
+//             left: 0,
+//             background: "#ffffffe6",
+//         }}
+//         className="d-flex justify-content-end"
+//     >
+//         <Button.Group size="mini" className="me-1">
+//             <Button
+//                 content="Нал."
+//                 active={formdata.type_pay === 1}
+//                 color={formdata.type_pay === 1 ? "green" : null}
+//                 onClick={() => setFormdata(p => ({ ...p, type_pay: 1 }))}
+//             />
+//             <Button
+//                 content="Безнал."
+//                 active={formdata.type_pay === 2}
+//                 color={formdata.type_pay === 2 ? "green" : null}
+//                 onClick={() => setFormdata(p => ({ ...p, type_pay: 2 }))}
+//             />
+//         </Button.Group>
+//         <Input
+//             size="mini"
+//             type="date"
+//             className="me-1"
+//             style={{ maxHeight: "100%" }}
+//             value={formdata.date || ""}
+//             onChange={(e, { value }) => setFormdata(p => ({ ...p, date: value }))}
+//             disabled={save}
+//         />
+//         <Input
+//             size="mini"
+//             placeholder="Введите сумму"
+//             type="number"
+//             step="0.01"
+//             value={formdata.sum || ""}
+//             onChange={(e, { value }) => setFormdata(p => ({ ...p, sum: value }))}
+//             className="me-1"
+//             disabled={save}
+//         />
+//         <Button
+//             icon="save"
+//             size="mini"
+//             color={saveError ? "red" : "green"}
+//             onClick={() => setSave(true)}
+//             loading={save}
+//             disabled={save}
+//             className="me-1"
+//         />
+//         <Button
+//             icon="cancel"
+//             size="mini"
+//             className="me-0"
+//             onClick={() => close()}
+//             disabled={save}
+//         />
+//     </div>
 
-}
+// }
 
 export default TenantPays;

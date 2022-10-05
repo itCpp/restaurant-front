@@ -5,13 +5,15 @@ import { axios, moment } from "../../system";
 const TenantPaysAddPay = props => {
 
     const { show, close, setRow, fine } = props;
-    const { date, sum, purpose_pay, income_part_id, income_source_id, parking_id } = props;
+    const { date, sum, purpose_pay, income_part_id, income_source_id, parking_id, service_id } = props;
     const { nextPayRow, lostPayRow } = props;
 
     const [formdata, setFormdata] = React.useState({});
     const [save, setSave] = React.useState(false);
     const [saveError, setSaveError] = React.useState(false);
     const [saveErrors, setSaveErrors] = React.useState({});
+
+    React.useEffect(() => console.log(formdata), [formdata]);
 
     React.useEffect(() => {
 
@@ -23,6 +25,7 @@ const TenantPaysAddPay = props => {
                 purpose_pay,
                 income_part_id: income_part_id || 0,
                 income_source_id,
+                service_id,
                 fine,
                 parking_id: parking_id || null,
                 type_pay: 1,
