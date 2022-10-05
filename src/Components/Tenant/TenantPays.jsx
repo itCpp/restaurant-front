@@ -25,15 +25,15 @@ const TenantPays = props => {
                 setRow={setRow}
             />}
 
-            {(row.next_pays || []).map((pay, i) => <NextPayRow
+            {/* {(row.next_pays || []).map((pay, i) => <NextPayRow
                 key={i}
                 row={pay}
                 income_part_id={row.part_id}
                 income_source_id={row.id}
                 setRow={setRow}
-            />)}
+            />)} */}
 
-            {pays.map(pay => <Grid.Row key={pay.month} stretched columns="equal" className="py-1">
+            {pays.map((pay, key) => <Grid.Row key={pay.month} stretched columns="equal" className="py-1">
 
                 <Grid.Column className="my-0">
                     <span className="py-1 px-2">
@@ -42,6 +42,15 @@ const TenantPays = props => {
                 </Grid.Column>
 
                 <Grid.Column width={12} className="my-0">
+
+                    {key === 0 && (row.next_pays || []).map((pay, i) => <NextPayRow
+                        key={i}
+                        row={pay}
+                        income_part_id={row.part_id}
+                        income_source_id={row.id}
+                        setRow={setRow}
+                    />)}
+
                     {pay.rows.map((item, key) => <PayRowColumn
                         key={`${pay.month}_${key}`}
                         row={item}
@@ -146,45 +155,39 @@ const NextPayRow = props => {
     const { income_part_id, income_source_id } = props;
     const [addReady, setAddReady] = React.useState(false);
 
-    return <Grid.Row stretched columns="equal" className="py-1">
+    return <div className="py-1 px-2 d-flex align-items-center pay-row-tenant position-relative">
 
-        <Grid.Column className="my-0">
-            <div className="py-1 px-2 d-flex align-items-center">
+        <span className="opacity-60 me-3">
+            {moment(row.date).format("DD.MM.YYYY")}
+        </span>
 
-                <span className="opacity-60 me-3">
-                    {moment(row.date).format("DD.MM.YYYY")}
-                </span>
+        <div><Icon name={row.icon} /></div>
 
-                <div><Icon name={row.icon} /></div>
+        <div className="flex-grow-1">{row.title}</div>
 
-                <div className="flex-grow-1">{row.title}</div>
+        <span>
+            <TenantPaysAddPay
+                show={addReady}
+                close={() => setAddReady(false)}
+                setRow={setRow}
+                date={moment().format("YYYY-MM-DD")}
+                sum={row.price}
+                purpose_pay={row.type}
+                income_part_id={income_part_id}
+                income_source_id={income_source_id}
+                nextPayRow={row}
+                parking_id={row.income_source_parking_id}
+                trigger={<Icon
+                    name="plus"
+                    fitted
+                    link
+                    title="Добавить платеж"
+                    onClick={() => setAddReady(true)}
+                />}
+            />
+        </span>
 
-                <span>
-                    <TenantPaysAddPay
-                        show={addReady}
-                        close={() => setAddReady(false)}
-                        setRow={setRow}
-                        date={moment().format("YYYY-MM-DD")}
-                        sum={row.price}
-                        purpose_pay={row.type}
-                        income_part_id={income_part_id}
-                        income_source_id={income_source_id}
-                        nextPayRow={row}
-                        parking_id={row.income_source_parking_id}
-                        trigger={<Icon
-                            name="plus"
-                            fitted
-                            link
-                            title="Добавить платеж"
-                            onClick={() => setAddReady(true)}
-                        />}
-                    />
-                </span>
-
-            </div>
-        </Grid.Column>
-
-    </Grid.Row>
+    </div>
 
     // return <div className="position-relative pay-row-tenant px-3" style={{ minHeight: 31 }}>
 
@@ -349,6 +352,7 @@ const PayRowColumn = props => {
                             color="red"
                             link={load === false}
                             disabled={load !== false}
+                            fitted
                         />}
                         direction="left"
                     >
@@ -414,6 +418,7 @@ const PayRowColumn = props => {
                             source_id: source?.id,
                             parking_id: row?.parking?.id,
                         })}
+                        fitted
                     />
                 </span>
 

@@ -13,8 +13,6 @@ const TenantPaysAddPay = props => {
     const [saveError, setSaveError] = React.useState(false);
     const [saveErrors, setSaveErrors] = React.useState({});
 
-    React.useEffect(() => console.log(formdata), [formdata]);
-
     React.useEffect(() => {
 
         if (show) {

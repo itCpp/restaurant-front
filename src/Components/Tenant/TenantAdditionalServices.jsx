@@ -6,7 +6,7 @@ import useDropRow from "./useDropRow";
 
 const TenantAdditionalServices = props => {
 
-    const { row } = props;
+    const { row, setRow } = props;
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState(null);
     const [rows, setRows] = React.useState([]);
@@ -45,6 +45,7 @@ const TenantAdditionalServices = props => {
                 setRows={setRows}
                 toEdit={edit}
                 setEdit={setEdit}
+                setRow={setRow}
             />
 
         </div>
@@ -133,7 +134,7 @@ const TenantAdditionalServiceRow = props => {
 
 export const SelectAdditionalServices = props => {
 
-    const { row, toEdit, setEdit, setRows } = props;
+    const { row, toEdit, setEdit, setRows, setRow } = props;
 
     const [open, setOpen] = React.useState(false);
     const [loading, setLoading] = React.useState(true);
@@ -188,10 +189,14 @@ export const SelectAdditionalServices = props => {
     React.useEffect(() => {
 
         if (save) {
-            axios.put('services/save', { ...formdata, id: row?.id })
+            axios.put('services/save', { ...formdata, id: row?.id, toPays: true })
                 .then(({ data }) => {
                     setRows(p => data.list || p);
                     setOpen(false);
+
+                    typeof setRow == "function"
+                        && typeof data.pays == "object"
+                        && setRow(p => ({ ...p, pays: data.pays }));
                 })
                 .catch(e => {
                     setSaveError(axios.getError(e));
@@ -280,17 +285,16 @@ export const SelectAdditionalServices = props => {
                     placeholder="Выберите форму"
                     options={[
                         { key: 0, value: 1, text: "Разовая" },
-                        { key: 1, value: 2, text: "Ежедневная" },
-                        { key: 2, value: 3, text: "Еженедельная" },
+                        { key: 1, value: 2, text: "Ежедневная", disabled: true },
+                        { key: 2, value: 3, text: "Еженедельная", disabled: true },
                         { key: 3, value: 4, text: "Ежемесячная" },
-                        { key: 4, value: 5, text: "Квартальная" },
-                        { key: 5, value: 6, text: "Полугодовая" },
-                        { key: 6, value: 7, text: "Годовая" },
+                        { key: 4, value: 5, text: "Квартальная", disabled: true },
+                        { key: 5, value: 6, text: "Полугодовая", disabled: true },
+                        { key: 6, value: 7, text: "Годовая", disabled: true },
                     ]}
                     value={formdata?.type_pay || null}
                     onChange={(e, { value }) => setFormdata(p => ({ ...p, type_pay: value }))}
                     error={Boolean(saveErrors?.type_pay)}
-                    disabled
                 />
 
             </Form>
