@@ -8,7 +8,7 @@ const ParkingPlaceAdd = props => {
 
     const { showParkingPlaceAdd } = useSelector(s => s.incomes);
     const dispatch = useDispatch();
-    const { setRows } = props;
+    const { setRows, toPays } = props;
 
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState(null);
@@ -61,8 +61,10 @@ const ParkingPlaceAdd = props => {
     React.useEffect(() => {
 
         if (save) {
-            axios.put('parking/save', formdata)
+            axios.put('parking/save', { ...formdata, toPays })
                 .then(({ data }) => {
+
+                    const dataRow = toPays ? { ...data.row, pays: data.pays } : data.row;
 
                     typeof setRows == "function" && setRows(p => {
 
@@ -76,13 +78,13 @@ const ParkingPlaceAdd = props => {
                             if (row.id === data.source_id) {
 
                                 row.parking.forEach((r, i) => {
-                                    if (r.id === data.row.id) {
+                                    if (r.id === dataRow.id) {
                                         add = false;
-                                        row.parking[i] = { ...r, ...data.row };
+                                        row.parking[i] = { ...r, ...dataRow };
                                     }
                                 });
 
-                                add && row.parking.unshift(data.row);
+                                add && row.parking.unshift(dataRow);
                             }
 
                             rows.push(row);

@@ -169,7 +169,7 @@ const ParkingPlaceRow = props => {
     return <Table.Row className={className.join(" ")}>
         <Table.Cell>{row.parking_place}</Table.Cell>
         <Table.Cell>{row.car}</Table.Cell>
-        <Table.Cell>{row.car_number}</Table.Cell>
+        <Table.Cell>{row.car_number && String(row.car_number).replace(/ /ig, "")}</Table.Cell>
         <Table.Cell>
             <div>
                 {row.date_from && <span>с {moment(row.date_from).format("DD.MM.YYYY")}</span>}
@@ -233,14 +233,16 @@ const AddNextPayParking = props => {
     const [formdata, setFormdata] = React.useState({});
     const [save, setSave] = React.useState(false);
     const [error, setError] = React.useState(null);
+    const [errors, setErrors] = React.useState({});
 
     React.useEffect(() => {
 
         if (active) {
             setFormdata({
-                date: pay.date || "",
-                sum: pay.pay_sum || "",
-                parking_id: row.id,
+                date: pay?.date || moment().format("YYYY-MM-DD"),
+                month: pay?.month || moment().format("YYYY-MM"),
+                sum: pay?.pay_sum || "",
+                parking_id: row?.id,
                 type_pay: 1,
             });
         }
@@ -249,6 +251,7 @@ const AddNextPayParking = props => {
             setSave(false);
             setLoading(false);
             setError(null);
+            setErrors({});
         }
 
     }, [active]);
@@ -276,6 +279,7 @@ const AddNextPayParking = props => {
                 })
                 .catch(e => {
                     setError(axios.getError(e));
+                    setErrors(axios.getErrors(e));
                 })
                 .then(() => {
                     setSave(false);
@@ -304,6 +308,16 @@ const AddNextPayParking = props => {
                     className="mb-1"
                     value={formdata.date || ""}
                     onChange={(e, { value }) => setFormdata(p => ({ ...p, date: value }))}
+                    error={Boolean(errors?.date)}
+                />
+                <Form.Input
+                    label="Отчетный месяц"
+                    type="month"
+                    size="mini"
+                    className="mb-1"
+                    value={formdata.month || ""}
+                    onChange={(e, { value }) => setFormdata(p => ({ ...p, month: value }))}
+                    error={Boolean(errors?.month)}
                 />
                 <Form.Input
                     label="Сумма платежа"
@@ -313,6 +327,7 @@ const AddNextPayParking = props => {
                     className="mb-2"
                     value={formdata.sum || ""}
                     onChange={(e, { value }) => setFormdata(p => ({ ...p, sum: value }))}
+                    error={Boolean(errors?.sum)}
                 />
                 <Button.Group size="mini" fluid className="mb-1">
                     <Button
@@ -322,10 +337,16 @@ const AddNextPayParking = props => {
                         onClick={() => setFormdata(p => ({ ...p, type_pay: 1 }))}
                     />
                     <Button
-                        content="Безнал."
+                        content="Б/Н"
                         active={formdata.type_pay === 2}
-                        color={formdata.type_pay === 2 ? "green" : null}
+                        color={formdata.type_pay === 2 ? "blue" : null}
                         onClick={() => setFormdata(p => ({ ...p, type_pay: 2 }))}
+                    />
+                    <Button
+                        content="Р/С"
+                        active={formdata.type_pay === 3}
+                        color={formdata.type_pay === 3 ? "orange" : null}
+                        onClick={() => setFormdata(p => ({ ...p, type_pay: 3 }))}
                     />
                 </Button.Group>
 

@@ -138,10 +138,12 @@ const Tenant = () => {
 
                     </Grid.Row>
 
-                    <Grid.Row columns={2} stretched>
+                    <Grid.Row columns={2}>
 
                         <Grid.Column>
                             <TenantData row={row} setRow={setRow} />
+                            <TenantFiles row={row} setRow={setRow} />
+                            <TenantAdditionalServices row={row} setRow={setRow} />
                         </Grid.Column>
 
                         <Grid.Column>
@@ -150,17 +152,15 @@ const Tenant = () => {
 
                     </Grid.Row>
 
-                    <Grid.Row columns={2} stretched>
+                    {/* <Grid.Row columns={2}>
 
                         <Grid.Column>
-                            <TenantFiles row={row} setRow={setRow} />
                         </Grid.Column>
 
                         <Grid.Column>
-                            <TenantAdditionalServices row={row} setRow={setRow} />
                         </Grid.Column>
 
-                    </Grid.Row>
+                    </Grid.Row> */}
 
                 </Grid>
 
