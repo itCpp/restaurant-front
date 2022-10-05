@@ -8,7 +8,7 @@ const Salary = () => {
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState(null);
     const [rows, setRows] = React.useState([]);
-    const [month, setMonth] = React.useState(null);
+    const [month, setMonth] = React.useState(moment().subtract('days', 5).format("YYYY-MM"));
 
     React.useEffect(() => {
 

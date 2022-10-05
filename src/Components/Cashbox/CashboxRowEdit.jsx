@@ -317,6 +317,7 @@ const CashboxRowEdit = props => {
                             { key: 1, value: "parking_one", text: "Оплата гостевой парковки" },
                         ]}
                         name="income_type_pay"
+                        value={formdata.income_type_pay || null}
                         onChange={handleChange}
                         required
                     />
