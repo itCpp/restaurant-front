@@ -1,4 +1,4 @@
-import { Table } from "semantic-ui-react";
+import { Dropdown, Icon, Table } from "semantic-ui-react";
 
 const SalaryTable = props => {
 
@@ -13,6 +13,7 @@ const SalaryTable = props => {
                 <Table.HeaderCell>Должность</Table.HeaderCell>
                 <Table.HeaderCell>Оклад</Table.HeaderCell>
                 <Table.HeaderCell>Зарплата</Table.HeaderCell>
+                <Table.HeaderCell>Долг</Table.HeaderCell>
                 <Table.HeaderCell>Аванс</Table.HeaderCell>
                 <Table.HeaderCell>Остаток</Table.HeaderCell>
                 <Table.HeaderCell />
@@ -36,15 +37,48 @@ const SalaryTableRow = props => {
 
     const { row } = props;
 
-    return <Table.Row textAlign="center">
+    return <Table.Row textAlign="center" negative={row.is_fired}>
         <Table.Cell>{row.pin}</Table.Cell>
         <Table.Cell textAlign="left">{row.fullname}</Table.Cell>
         <Table.Cell><small className="opacity-70">{row.job_title}</small></Table.Cell>
         <Table.Cell>{row.salary}{row.salary_one_day ? "/день" : ""}</Table.Cell>
-        <Table.Cell>{row.salaryToPay || 0}</Table.Cell>
+        <Table.Cell>{row.toPayoff || 0}</Table.Cell>
+        <Table.Cell>{0}</Table.Cell>
         <Table.Cell>{row.prepayment || 0}</Table.Cell>
-        <Table.Cell>{row.balance || 0}</Table.Cell>
-        <Table.Cell />
+        <Table.Cell
+            positive={(row.balance || 0) > 0}
+            negative={(row.balance || 0) < 0}
+            content={row.balance || 0}
+        />
+        <Table.Cell
+            content={<Dropdown
+                direction="left"
+                pointing="right"
+                icon={null}
+                trigger={<Icon
+                    name="ellipsis vertical"
+                    link
+                    fitted
+                />}
+            >
+                <Dropdown.Menu>
+                    <Dropdown.Item
+                        icon="calendar"
+                        content="График работы"
+                    />
+                    <Dropdown.Item
+                        icon="plus"
+                        content="Добавить выплату"
+                        disabled
+                    />
+                    <Dropdown.Item
+                        icon="info"
+                        content="Подробнее"
+                        disabled
+                    />
+                </Dropdown.Menu>
+            </Dropdown>}
+        />
     </Table.Row>
 }
 
