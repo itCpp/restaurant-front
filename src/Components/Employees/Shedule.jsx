@@ -117,10 +117,10 @@ const TableCellDay = props => {
 
     const [loading, setLoading] = useState(false);
 
-    if (employeeData?.work_start && employeeData?.work_start > day.date)
+    if (employeeData?.date_work_start && employeeData?.date_work_start > day.date)
         row.toMonth = false;
 
-    if (employeeData?.work_stop && employeeData?.work_stop < day.date)
+    if (employeeData?.date_work_stop && employeeData?.date_work_stop < day.date)
         row.toMonth = false;
 
     const change = useCallback((e, { value, date }) => {
