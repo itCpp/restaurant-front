@@ -32,6 +32,12 @@ const SalaryTable = props => {
                 dispatch={dispatch}
             />)}
 
+            {rows.length === 0 && <Table.Row>
+                <Table.Cell disabled colSpan={9}>
+                    <div className="text-center py-4">Данных еще нет</div>
+                </Table.Cell>
+            </Table.Row>}
+
         </Table.Body>
 
     </Table>

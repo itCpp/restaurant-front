@@ -83,6 +83,7 @@ const Shedule = props => {
                             day={day}
                             options={options}
                             employee={showShedule?.id}
+                            employeeData={showShedule || {}}
                             days={days}
                             setDays={setDays}
                         />)}
@@ -108,13 +109,19 @@ const Shedule = props => {
 
 const TableCellDay = props => {
 
-    const { day, options, employee } = props;
+    const { day, options, employee, employeeData } = props;
     const { days, setDays } = props;
     const data = days[moment(day.date).format("DD")] || {};
     const row = { ...day, ...data };
     const option = options.find(i => i.value === row.type);
 
     const [loading, setLoading] = useState(false);
+
+    if (employeeData?.work_start && employeeData?.work_start > day.date)
+        row.toMonth = false;
+
+    if (employeeData?.work_stop && employeeData?.work_stop < day.date)
+        row.toMonth = false;
 
     const change = useCallback((e, { value, date }) => {
 
@@ -129,7 +136,7 @@ const TableCellDay = props => {
     }, []);
 
     return <Table.Cell
-        disabled={!day?.toMonth}
+        disabled={!row?.toMonth}
         content={<div className="d-flex">
 
             <div className="flex-grow-1 d-flex align-items-center">
@@ -143,7 +150,7 @@ const TableCellDay = props => {
                 />}
             </div>
 
-            {day?.toMonth && <Dropdown
+            {row?.toMonth && <Dropdown
                 direction="left"
                 date={day.date}
                 loading={loading}
