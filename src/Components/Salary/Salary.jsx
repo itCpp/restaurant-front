@@ -1,6 +1,7 @@
 import React from "react";
 import { Header, Icon, Loader, Message } from "semantic-ui-react";
 import { axios, moment, ucFirst } from "../../system";
+import Shedule from "../Employees/Shedule";
 import SalaryTable from "./SalaryTable";
 
 const Salary = () => {
@@ -26,6 +27,10 @@ const Salary = () => {
     }, [month]);
 
     return <div className="px-2 py-1">
+
+        <Shedule
+            month={month}
+        />
 
         <div className="mt-3 d-flex align-items-center justify-content-center">
             <span>

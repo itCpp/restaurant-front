@@ -31,7 +31,8 @@ const defaultMainState = {
                 color: "orange",
             }
         },
-    ]
+    ],
+    showShedule: false,
 };
 
 export default combineReducers({
@@ -47,6 +48,9 @@ export default combineReducers({
 
             case ACTIONS.USER_DATA:
                 return { ...state, user: action.payload }
+
+            case ACTIONS.SHOW_SHEDULE:
+                return { ...state, showShedule: action.payload }
 
             default:
                 return state;

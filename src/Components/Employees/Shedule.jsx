@@ -1,0 +1,153 @@
+import { useCallback } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux"
+import { Dimmer, Dropdown, Header, Label, Loader, Modal, Table } from "semantic-ui-react";
+import { setShowShedule } from "../../store/actions";
+import { axios, moment, ucFirst } from "../../system";
+import { createCalendarPlace } from "../Cashbox/CashboxCalendar";
+
+const Shedule = props => {
+
+    const d = useDispatch();
+    const { showShedule } = useSelector(s => s.main);
+    const open = Boolean(showShedule);
+
+    const [loading, setLoading] = useState(null);
+    const [month, setMonth] = useState(null);
+    const [calendar, setCalendar] = useState([]);
+    const [options, setOptions] = useState([]);
+    const [days, setDays] = useState({});
+
+    useEffect(() => {
+        props.month && setMonth(props.month);
+        setCalendar(createCalendarPlace(props.month || moment().format("Y-m")));
+    }, [props.month]);
+
+    useEffect(() => {
+
+        if (open) {
+
+            setLoading(true);
+
+            axios.post('employees/shedule', { id: showShedule?.id, month })
+                .then(({ data }) => {
+                    setOptions(data.options);
+                    setDays(data?.shedule?.days || {});
+                })
+                .catch(e => { })
+                .then(() => setLoading(false));
+        }
+
+        return () => {
+            setDays({});
+        }
+
+    }, [open]);
+
+    return <Modal
+        open={open}
+        header={`График работы ${showShedule?.work_shedule} ${showShedule?.work_shedule_time}`}
+        centered={false}
+        closeIcon
+        onClose={() => d(setShowShedule(false))}
+        content={<div className="content">
+
+            <Header
+                as="h3"
+                content={showShedule?.fullname}
+                subheader={ucFirst(moment(month || new Date).format("MMMM YYYY"))}
+                className="text-center"
+            />
+
+            <Table basic celled striped>
+
+                <Table.Row textAlign="center">
+                    <Table.Cell style={{ width: "calc(100% / 7)" }}><strong>ПН</strong></Table.Cell>
+                    <Table.Cell style={{ width: "calc(100% / 7)" }}><strong>ВТ</strong></Table.Cell>
+                    <Table.Cell style={{ width: "calc(100% / 7)" }}><strong>СР</strong></Table.Cell>
+                    <Table.Cell style={{ width: "calc(100% / 7)" }}><strong>ЧТ</strong></Table.Cell>
+                    <Table.Cell style={{ width: "calc(100% / 7)" }}><strong>ПТ</strong></Table.Cell>
+                    <Table.Cell style={{ width: "calc(100% / 7)" }}><strong className="text-danger">СБ</strong></Table.Cell>
+                    <Table.Cell style={{ width: "calc(100% / 7)" }}><strong className="text-danger">ВС</strong></Table.Cell>
+                </Table.Row>
+
+                {calendar.map((week, i) => <Table.Row key={i}>
+
+                    {week.map((day, key) => <TableCellDay
+                        key={key}
+                        day={day}
+                        options={options}
+                        employee={showShedule?.id}
+                        days={days}
+                        setDays={setDays}
+                    />)}
+
+                </Table.Row>)}
+
+            </Table>
+
+            <Dimmer active={loading} inverted>
+                <Loader />
+            </Dimmer>
+
+        </div>}
+    />
+}
+
+const TableCellDay = props => {
+
+    const { day, options, employee } = props;
+    const { days, setDays } = props;
+    const data = days[moment(day.date).format("DD")] || {};
+    const row = { ...day, ...data };
+    const option = options.find(i => i.value === row.type);
+
+    const [loading, setLoading] = useState(false);
+
+    const change = useCallback((e, { value, date }) => {
+
+        setLoading(true);
+
+        axios.put('employees/shedule/set', { value, date, employee })
+            .then(({ data }) => {
+                setDays(p => ({ ...p, [data.day]: { ...(p[data.day] || {}), ...data.dayData } }))
+            })
+            .catch(e => { })
+            .then(() => setLoading(false));
+    }, []);
+
+    return <Table.Cell
+        disabled={!day?.toMonth}
+        content={<div className="d-flex">
+
+            <div className="flex-grow-1 d-flex align-items-center">
+                <span className="flex-grow-1">{moment(day.date).format("DD")}</span>
+                {day?.toMonth && row?.type && option?.color && <Label
+                    color={option.color}
+                    empty
+                    circular
+                    className="mx-1"
+                    size="mini"
+                />}
+            </div>
+
+            {day?.toMonth && <Dropdown
+                direction="left"
+                date={day.date}
+                loading={loading}
+                disabled={loading}
+                options={options.map((r, i) => ({
+                    key: i,
+                    ...r,
+                    label: r?.color ? { color: r.color, empty: true, circular: true } : null
+                }))}
+                value={row.type || null}
+                onChange={change}
+            />}
+
+        </div>}
+    />
+
+}
+
+export default Shedule;

@@ -1,8 +1,11 @@
+import { useDispatch } from "react-redux";
 import { Dropdown, Icon, Table } from "semantic-ui-react";
+import { setShowShedule } from "../../store/actions";
 
 const SalaryTable = props => {
 
     const { rows } = props;
+    const dispatch = useDispatch();
 
     return <Table className="mx-auto" style={{ maxWidth: 1000 }} compact>
 
@@ -26,6 +29,7 @@ const SalaryTable = props => {
                 key={row.id}
                 {...props}
                 row={row}
+                dispatch={dispatch}
             />)}
 
         </Table.Body>
@@ -35,7 +39,7 @@ const SalaryTable = props => {
 
 const SalaryTableRow = props => {
 
-    const { row } = props;
+    const { row, dispatch } = props;
 
     return <Table.Row textAlign="center" negative={row.is_fired}>
         <Table.Cell>{row.pin}</Table.Cell>
@@ -65,6 +69,7 @@ const SalaryTableRow = props => {
                     <Dropdown.Item
                         icon="calendar"
                         content="График работы"
+                        onClick={() => dispatch(setShowShedule(row))}
                     />
                     <Dropdown.Item
                         icon="plus"

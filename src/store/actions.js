@@ -9,3 +9,9 @@ export const setUserData = data => ({
     type: USER_DATA,
     payload: data
 });
+
+export const SHOW_SHEDULE = "SHOW_SHEDULE";
+export const setShowShedule = data => ({
+    type: SHOW_SHEDULE,
+    payload: data
+});
