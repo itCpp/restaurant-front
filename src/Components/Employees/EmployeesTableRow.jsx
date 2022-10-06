@@ -2,10 +2,13 @@ import React from "react";
 import moment from "moment";
 import { Dimmer, Dropdown, Form, Icon, Loader, Table } from "semantic-ui-react";
 import { axios } from "../../system";
+import { setShowShedule } from "../../store/actions";
+import { useDispatch } from "react-redux";
 
 const EmployeesTableRow = props => {
 
     const { row, setEdit, setRows } = props;
+    const d = useDispatch();
 
     return <Table.Row>
         <Table.Cell>
@@ -49,6 +52,11 @@ const EmployeesTableRow = props => {
                         content="Редактировать"
                         icon="edit"
                         onClick={() => setEdit(row)}
+                    />
+                    <Dropdown.Item
+                        content="График работы"
+                        icon="calendar alternate"
+                        onClick={() => d(setShowShedule(row))}
                     />
                 </Dropdown.Menu>
             </Dropdown>

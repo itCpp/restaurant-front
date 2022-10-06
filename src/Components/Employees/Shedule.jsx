@@ -12,21 +12,23 @@ const Shedule = props => {
     const { showShedule } = useSelector(s => s.main);
     const open = Boolean(showShedule);
 
-    const [loading, setLoading] = useState(null);
+    const [loading, setLoading] = useState(true);
     const [month, setMonth] = useState(null);
     const [calendar, setCalendar] = useState([]);
     const [options, setOptions] = useState([]);
     const [days, setDays] = useState({});
 
     useEffect(() => {
-        props.month && setMonth(props.month);
-        setCalendar(createCalendarPlace(props.month || moment().format("Y-m")));
+        let m = props.month || moment().format("YYYY-MM");
+        setMonth(m);
+        setCalendar(createCalendarPlace(m));
     }, [props.month]);
 
     useEffect(() => {
 
         if (open) {
-
+            
+            showShedule?.shedule && setDays(showShedule.shedule);
             setLoading(true);
 
             axios.post('employees/shedule', { id: showShedule?.id, month })
@@ -40,6 +42,7 @@ const Shedule = props => {
 
         return () => {
             setDays({});
+            setLoading(true);
         }
 
     }, [open]);

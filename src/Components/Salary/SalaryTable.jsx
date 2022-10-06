@@ -67,7 +67,7 @@ const SalaryTableRow = props => {
             >
                 <Dropdown.Menu>
                     <Dropdown.Item
-                        icon="calendar"
+                        icon="calendar alternate"
                         content="График работы"
                         onClick={() => dispatch(setShowShedule(row))}
                     />
