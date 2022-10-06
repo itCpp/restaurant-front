@@ -39,9 +39,9 @@ const SalaryTable = props => {
 
 const SalaryTableRow = props => {
 
-    const { row, dispatch } = props;
+    const { row, dispatch, load } = props;
 
-    return <Table.Row textAlign="center" negative={row.is_fired}>
+    return <Table.Row textAlign="center" negative={row.is_fired} disabled={load === row.id}>
         <Table.Cell>{row.pin}</Table.Cell>
         <Table.Cell textAlign="left">{row.fullname}</Table.Cell>
         <Table.Cell><small className="opacity-70">{row.job_title}</small></Table.Cell>
@@ -49,11 +49,9 @@ const SalaryTableRow = props => {
         <Table.Cell>{row.toPayoff || 0}</Table.Cell>
         <Table.Cell>{0}</Table.Cell>
         <Table.Cell>{row.prepayment || 0}</Table.Cell>
-        <Table.Cell
-            positive={(row.balance || 0) > 0}
-            negative={(row.balance || 0) < 0}
-            content={row.balance || 0}
-        />
+        <Table.Cell>
+            <strong className={`${load === row.id ? "opacity-40" : ((row.balance || 0) > 0 ? "text-success" : ((row.balance || 0) < 0 ? "text-danger" : ""))}`}>{row.balance || 0}</strong>
+        </Table.Cell>
         <Table.Cell
             content={<Dropdown
                 direction="left"

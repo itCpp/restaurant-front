@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { Header, Icon, Loader, Message } from "semantic-ui-react";
 import { axios, moment, ucFirst } from "../../system";
 import Shedule from "../Employees/Shedule";
@@ -10,6 +11,8 @@ const Salary = () => {
     const [error, setError] = React.useState(null);
     const [rows, setRows] = React.useState([]);
     const [month, setMonth] = React.useState(moment().subtract('days', 5).format("YYYY-MM"));
+    const shedule = useSelector(s => s.main.showShedule);
+    const [load, setLoad] = React.useState(null);
 
     React.useEffect(() => {
 
@@ -25,6 +28,34 @@ const Salary = () => {
             .then(() => setLoading(false));
 
     }, [month]);
+
+    React.useEffect(() => {
+
+        const a = shedule;
+
+        return () => {
+
+            if (!Boolean(a?.id)) return;
+
+            setLoad(a?.id);
+
+            axios.post('employees/salary', { month, id: a?.id })
+                .then(({ data }) => {
+                    setRows(p => {
+                        let rows = [];
+                        p.forEach(r => {
+                            let fund = data.rows.find(i => i.id === r.id);
+                            if (fund) r = { ...r, ...fund }
+                            rows.push(r);
+                        })
+                        return rows;
+                    });
+                })
+                .catch(() => null)
+                .then(() => setLoad(null));
+        }
+
+    }, [shedule]);
 
     return <div className="px-2 py-1">
 
@@ -76,6 +107,7 @@ const Salary = () => {
 
         {!loading && !error && <SalaryTable
             rows={rows}
+            load={load}
         />}
 
     </div>

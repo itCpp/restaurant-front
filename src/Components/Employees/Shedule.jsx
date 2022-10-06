@@ -27,7 +27,7 @@ const Shedule = props => {
     useEffect(() => {
 
         if (open) {
-            
+
             showShedule?.shedule && setDays(showShedule.shedule);
             setLoading(true);
 
@@ -64,34 +64,43 @@ const Shedule = props => {
 
             <Table basic celled striped>
 
-                <Table.Row textAlign="center">
-                    <Table.Cell style={{ width: "calc(100% / 7)" }}><strong>ПН</strong></Table.Cell>
-                    <Table.Cell style={{ width: "calc(100% / 7)" }}><strong>ВТ</strong></Table.Cell>
-                    <Table.Cell style={{ width: "calc(100% / 7)" }}><strong>СР</strong></Table.Cell>
-                    <Table.Cell style={{ width: "calc(100% / 7)" }}><strong>ЧТ</strong></Table.Cell>
-                    <Table.Cell style={{ width: "calc(100% / 7)" }}><strong>ПТ</strong></Table.Cell>
-                    <Table.Cell style={{ width: "calc(100% / 7)" }}><strong className="text-danger">СБ</strong></Table.Cell>
-                    <Table.Cell style={{ width: "calc(100% / 7)" }}><strong className="text-danger">ВС</strong></Table.Cell>
-                </Table.Row>
+                <Table.Body>
 
-                {calendar.map((week, i) => <Table.Row key={i}>
+                    <Table.Row textAlign="center">
+                        <Table.Cell style={{ width: "calc(100% / 7)" }}><strong>ПН</strong></Table.Cell>
+                        <Table.Cell style={{ width: "calc(100% / 7)" }}><strong>ВТ</strong></Table.Cell>
+                        <Table.Cell style={{ width: "calc(100% / 7)" }}><strong>СР</strong></Table.Cell>
+                        <Table.Cell style={{ width: "calc(100% / 7)" }}><strong>ЧТ</strong></Table.Cell>
+                        <Table.Cell style={{ width: "calc(100% / 7)" }}><strong>ПТ</strong></Table.Cell>
+                        <Table.Cell style={{ width: "calc(100% / 7)" }}><strong className="text-danger">СБ</strong></Table.Cell>
+                        <Table.Cell style={{ width: "calc(100% / 7)" }}><strong className="text-danger">ВС</strong></Table.Cell>
+                    </Table.Row>
 
-                    {week.map((day, key) => <TableCellDay
-                        key={key}
-                        day={day}
-                        options={options}
-                        employee={showShedule?.id}
-                        days={days}
-                        setDays={setDays}
-                    />)}
+                    {calendar.map((week, i) => <Table.Row key={i}>
 
-                </Table.Row>)}
+                        {week.map((day, key) => <TableCellDay
+                            key={key}
+                            day={day}
+                            options={options}
+                            employee={showShedule?.id}
+                            days={days}
+                            setDays={setDays}
+                        />)}
+
+                    </Table.Row>)}
+
+                </Table.Body>
 
             </Table>
 
             <Dimmer active={loading} inverted>
                 <Loader />
             </Dimmer>
+
+            {options.map(r => <Label size="small" key={r.value} color={r.color}>
+                <strong>{r.text}</strong>{' - '}
+                <span>{r.comment}</span>
+            </Label>)}
 
         </div>}
     />
