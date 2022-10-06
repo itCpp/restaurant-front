@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Dropdown, Icon, Table } from "semantic-ui-react";
 import { setShowShedule } from "../../store/actions";
@@ -6,6 +8,27 @@ const SalaryTable = props => {
 
     const { rows } = props;
     const dispatch = useDispatch();
+    const [stat, setStat] = useState(null);
+
+    useEffect(() => {
+
+        let counter = {
+            toPayoff: 0,
+            prepayment: 0,
+            debt: 0,
+            balance: 0,
+        }
+
+        rows.forEach(r => {
+            counter.toPayoff += Number(r.toPayoff || 0);
+            counter.prepayment += Number(r.prepayment || 0);
+            counter.debt += Number(r.debt || 0);
+            counter.balance += Number(r.balance || 0);
+        });
+
+        setStat(counter);
+
+    }, [rows]);
 
     return <Table className="mx-auto" style={{ maxWidth: 1000 }} compact>
 
@@ -24,6 +47,18 @@ const SalaryTable = props => {
         </Table.Header>
 
         <Table.Body>
+
+            {rows.length > 0 && Boolean(stat) && <Table.Row active textAlign="center">
+                <Table.Cell />
+                <Table.Cell />
+                <Table.Cell />
+                <Table.Cell />
+                <Table.Cell content={stat.toPayoff}/>
+                <Table.Cell content={stat.debt}/>
+                <Table.Cell content={stat.prepayment}/>
+                <Table.Cell content={stat.balance}/>
+                <Table.Cell />
+            </Table.Row>}
 
             {rows.map(row => <SalaryTableRow
                 key={row.id}
