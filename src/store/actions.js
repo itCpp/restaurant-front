@@ -21,3 +21,9 @@ export const setShowSalaryMore = data => ({
     type: SHOW_SALARY_MORE,
     payload: data
 });
+
+export const SHOW_ADD_SALARY = "SHOW_ADD_SALARY";
+export const setShowAddSalary = data => ({
+    type: SHOW_ADD_SALARY,
+    payload: data
+});

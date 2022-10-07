@@ -46,7 +46,7 @@ const SalaryMore = props => {
                 </Statistic>
 
                 <Statistic size="tiny">
-                    <Statistic.Value>{data?.prepayment || 0}</Statistic.Value>
+                    <Statistic.Value>{data?.debt || 0}</Statistic.Value>
                     <Statistic.Label>Долг</Statistic.Label>
                 </Statistic>
 

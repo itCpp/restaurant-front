@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { Header, Icon, Loader, Message } from "semantic-ui-react";
 import { axios, moment, ucFirst } from "../../system";
 import Shedule from "../Employees/Shedule";
+import SalaryAdd from "./SalaryAdd";
 import SalaryMore from "./SalaryMore";
 import SalaryTable from "./SalaryTable";
 
@@ -13,6 +14,7 @@ const Salary = () => {
     const [rows, setRows] = React.useState([]);
     const [month, setMonth] = React.useState(moment().subtract('days', 5).format("YYYY-MM"));
     const shedule = useSelector(s => s.main.showShedule);
+    const salary = useSelector(s => s.main.showEmployeeAddPay);
     const [load, setLoad] = React.useState(null);
 
     React.useEffect(() => {
@@ -32,7 +34,7 @@ const Salary = () => {
 
     React.useEffect(() => {
 
-        const a = shedule;
+        const a = shedule || salary;
 
         return () => {
 
@@ -56,13 +58,15 @@ const Salary = () => {
                 .then(() => setLoad(null));
         }
 
-    }, [shedule]);
+    }, [shedule, salary]);
 
     return <div className="px-2 py-1">
 
         <SalaryMore />
 
         <Shedule month={month} />
+
+        <SalaryAdd month={month} />
 
         <div className="mt-3 d-flex align-items-center justify-content-center">
             <span>

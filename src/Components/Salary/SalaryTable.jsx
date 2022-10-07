@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Dropdown, Icon, Table } from "semantic-ui-react";
-import { setShowShedule, setShowSalaryMore } from "../../store/actions";
+import { setShowShedule, setShowSalaryMore, setShowAddSalary } from "../../store/actions";
 
 const SalaryTable = props => {
 
@@ -121,7 +121,7 @@ const SalaryTableRow = props => {
                     <Dropdown.Item
                         icon="plus"
                         content="Добавить выплату"
-                        disabled
+                        onClick={() => dispatch(setShowAddSalary(row))}
                     />
                     <Dropdown.Item
                         icon="info"
