@@ -61,46 +61,52 @@ const CashboxCalendar = props => {
     </div>
 }
 
+export const createCalendarPlace = (month, cb = null) => {
+
+    let start = moment(month || new Date).startOf('month').format("YYYY-MM-DD"),
+        stop = moment(month || new Date).endOf('month').format("YYYY-MM-DD"),
+        startWeek = moment(start).startOf('week').subtract('days', 1).format("YYYY-MM-DD"),
+        stopWeek = moment(stop).endOf('week').subtract('days', 1).format("YYYY-MM-DD"),
+        step = startWeek,
+        day = 0,
+        week = 0,
+        calendar = [];
+
+    while (step <= stopWeek) {
+
+        if (day === 7) {
+            day = 0;
+            week++;
+        }
+
+        if (step >= stop && day === 0)
+            break;
+
+        step = moment(step).add(1, 'd').format("YYYY-MM-DD");
+
+        Boolean(!calendar[week]) && calendar.push([]);
+
+        calendar[week].push({
+            date: step,
+            toMonth: step >= start && step <= stop,
+        });
+
+        day++;
+    }
+
+    typeof cb == "function" && cb(calendar);
+
+    return calendar;
+
+}
+
 const Calendar = props => {
 
     const { month, setMonth, setLoading } = props;
     const [calendar, setCalendar] = React.useState([]);
 
     React.useEffect(() => {
-
-        let start = moment(month || new Date).startOf('month').format("YYYY-MM-DD"),
-            stop = moment(month || new Date).endOf('month').format("YYYY-MM-DD"),
-            startWeek = moment(start).startOf('week').format("YYYY-MM-DD"),
-            stopWeek = moment(stop).endOf('week').format("YYYY-MM-DD"),
-            step = startWeek,
-            day = 0,
-            week = 0,
-            calendar = [];
-
-        while (step <= stopWeek) {
-
-            if (day === 7) {
-                day = 0;
-                week++;
-            }
-
-            if (step >= stop && day === 0)
-                break;
-
-            step = moment(step).add(1, 'd').format("YYYY-MM-DD");
-
-            Boolean(!calendar[week]) && calendar.push([]);
-
-            calendar[week].push({
-                date: step,
-                toMonth: step >= start && step <= stop,
-            });
-
-            day++;
-        }
-
-        setCalendar(calendar);
-
+        setCalendar(createCalendarPlace(month));
     }, [month]);
 
     return <MySegment style={{ maxWidth: 1300 }} className="mx-auto pt-5">

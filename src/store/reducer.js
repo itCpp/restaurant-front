@@ -31,7 +31,10 @@ const defaultMainState = {
                 color: "orange",
             }
         },
-    ]
+    ],
+    showShedule: false,
+    showSalaryMore: false,
+    showEmployeeAddPay: false,
 };
 
 export default combineReducers({
@@ -47,6 +50,15 @@ export default combineReducers({
 
             case ACTIONS.USER_DATA:
                 return { ...state, user: action.payload }
+
+            case ACTIONS.SHOW_SHEDULE:
+                return { ...state, showShedule: action.payload }
+
+            case ACTIONS.SHOW_SALARY_MORE:
+                return { ...state, showSalaryMore: action.payload }
+
+            case ACTIONS.SHOW_ADD_SALARY:
+                return { ...state, showEmployeeAddPay: action.payload }
 
             default:
                 return state;

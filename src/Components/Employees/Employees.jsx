@@ -4,6 +4,7 @@ import { axios } from "../../system";
 import EmployeeAdd from "./EmployeeAdd";
 import EmployeesTableRow from "./EmployeesTableRow";
 import EmployeeEdit from "./EmployeeEdit";
+import Shedule from "./Shedule";
 
 const Employees = props => {
 
@@ -62,6 +63,8 @@ const Employees = props => {
             close={() => setEdit(null)}
             handleRows={handleRows}
         />
+
+        <Shedule />
 
         {loading && <Loader active inline="centered" />}
 

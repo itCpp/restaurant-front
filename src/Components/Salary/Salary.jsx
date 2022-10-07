@@ -1,6 +1,10 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { Header, Icon, Loader, Message } from "semantic-ui-react";
 import { axios, moment, ucFirst } from "../../system";
+import Shedule from "../Employees/Shedule";
+import SalaryAdd from "./SalaryAdd";
+import SalaryMore from "./SalaryMore";
 import SalaryTable from "./SalaryTable";
 
 const Salary = () => {
@@ -9,6 +13,9 @@ const Salary = () => {
     const [error, setError] = React.useState(null);
     const [rows, setRows] = React.useState([]);
     const [month, setMonth] = React.useState(moment().subtract('days', 5).format("YYYY-MM"));
+    const shedule = useSelector(s => s.main.showShedule);
+    const salary = useSelector(s => s.main.showEmployeeAddPay);
+    const [load, setLoad] = React.useState(null);
 
     React.useEffect(() => {
 
@@ -25,7 +32,41 @@ const Salary = () => {
 
     }, [month]);
 
+    React.useEffect(() => {
+
+        const a = shedule || salary;
+
+        return () => {
+
+            if (!Boolean(a?.id)) return;
+
+            setLoad(a?.id);
+
+            axios.post('employees/salary', { month, id: a?.id })
+                .then(({ data }) => {
+                    setRows(p => {
+                        let rows = [];
+                        p.forEach(r => {
+                            let fund = data.rows.find(i => i.id === r.id);
+                            if (fund) r = { ...r, ...fund }
+                            rows.push(r);
+                        })
+                        return rows;
+                    });
+                })
+                .catch(() => null)
+                .then(() => setLoad(null));
+        }
+
+    }, [shedule, salary]);
+
     return <div className="px-2 py-1">
+
+        <SalaryMore />
+
+        <Shedule month={month} />
+
+        <SalaryAdd month={month} />
 
         <div className="mt-3 d-flex align-items-center justify-content-center">
             <span>
@@ -36,7 +77,7 @@ const Salary = () => {
                     disabled={loading}
                     className="ms-0 me-3"
                     onClick={() => {
-                        setMonth(p => moment(p || new Date).subtract('months', 1).format("YYYY-MM"))
+                        setMonth(p => moment(p || new Date).subtract(1, 'months').format("YYYY-MM"))
                     }}
                 />
             </span>
@@ -53,7 +94,7 @@ const Salary = () => {
                     disabled={loading}
                     className="ms-3 me-0"
                     onClick={() => {
-                        setMonth(p => moment(p || new Date).add('months', 1).format("YYYY-MM"))
+                        setMonth(p => moment(p || new Date).add(1, 'months').format("YYYY-MM"))
                     }}
                 />
             </span>
@@ -71,6 +112,7 @@ const Salary = () => {
 
         {!loading && !error && <SalaryTable
             rows={rows}
+            load={load}
         />}
 
     </div>
