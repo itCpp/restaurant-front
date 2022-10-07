@@ -9,3 +9,21 @@ export const setUserData = data => ({
     type: USER_DATA,
     payload: data
 });
+
+export const SHOW_SHEDULE = "SHOW_SHEDULE";
+export const setShowShedule = data => ({
+    type: SHOW_SHEDULE,
+    payload: data
+});
+
+export const SHOW_SALARY_MORE = "SHOW_SALARY_MORE";
+export const setShowSalaryMore = data => ({
+    type: SHOW_SALARY_MORE,
+    payload: data
+});
+
+export const SHOW_ADD_SALARY = "SHOW_ADD_SALARY";
+export const setShowAddSalary = data => ({
+    type: SHOW_ADD_SALARY,
+    payload: data
+});
