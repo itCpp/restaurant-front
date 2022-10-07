@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { Header, Icon, Loader, Message } from "semantic-ui-react";
 import { axios, moment, ucFirst } from "../../system";
 import Shedule from "../Employees/Shedule";
+import SalaryMore from "./SalaryMore";
 import SalaryTable from "./SalaryTable";
 
 const Salary = () => {
@@ -59,9 +60,9 @@ const Salary = () => {
 
     return <div className="px-2 py-1">
 
-        <Shedule
-            month={month}
-        />
+        <SalaryMore />
+
+        <Shedule month={month} />
 
         <div className="mt-3 d-flex align-items-center justify-content-center">
             <span>
@@ -72,7 +73,7 @@ const Salary = () => {
                     disabled={loading}
                     className="ms-0 me-3"
                     onClick={() => {
-                        setMonth(p => moment(p || new Date).subtract('months', 1).format("YYYY-MM"))
+                        setMonth(p => moment(p || new Date).subtract(1, 'months').format("YYYY-MM"))
                     }}
                 />
             </span>
@@ -89,7 +90,7 @@ const Salary = () => {
                     disabled={loading}
                     className="ms-3 me-0"
                     onClick={() => {
-                        setMonth(p => moment(p || new Date).add('months', 1).format("YYYY-MM"))
+                        setMonth(p => moment(p || new Date).add(1, 'months').format("YYYY-MM"))
                     }}
                 />
             </span>

@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Dropdown, Icon, Table } from "semantic-ui-react";
-import { setShowShedule } from "../../store/actions";
+import { setShowShedule, setShowSalaryMore } from "../../store/actions";
 
 const SalaryTable = props => {
 
@@ -53,10 +53,18 @@ const SalaryTable = props => {
                 <Table.Cell />
                 <Table.Cell />
                 <Table.Cell />
-                <Table.Cell content={stat.toPayoff}/>
-                <Table.Cell content={stat.debt}/>
-                <Table.Cell content={stat.prepayment}/>
-                <Table.Cell content={stat.balance}/>
+                <Table.Cell
+                    content={stat.toPayoff.toFixed((stat.toPayoff - stat.toPayoff.toFixed(0) !== 0) ? 2 : 0)}
+                />
+                <Table.Cell
+                    content={stat.debt.toFixed((stat.debt - stat.debt.toFixed(0) !== 0) ? 2 : 0)}
+                />
+                <Table.Cell
+                    content={stat.prepayment.toFixed((stat.prepayment - stat.prepayment.toFixed(0) !== 0) ? 2 : 0)}
+                />
+                <Table.Cell
+                    content={stat.balance.toFixed((stat.balance - stat.balance.toFixed(0) !== 0) ? 2 : 0)}
+                />
                 <Table.Cell />
             </Table.Row>}
 
@@ -118,7 +126,7 @@ const SalaryTableRow = props => {
                     <Dropdown.Item
                         icon="info"
                         content="Подробнее"
-                        disabled
+                        onClick={() => dispatch(setShowSalaryMore(row))}
                     />
                 </Dropdown.Menu>
             </Dropdown>}

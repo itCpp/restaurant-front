@@ -33,6 +33,7 @@ const defaultMainState = {
         },
     ],
     showShedule: false,
+    showSalaryMore: false,
 };
 
 export default combineReducers({
@@ -51,6 +52,9 @@ export default combineReducers({
 
             case ACTIONS.SHOW_SHEDULE:
                 return { ...state, showShedule: action.payload }
+
+            case ACTIONS.SHOW_SALARY_MORE:
+                return { ...state, showSalaryMore: action.payload }
 
             default:
                 return state;

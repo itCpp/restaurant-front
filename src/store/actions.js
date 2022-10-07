@@ -15,3 +15,9 @@ export const setShowShedule = data => ({
     type: SHOW_SHEDULE,
     payload: data
 });
+
+export const SHOW_SALARY_MORE = "SHOW_SALARY_MORE";
+export const setShowSalaryMore = data => ({
+    type: SHOW_SALARY_MORE,
+    payload: data
+});
