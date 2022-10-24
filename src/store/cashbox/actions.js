@@ -9,3 +9,9 @@ export const setShowCashboxCalendar = data => ({
     type: CASHBOX_SHOW_CALENDAR,
     payload: data
 });
+
+export const CASHBOX_SEARCH = "CASHBOX_SEARCH";
+export const setCahsboxSearch = data => ({
+    type: CASHBOX_SEARCH,
+    payload: data
+});

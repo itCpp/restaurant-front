@@ -17,6 +17,8 @@ const Cashbox = () => {
 
 const CashboxRows = () => {
 
+    const { search } = useSelector(s => s.cashbox);
+
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState(null);
     const [load, setLoad] = React.useState(false);
@@ -33,7 +35,7 @@ const CashboxRows = () => {
 
         setLoad(true);
 
-        axios.post('cashbox', param || {})
+        axios.post('cashbox', { search, ...(param || {}) })
             .then(({ data }) => {
                 setRows(p => Number(data.page) > 1 ? [...p, ...data.rows] : data.rows);
                 setPage(data.page || null);
@@ -50,7 +52,7 @@ const CashboxRows = () => {
 
     React.useEffect(() => {
 
-        getRows();
+        getRows({ search });
 
         return () => {
             setLoading(true);
@@ -59,7 +61,26 @@ const CashboxRows = () => {
             setEnd(false);
         }
 
-    }, []);
+    }, [search]);
+
+    // React.useEffect(() => {
+
+    //     if (search) {
+
+    //         let toSearch = false;
+
+    //         if (typeof search == "object") {
+
+    //             Object.values(search).forEach(value => {
+    //                 if (Boolean(value))
+    //                     toSearch = true;
+    //             });
+
+    //             toSearch && console.log("SEARCH", search);
+    //         }
+    //     }
+
+    // }, [search]);
 
     React.useEffect(() => {
 
@@ -82,7 +103,7 @@ const CashboxRows = () => {
             window.removeEventListener('scroll', scrollHandle);
         }
 
-    }, [page, load, end])
+    }, [page, load, end]);
 
     return <div className="px-2 py-1">
 
