@@ -31,7 +31,7 @@ const CashboxRows = () => {
 
     const getRows = (param = {}) => {
 
-        if (load || end || (typeof pages == "number" && pages < Number(param?.page))) return;
+        if (load || (end && !(Boolean(param?._start))) || (typeof pages == "number" && pages < Number(param?.page))) return;
 
         setLoad(true);
 
@@ -52,35 +52,17 @@ const CashboxRows = () => {
 
     React.useEffect(() => {
 
-        getRows({ search });
+        setTimeout(() => getRows({ _start: true, search, page: 1 }), 500);
 
         return () => {
             setLoading(true);
             setPage(null);
             setPages(null);
             setEnd(false);
+            setError(null);
         }
 
     }, [search]);
-
-    // React.useEffect(() => {
-
-    //     if (search) {
-
-    //         let toSearch = false;
-
-    //         if (typeof search == "object") {
-
-    //             Object.values(search).forEach(value => {
-    //                 if (Boolean(value))
-    //                     toSearch = true;
-    //             });
-
-    //             toSearch && console.log("SEARCH", search);
-    //         }
-    //     }
-
-    // }, [search]);
 
     React.useEffect(() => {
 
@@ -118,6 +100,8 @@ const CashboxRows = () => {
             className="mx-auto"
             style={{ maxWidth: 500 }}
         />}
+
+        {!loading && !error && rows.length === 0 && <div className="text-center my-4 opacity-50"><b>Ничего не найдено</b></div>}
 
         {!loading && !error && rows.length > 0 && <CashboxData
             rows={rows}

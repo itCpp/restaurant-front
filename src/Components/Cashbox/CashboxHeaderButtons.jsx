@@ -17,6 +17,7 @@ const CashboxHeaderButtons = () => {
         return () => {
             setShowSearch(false);
             setFormdata({});
+            dispatch(setCahsboxSearch(null));
         }
 
     }, []);
@@ -30,7 +31,7 @@ const CashboxHeaderButtons = () => {
                 toSearch = true;
         });
 
-        return toSearch ? search : null;
+        return toSearch ? { ...search} : null;
     }
 
     return <div className="d-flex justify-content-end">
@@ -89,6 +90,7 @@ const CashboxHeaderButtons = () => {
                         className="mt-1"
                         onClick={() => {
                             setShowSearch(false);
+                            setFormdata({});
                             dispatch(setCahsboxSearch(null))
                         }}
                     />}
