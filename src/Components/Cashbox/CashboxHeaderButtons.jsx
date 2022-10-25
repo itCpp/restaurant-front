@@ -2,6 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Dropdown, Form } from "semantic-ui-react";
 import { setShowCashboxRowEdit, setShowCashboxCalendar, setCahsboxSearch } from "../../store/cashbox/actions";
+import CashboxBaseInfoModal from "./CashboxBaseInfoModal";
 
 const CashboxHeaderButtons = () => {
 
@@ -106,6 +107,8 @@ const CashboxHeaderButtons = () => {
                 </div>
             </Dropdown.Menu>
         </Dropdown>
+
+        <CashboxBaseInfoModal />
 
         <Button
             color="blue"
