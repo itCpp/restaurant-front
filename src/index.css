@@ -116,8 +116,8 @@ hr {
   left: -100vw;
   bottom: 0;
   width: 100%;
-  z-index: 10000;
-  transition: .1s;
+  z-index: 100000;
+  /* transition: .1s; */
   opacity: 0;
 }
 

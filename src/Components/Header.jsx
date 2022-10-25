@@ -35,13 +35,37 @@ const Header = () => {
                     <NavLink to="/"><strong>CRM</strong></NavLink>
                 </div>
 
-                <NavLink to="/income/1" className="header-link">Строение 1</NavLink>
-                <NavLink to="/income/2" className="header-link">Строение 2</NavLink>
-                <NavLink to="/income/parking" className="header-link">Парковка</NavLink>
-                <NavLink to="/expenses" className="header-link">Раcходы</NavLink>
-                <NavLink to="/employees" className="header-link">Сотрудники</NavLink>
-                <NavLink to="/salary" className="header-link">Зарплата</NavLink>
-                <NavLink to="/cashbox" className="header-link">Касса</NavLink>
+                <NavLink to="/income/1" className="header-link">
+                    <Icon name="building" className="me-3" /><span>Строение 1</span>
+                </NavLink>
+
+                <NavLink to="/income/2" className="header-link">
+                    <Icon name="building" className="me-3" /><span>Строение 2</span>
+                </NavLink>
+
+                <NavLink to="/income/parking" className="header-link">
+                    <Icon name="car" className="me-3" /><span>Парковка</span>
+                </NavLink>
+
+                <NavLink to="/income/address" className="header-link">
+                    <Icon name="point" className="me-3" /><span>Юридические адреса</span>
+                </NavLink>
+
+                <NavLink to="/expenses" className="header-link">
+                    <Icon name="cart arrow down" className="me-3" /><span>Раcходы</span>
+                </NavLink>
+
+                <NavLink to="/employees" className="header-link">
+                    <Icon name="users" className="me-3" /><span>Сотрудники</span>
+                </NavLink>
+
+                <NavLink to="/salary" className="header-link">
+                    <Icon name="money" className="me-3" /><span>Зарплата</span>
+                </NavLink>
+
+                <NavLink to="/cashbox" className="header-link">
+                    <Icon name="calculator" className="me-3" /><span>Касса</span>
+                </NavLink>
             </div>
 
         </div>
