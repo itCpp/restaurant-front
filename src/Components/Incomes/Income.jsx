@@ -9,6 +9,7 @@ import IncomesView from "./IncomesView";
 import IncomePartAdd from "./IncomePartAdd";
 import { useParams } from "react-router-dom";
 import { Parking } from "../Components";
+import LegalAddress from "../LegalAddress";
 
 const Income = () => {
 
@@ -16,6 +17,8 @@ const Income = () => {
 
     if (id === "parking")
         return <Parking id={id} />
+    else if (id == "address")
+        return <LegalAddress id={id} />
 
     return <IncomeBuilding id={id} />
 

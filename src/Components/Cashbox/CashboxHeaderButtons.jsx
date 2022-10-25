@@ -31,7 +31,7 @@ const CashboxHeaderButtons = () => {
                 toSearch = true;
         });
 
-        return toSearch ? { ...search} : null;
+        return toSearch ? { ...search } : null;
     }
 
     return <div className="d-flex justify-content-end">
@@ -55,11 +55,20 @@ const CashboxHeaderButtons = () => {
                 <div className="px-2 mb-2">
                     <Form>
                         <Form.Input
-                            icon="search"
                             placeholder="Наименование"
                             label="Наименование"
                             className="mb-2"
+                            type="text"
                             value={formdata?.name || ""}
+                            onKeyUp={({ keyCode }) => {
+                                if (keyCode === 32)
+                                    setFormdata(p => ({ ...p, name: p.name + " " }))
+                                else if (keyCode === 13)
+                                    setTimeout(() => {
+                                        setShowSearch(false);
+                                        dispatch(setCahsboxSearch(toSearch(formdata)))
+                                    }, 200);
+                            }}
                             onChange={(e, { value }) => setFormdata(p => ({ ...p, name: value }))}
                         />
                         <Form.Input
