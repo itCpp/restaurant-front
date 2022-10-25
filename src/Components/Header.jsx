@@ -6,6 +6,7 @@ import { Icon } from "semantic-ui-react";
 import CashboxHeaderButtons from "./Cashbox/CashboxHeaderButtons";
 import { ExpenseHeaderButtons } from "./Expenses";
 import { IncomeHeaderButtons } from "./Incomes";
+import ParkingHeaderButtons from "./Parking/ParkingHeaderButtons";
 
 const Header = () => {
 
@@ -56,6 +57,7 @@ const Header = () => {
             {pathname.indexOf("/income/1") >= 0 && <IncomeHeaderButtons />}
             {pathname.indexOf("/income/2") >= 0 && <IncomeHeaderButtons />}
             {pathname.indexOf("/cashbox") >= 0 && <CashboxHeaderButtons />}
+            {pathname.indexOf("/income/parking") >= 0 && <ParkingHeaderButtons />}
 
         </div>
 
