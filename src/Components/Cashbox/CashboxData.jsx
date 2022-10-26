@@ -5,7 +5,7 @@ import CashboxDataTableRow from "./CashboxDataTableRow";
 
 const CashboxData = props => {
 
-    const { rows, loading, end, stats } = props;
+    const { rows, loading, end, stats, setRows } = props;
 
     return <MySegment>
 
@@ -30,6 +30,7 @@ const CashboxData = props => {
                     row={row}
                     stats={stats}
                     keyId={i}
+                    setRows={setRows}
                 />)}
 
             </Table.Body>

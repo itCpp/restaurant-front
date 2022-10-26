@@ -1,8 +1,9 @@
 import moment from "moment";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { Button, Dropdown, Header, Icon, Portal, Segment, Table } from "semantic-ui-react";
+import { Dropdown, Icon, Table } from "semantic-ui-react";
 import { setShowCashboxRowEdit } from "../../store/cashbox/actions";
+import { axios } from "../../system";
 
 let dateChange = null;
 const colspan = 7;
@@ -23,7 +24,7 @@ export const getIconTypePay = (type, title = false) => {
 const CashboxDataTableRow = props => {
 
     const { row, stats, keyId } = props;
-    const [drop, setDrop] = React.useState(false);
+    const deleted = Boolean(row.deleted_at);
 
     let toDate = false,
         typePay = null,
@@ -80,7 +81,7 @@ const CashboxDataTableRow = props => {
             <Table.Cell colSpan={3} />
         </Table.Row>}
 
-        {toDate && <Table.Row active className="cashbox-date-row">
+        {toDate && <Table.Row active className="cashbox-date-row" >
             <Table.Cell
                 colSpan={colspan}
                 className="px-2 text-center"
@@ -96,25 +97,25 @@ const CashboxDataTableRow = props => {
             className="celled-cashbox"
         >
 
-            <Table.Cell>{row.name}</Table.Cell>
+            <Table.Cell disabled={deleted}>{row.name}</Table.Cell>
 
-            <Table.Cell>
+            <Table.Cell disabled={deleted}>
                 {row.sum > 0 && <strong className={row.sum >= 0 ? "text-success" : "text-danger"}>
                     {typePay}
                     {row.sum.toFixed(2)}
                 </strong>}
             </Table.Cell>
 
-            <Table.Cell>
+            <Table.Cell disabled={deleted}>
                 {row.sum < 0 && <strong className={row.sum >= 0 ? "text-success" : "text-danger"}>
                     {typePay}
                     {row.sum.toFixed(2)}
                 </strong>}
             </Table.Cell>
 
-            {/* <Table.Cell>{moment(row.date).format("DD.MM.YYYY")}</Table.Cell> */}
+            {/* <Table.Cell disabled={deleted}>{moment(row.date).format("DD.MM.YYYY")}</Table.Cell> */}
 
-            <Table.Cell>
+            <Table.Cell disabled={deleted}>
                 <div className="d-flex align-items-center">
                     {row.purpose && <PurposeType data={row.purpose} />}
                     {(row.purpose && row.comment) && <span className="mx-2">/</span>}
@@ -122,7 +123,7 @@ const CashboxDataTableRow = props => {
                 </div>
             </Table.Cell>
 
-            <Table.Cell>
+            <Table.Cell disabled={deleted}>
                 {Boolean(row.period_start && row.period_stop)
                     ? <div className="d-flex text-nowrap">
                         <div className="me-1">с {moment(row.period_start).format("DD.MM.YYYY")}</div>
@@ -131,12 +132,12 @@ const CashboxDataTableRow = props => {
                     : (row.month && <div>{moment(row.month).format("MMMM YYYY")}</div>)}
             </Table.Cell>
 
-            {/* <Table.Cell>
+            {/* <Table.Cell disabled={deleted}>
                 <small className="opacity-50">{moment(row.created_at).format("DD.MM.YYYY в HH:mm")}</small>
             </Table.Cell> */}
 
             <Table.Cell textAlign="center">
-                <DropdownRowMenu row={row} setDrop={setDrop} />
+                <DropdownRowMenu row={row} setRows={props.setRows} />
             </Table.Cell>
 
         </Table.Row>
@@ -165,7 +166,33 @@ const PurposeType = props => {
 const DropdownRowMenu = props => {
 
     const dispatch = useDispatch();
-    const { row, setDrop } = props;
+    const { row, setRows } = props;
+    const [drop, setDrop] = React.useState(false);
+    const deleted = Boolean(row.deleted_at);
+
+    React.useEffect(() => {
+
+        if (drop) {
+            axios.post('cashbox/remove', { id: row.id })
+                .then(({ data }) => {
+                    typeof setRows == "function" && setRows(p => {
+                        let rows = [];
+                        p.forEach(row => {
+                            if (row.id === data.row.id) {
+                                row.deleted_at = data.row.deleted_at;
+                            }
+                            rows.push(row);
+                        })
+                        return rows;
+                    });
+                })
+                .catch(e => {})
+                .then(() => {
+                    setDrop(false);
+                });
+        }
+
+    }, [drop]);
 
     return <Dropdown
         icon={null}
@@ -174,18 +201,20 @@ const DropdownRowMenu = props => {
             link
         />}
         direction="left"
+        loading={drop}
     >
         <Dropdown.Menu>
             <Dropdown.Item
                 icon="pencil"
                 content="Изменить"
                 onClick={() => dispatch(setShowCashboxRowEdit(row))}
+                disabled={Boolean(row.deleted_at)}
             />
             <Dropdown.Item
-                icon="trash"
-                content="Удалить"
+                icon={deleted ? "redo" : "trash"}
+                content={deleted ? "Восстановить" : "Удалить"}
                 onClick={() => setDrop(row)}
-                disabled
+                disabled={drop}
             />
         </Dropdown.Menu>
     </Dropdown>
