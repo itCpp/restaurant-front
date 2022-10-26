@@ -11,6 +11,15 @@ export const typePayCash = <Icon name="ruble" className="ms-0 me-2" title="На�
 export const typePayCard = <Icon name="credit card" className="ms-0 me-2" title="Безналичные" />;
 export const typePayCheckingAccount = <Icon name="file text" className="ms-0 me-2" title="Расчетный счет" />;
 
+export const getIconTypePay = (type, title = false) => {
+    if (type === 1 || !type)
+        return <span>{typePayCash}{title && <b>Наличные</b>}</span>;
+    else if (type === 2)
+        return <span>{typePayCard}{title && <b>Безналичные</b>}</span>;
+    else if (type === 3)
+        return <span>{typePayCheckingAccount}{title && <b>Расчетный счёт</b>}</span>;
+}
+
 const CashboxDataTableRow = props => {
 
     const { row, stats, keyId } = props;

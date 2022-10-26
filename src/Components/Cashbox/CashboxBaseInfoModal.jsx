@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Dimmer, Header, Image, Label, List, Loader, Message, Modal } from "semantic-ui-react"
 import { axios } from "../../system";
+import { getIconTypePay } from "./CashboxDataTableRow";
 
 const CashboxBaseInfoModal = props => {
 
@@ -15,7 +16,7 @@ const CashboxBaseInfoModal = props => {
 
             setLoading(true);
 
-            axios.get('cashbox/base')
+            axios.get('cashbox/info')
                 .then(({ data }) => setData(data))
                 .catch(e => setError(axios.getError(e)))
                 .then(() => setLoading(false));
@@ -33,11 +34,11 @@ const CashboxBaseInfoModal = props => {
         <Modal
             open={show}
             centered={false}
-            header="Информация из БАЗЫ"
+            header="Информация из кассы"
             closeIcon
             onClose={() => setShow(false)}
             size="tiny"
-            content={<div className="content position-relative pb-0">
+            content={<div className="content position-relative">
 
                 {!loading && error && <Message error content={error} size="mini" className="mb-0" />}
 
@@ -46,6 +47,19 @@ const CashboxBaseInfoModal = props => {
                 </div>}
 
                 {!loading && !error && <>
+
+                    {data?.info && data.info.length > 0 && <div>
+
+                        <List divided verticalAlign="middle" selection>
+                            {data.info.map(r => <List.Item key={r.type_pay}>
+                                <List.Content className="d-flex align-items-center">
+                                    <span className="flex-grow-1">{getIconTypePay(r.type_pay, true)}</span>
+                                    <Label color="green">{r.sum}</Label>
+                                </List.Content>
+                            </List.Item>)}
+                        </List>
+
+                    </div>}
 
                     {data?.safe && data.safe.length > 0 && <div className="mb-4">
 

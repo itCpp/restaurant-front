@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Dimmer, Form, Icon, Loader, Modal } from "semantic-ui-react";
 import { setShowCashboxRowEdit } from "../../store/cashbox/actions";
-import { axios } from "../../system";
+import { axios, moment } from "../../system";
 
 const CashboxRowEdit = props => {
 
@@ -223,7 +223,14 @@ const CashboxRowEdit = props => {
                         type="month"
                         name="month"
                         value={formdata?.month || ""}
-                        onChange={handleChange}
+                        onChange={(e, { value }) => {
+                            setFormdata(p => ({
+                                ...p,
+                                month: value,
+                                period_start: value && moment(value).startOf('month').format("YYYY-MM-DD"),
+                                period_stop: value && moment(value).endOf('month').format("YYYY-MM-DD"),
+                            }))
+                        }}
                         error={Boolean(errors?.month)}
                     />
 
