@@ -37,7 +37,7 @@ const CashboxRowEdit = props => {
 
             axios.post('cashbox/get', { id: showCashboxRowEdit?.id })
                 .then(({ data }) => {
-                    setFormdata(data.row);
+                    setFormdata({ ...data.row, sum: (data.row?.sum || 0) < 0 ? data.row.sum * (-1) : data.row?.sum });
                     setOptions(p => ({
                         ...p,
                         expense_types: data.expense_types,
@@ -169,7 +169,7 @@ const CashboxRowEdit = props => {
                         label="Сумма"
                         placeholder="Укажите сумму"
                         name="sum"
-                        value={Boolean(formdata?.sum) ? Math.abs(formdata.sum) : ""}
+                        value={Boolean(formdata?.sum) ? formdata.sum : ""}
                         onChange={handleChange}
                         required
                         error={Boolean(errors?.sum)}
