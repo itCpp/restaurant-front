@@ -92,6 +92,14 @@ const TableBodySource = props => {
                 row={row}
             />)}
 
+            {row.rows.length === 0 && <Table.Row disabled>
+                <Table.Cell colSpan={11}>
+                    <div className="text-center my-3">
+                        Данных нет
+                    </div>
+                </Table.Cell>
+            </Table.Row>}
+
         </Table.Body>
 
     </>

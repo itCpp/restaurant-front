@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import { useRef } from "react";
+import { useDispatch } from "react-redux";
 import { NavLink, useLocation } from "react-router-dom";
 import { Icon } from "semantic-ui-react";
+import { setIncomeFilter } from "../store/incomes/actions";
 import CashboxHeaderButtons from "./Cashbox/CashboxHeaderButtons";
 import { ExpenseHeaderButtons } from "./Expenses";
 import { IncomeHeaderButtons } from "./Incomes";
@@ -13,6 +15,7 @@ const Header = () => {
     const { pathname } = useLocation();
     const [show, setShow] = useState(false);
     const menu = useRef();
+    const d = useDispatch();
 
     useEffect(() => {
 
@@ -35,11 +38,11 @@ const Header = () => {
                     <NavLink to="/"><strong>CRM</strong></NavLink>
                 </div>
 
-                <NavLink to="/income/1" className="header-link">
+                <NavLink to="/income/1" className="header-link" onClick={() => d(setIncomeFilter({}))}>
                     <Icon name="building" className="me-3" /><span>Строение 1</span>
                 </NavLink>
 
-                <NavLink to="/income/2" className="header-link">
+                <NavLink to="/income/2" className="header-link" onClick={() => d(setIncomeFilter({}))}>
                     <Icon name="building" className="me-3" /><span>Строение 2</span>
                 </NavLink>
 
