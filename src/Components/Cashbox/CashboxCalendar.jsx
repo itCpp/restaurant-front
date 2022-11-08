@@ -102,8 +102,43 @@ export const createCalendarPlace = (month, cb = null) => {
 
 const Calendar = props => {
 
-    const { month, setMonth, setLoading } = props;
+    const { month, data, setMonth, setLoading } = props;
     const [calendar, setCalendar] = React.useState([]);
+    const [total, setTotal] = React.useState({});
+
+    React.useEffect(() => {
+
+        let itog = {
+            expense: 0,
+            expenseCard: 0,
+            expenseCash: 0,
+            expenseCheckingAccount: 0,
+            incoming: 0,
+            incomingCard: 0,
+            incomingCash: 0,
+            incomingCheckingAccount: 0,
+        }
+
+        for (let i in data) {
+            if (String(data[i]?.date).indexOf(String(month || moment().format("YYYY-MM"))) >= 0) {
+                itog.expense += (data[i]?.expense || 0);
+                itog.expenseCard += (data[i]?.expenseCard || 0);
+                itog.expenseCash += (data[i]?.expenseCash || 0);
+                itog.expenseCheckingAccount += (data[i]?.expenseCheckingAccount || 0);
+                itog.incoming += (data[i]?.incoming || 0);
+                itog.incomingCard += (data[i]?.incomingCard || 0);
+                itog.incomingCash += (data[i]?.incomingCash || 0);
+                itog.incomingCheckingAccount += (data[i]?.incomingCheckingAccount || 0);
+            }
+        }
+
+        setTotal(itog);
+
+        return () => {
+            setTotal({});
+        }
+
+    }, [data, month]);
 
     React.useEffect(() => {
         setCalendar(createCalendarPlace(month));
@@ -111,7 +146,7 @@ const Calendar = props => {
 
     return <MySegment style={{ maxWidth: 1300 }} className="mx-auto pt-5">
 
-        <div className="d-flex justify-content-center align-items-center mb-5">
+        <div className="d-flex justify-content-center align-items-center mb-3">
 
             <span>
                 <Icon
@@ -143,14 +178,58 @@ const Calendar = props => {
 
         </div>
 
+        {Object.keys(total).length > 0 && <div className="pb-5 d-flex align-items-center flex-column">
+
+            <div className="d-flex text-success mx-4">
+                <div className="d-flex mx-2 align-items-center">
+                    <span>{typePayCash}</span>
+                    <code>{(total?.incomingCash || 0).toFixed(2)}</code>
+                </div>
+                <div className="d-flex mx-2 align-items-center">
+                    <span>{typePayCard}</span>
+                    <code>{(total?.incomingCard || 0).toFixed(2)}</code>
+                </div>
+                <div className="d-flex mx-2 align-items-center">
+                    <span>{typePayCheckingAccount}</span>
+                    <code>{(total?.incomingCheckingAccount || 0).toFixed(2)}</code>
+                </div>
+                <div className="d-flex mx-2 align-items-center">
+                    <b className="me-2">Итого</b>
+                    <code>{(total?.incoming || 0).toFixed(2)}</code>
+                </div>
+            </div>
+
+            <div className="d-flex text-danger mx-4">
+                <div className="d-flex mx-2 align-items-center">
+                    <span>{typePayCash}</span>
+                    <code>{Math.abs(total?.expenseCash || 0).toFixed(2)}</code>
+                </div>
+                <div className="d-flex mx-2 align-items-center">
+                    <span>{typePayCard}</span>
+                    <code>{Math.abs(total?.expenseCard || 0).toFixed(2)}</code>
+                </div>
+                <div className="d-flex mx-2 align-items-center">
+                    <span>{typePayCheckingAccount}</span>
+                    <code>{Math.abs(total?.expenseCheckingAccount || 0).toFixed(2)}</code>
+                </div>
+                <div className="d-flex mx-2 align-items-center">
+                    <b className="me-2">Итого</b>
+                    <code>{Math.abs(total?.expense || 0).toFixed(2)}</code>
+                </div>
+            </div>
+
+        </div>}
+
         <Grid divided>
 
             {calendar.map((r, i) => {
-                return <Grid.Row columns={7} className="calendar-row p-0" key={i}>{r.map(row => <CalendarDay
-                    key={row.date}
-                    {...props}
-                    row={row}
-                />)}</Grid.Row>
+                return <Grid.Row columns={7} className="calendar-row p-0" key={i}>
+                    {r.map(row => <CalendarDay
+                        key={row.date}
+                        {...props}
+                        row={row}
+                    />)}
+                </Grid.Row>
             })}
 
         </Grid>

@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Dimmer, Form, Icon, Loader, Modal } from "semantic-ui-react";
 import { setShowCashboxRowEdit } from "../../store/cashbox/actions";
-import { axios } from "../../system";
+import { axios, moment } from "../../system";
 
 const CashboxRowEdit = props => {
 
@@ -37,7 +37,7 @@ const CashboxRowEdit = props => {
 
             axios.post('cashbox/get', { id: showCashboxRowEdit?.id })
                 .then(({ data }) => {
-                    setFormdata(data.row);
+                    setFormdata({ ...data.row, sum: (data.row?.sum || 0) < 0 ? data.row.sum * (-1) : data.row?.sum });
                     setOptions(p => ({
                         ...p,
                         expense_types: data.expense_types,
@@ -169,7 +169,7 @@ const CashboxRowEdit = props => {
                         label="Сумма"
                         placeholder="Укажите сумму"
                         name="sum"
-                        value={Boolean(formdata?.sum) ? Math.abs(formdata.sum) : ""}
+                        value={Boolean(formdata?.sum) ? formdata.sum : ""}
                         onChange={handleChange}
                         required
                         error={Boolean(errors?.sum)}
@@ -223,7 +223,14 @@ const CashboxRowEdit = props => {
                         type="month"
                         name="month"
                         value={formdata?.month || ""}
-                        onChange={handleChange}
+                        onChange={(e, { value }) => {
+                            setFormdata(p => ({
+                                ...p,
+                                month: value,
+                                period_start: value && moment(value).startOf('month').format("YYYY-MM-DD"),
+                                period_stop: value && moment(value).endOf('month').format("YYYY-MM-DD"),
+                            }))
+                        }}
                         error={Boolean(errors?.month)}
                     />
 
