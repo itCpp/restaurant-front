@@ -22,9 +22,14 @@ export const setPartAdd = data => ({
     payload: data
 });
 
-
 export const INCOMES_PARKING_PLACE_ADD = "INCOMES_PARKING_PLACE_ADD";
 export const setParkingPlaceAdd = data => ({
     type: INCOMES_PARKING_PLACE_ADD,
+    payload: data
+});
+
+export const INCOMES_FILTER_SET = "INCOMES_FILTER_SET";
+export const setIncomeFilter = data => ({
+    type: INCOMES_FILTER_SET,
     payload: data
 });

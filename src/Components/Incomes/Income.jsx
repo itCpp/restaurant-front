@@ -29,12 +29,13 @@ const IncomeBuilding = props => {
     const { id } = props;
     const [loading, setLoading] = React.useState(false);
     const [rows, setRows] = React.useState([]);
+    const { filter } = useSelector(store => store.incomes);
 
-    const getIncomes = React.useCallback(() => {
+    const getIncomes = React.useCallback((filter = {}) => {
 
         setLoading(true);
 
-        axios.get('incomes', { params: { id } })
+        axios.get('incomes', { params: { ...filter, ...{ id } } })
             .then(({ data }) => {
                 setRows(data.rows);
             })
@@ -43,17 +44,17 @@ const IncomeBuilding = props => {
                 setLoading(false);
             });
 
-    }, [id]);
+    }, [id, filter]);
 
     React.useEffect(() => {
 
-        getIncomes();
+        getIncomes(filter);
 
         return () => {
             setRows([]);
         }
 
-    }, [id]);
+    }, [id, filter]);
 
     return <div className="p-2">
 

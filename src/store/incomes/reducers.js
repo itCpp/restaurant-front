@@ -6,6 +6,7 @@ const defaultState = {
     show: false,
     showPartAdd: false,
     showParkingPlaceAdd: false,
+    filter: {},
 };
 
 export const incomesReducer = (state = defaultState, action) => {
@@ -26,6 +27,9 @@ export const incomesReducer = (state = defaultState, action) => {
 
         case ACTIONS.INCOMES_PARKING_PLACE_ADD:
             return { ...state, showParkingPlaceAdd: action.payload }
+
+        case ACTIONS.INCOMES_FILTER_SET:
+            return { ...state, filter: { ...action.payload } }
 
         default:
             return state;
