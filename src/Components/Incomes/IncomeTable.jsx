@@ -148,8 +148,8 @@ const TableRowSource = props => {
         <Table.Cell>{price > 0 ? price.toFixed(2) : null}</Table.Cell>
         <Table.Cell>
             <div className="d-flex">
-                {row.date && <div>с {moment(row.date).format("DD.MM.YYYY")}</div>}
-                {row.date_to && <div className="ms-1">по {moment(row.date_to).format("DD.MM.YYYY")}</div>}
+                {row.date && <div className="text-nowrap">с {moment(row.date).format("DD.MM.YYYY")}</div>}
+                {row.date_to && <div className="ms-1 text-nowrap">по {moment(row.date_to).format("DD.MM.YYYY")}</div>}
             </div>
             {Boolean(row?.settings?.comment_date) && <div>
                 <small>{row.settings.comment_date}</small>
