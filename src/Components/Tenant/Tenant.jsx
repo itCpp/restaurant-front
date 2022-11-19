@@ -124,19 +124,25 @@ const Tenant = () => {
                                         title="Кабинет"
                                         className="me-2"
                                     />}
-                                    <Button
+                                    {!row?.deleted_at && <Button
                                         icon="archive"
                                         basic
                                         circular
                                         title="Отправить в архив"
                                         onClick={() => setArchive(true)}
-                                    />
+                                    />}
                                 </div>
                             </Segment>
 
                         </Grid.Column>
 
                     </Grid.Row>
+
+                    {row?.deleted_at && <Grid.Row>
+                        <Grid.Column>
+                            <Message warning content="В архиве" />
+                        </Grid.Column>
+                    </Grid.Row>}
 
                     <Grid.Row columns={2}>
 

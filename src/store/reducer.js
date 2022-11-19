@@ -11,7 +11,11 @@ const defaultMainState = {
         {
             key: 0,
             text: "Наличные",
-            value: 1
+            value: 1,
+            icon: {
+                name: "money",
+                color: "green",
+            }
         },
         {
             key: 1,
@@ -19,7 +23,7 @@ const defaultMainState = {
             value: 2,
             icon: {
                 name: "credit card",
-                color: "green",
+                color: "blue",
             }
         },
         {
@@ -31,6 +35,15 @@ const defaultMainState = {
                 color: "orange",
             }
         },
+        {
+            key: 4,
+            text: "Неучтенные",
+            value: 4,
+            icon: {
+                name: "question circle",
+                color: "red",
+            }
+        }
     ],
     showShedule: false,
     showSalaryMore: false,

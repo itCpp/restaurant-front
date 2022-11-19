@@ -1,6 +1,6 @@
 import moment from "moment";
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Dropdown, Icon, Table } from "semantic-ui-react";
 import { setShowCashboxRowEdit } from "../../store/cashbox/actions";
 import { axios } from "../../system";
@@ -12,13 +12,34 @@ export const typePayCash = <Icon name="ruble" className="ms-0 me-2" title="На�
 export const typePayCard = <Icon name="credit card" className="ms-0 me-2" title="Безналичные" />;
 export const typePayCheckingAccount = <Icon name="file text" className="ms-0 me-2" title="Расчетный счет" />;
 
-export const getIconTypePay = (type, title = false) => {
+const TypePayIcon = props => {
+
+    const { type, title, color } = props;
+    const { payTypes } = useSelector(s => s.main);
+
+    let fund = payTypes.find(i => i.value === type);
+
+    if (!fund) return null;
+
+    return <span>
+        {fund.icon?.name && <Icon
+            name={fund.icon.name}
+            className="ms-0 me-2"
+            color={(color && fund?.icon?.color) ? fund.icon.color : null}
+        />}
+        {Boolean(title) && <b>{fund.text}</b>}
+    </span>
+}
+
+export const getIconTypePay = (type, title = false, color = false) => {
     if (type === 1 || !type)
         return <span>{typePayCash}{title && <b>Наличные</b>}</span>;
     else if (type === 2)
         return <span>{typePayCard}{title && <b>Безналичные</b>}</span>;
     else if (type === 3)
         return <span>{typePayCheckingAccount}{title && <b>Расчетный счёт</b>}</span>;
+    else
+        return <TypePayIcon type={type} title={title} color={color} />
 }
 
 const CashboxDataTableRow = props => {
@@ -43,6 +64,8 @@ const CashboxDataTableRow = props => {
         typePay = typePayCard;
     else if (row.type_pay === 3)
         typePay = typePayCheckingAccount;
+    else
+        typePay = <TypePayIcon type={row.type_pay} />
 
     return <>
 
@@ -63,6 +86,7 @@ const CashboxDataTableRow = props => {
                     {typePayCheckingAccount}
                     {stat.incomingCheckingAccount.toFixed(2)}
                 </div>}
+                <StatCashboxTotalRow type="incoming" stat={stat} />
             </Table.Cell>
             <Table.Cell verticalAlign="top" className="text-danger">
                 {Boolean(stat?.expenseCash) && <div className="text-nowrap">
@@ -77,6 +101,7 @@ const CashboxDataTableRow = props => {
                     {typePayCheckingAccount}
                     {stat.expenseCheckingAccount.toFixed(2)}
                 </div>}
+                <StatCashboxTotalRow type="expense" stat={stat} />
             </Table.Cell>
             <Table.Cell colSpan={3} />
         </Table.Row>}
@@ -163,6 +188,31 @@ const PurposeType = props => {
 
 }
 
+export const StatCashboxTotalRow = props => {
+
+    const { stat, type } = props;
+
+    // console.log(stat, type)
+
+    if (typeof stat != "object" || (type !== "incoming" && type != "expense"))
+        return null;
+
+    const rows = [];
+
+    for (let i in stat) {
+        if (i.indexOf(type + "Type") >= 0 && stat[i] !== 0) {
+            let typeId = Number(i.replace(type + "Type", ""));
+            rows.push({ sum: stat[i], type: typeId })
+        }
+    }
+
+    return rows.map((r, i) => <div className="text-nowrap" key={i}>
+        <TypePayIcon type={r.type} />
+        {r.sum.toFixed(2)}
+    </div>);
+
+}
+
 const DropdownRowMenu = props => {
 
     const dispatch = useDispatch();
@@ -186,7 +236,7 @@ const DropdownRowMenu = props => {
                         return rows;
                     });
                 })
-                .catch(e => {})
+                .catch(e => { })
                 .then(() => {
                     setDrop(false);
                 });
