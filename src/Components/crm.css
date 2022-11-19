@@ -131,6 +131,14 @@
     background-color: #9fffa2;
 }
 
+.income-table-row.in-archive {
+    background-color: #fffd83;
+}
+
+.income-table-row.in-archive:hover {
+    background-color: #fffd76;
+}
+
 .income-table-row.overdue {
     background-color: #ffd2d2;
 }

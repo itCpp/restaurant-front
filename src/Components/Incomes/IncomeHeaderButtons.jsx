@@ -1,16 +1,41 @@
 import { Button, Dropdown } from "semantic-ui-react";
 import { useDispatch, useSelector } from "react-redux";
 import { setShowAdd, setIncomeSourceAdd, setPartAdd, setIncomeFilter } from "../../store/incomes/actions";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const IncomeHeaderButtons = () => {
 
     const dispatch = useDispatch();
     const { filter } = useSelector(s => s.incomes);
 
-    const setFilter = useCallback((data) => {
-        dispatch(setIncomeFilter(data));
-    }, []);
+    const [filters, setFilters] = useState({
+        archive: false,
+        all: false,
+        rent: false,
+        free: false,
+    })
+
+    useEffect(() => {
+
+        let data = {};
+
+        if (filters.archive) {
+            if (filters.archive) data.onlyArchive = true;
+            dispatch(setIncomeFilter(data));
+        }
+        else if (filters.all || filters.rent || filters.free) {
+            if (filters.archive) data.onlyArchive = true;
+            if (filters.rent && !filters.all) data.onlyRent = true;
+            if (filters.free && !filters.all) data.onlyFree = true;
+            dispatch(setIncomeFilter(data));
+        }
+
+    }, [filters]);
+
+    // const setFilter = (data) => {
+    //     typeof data?.onlyArchive == "boolean" && delete (data.onlyArchive);
+    //     dispatch(setIncomeFilter(Boolean(archive) ? { ...data, onlyArchive: true } : data));
+    // }
 
     return <div className="d-flex justify-content-end">
 
@@ -18,7 +43,11 @@ const IncomeHeaderButtons = () => {
             trigger={<Button
                 basic
                 icon="filter"
-                color={Object.keys(filter).length > 0 ? "orange" : null}
+                color={(
+                    Boolean(filter?.onlyArchive)
+                    || Boolean(filter?.onlyRent)
+                    || Boolean(filter?.onlyFree)
+                ) ? "orange" : null}
             />}
             icon={null}
             pointing="top left"
@@ -26,24 +55,34 @@ const IncomeHeaderButtons = () => {
         >
             <Dropdown.Menu>
                 <Dropdown.Header icon='tags' content='Фильтрация' />
-                <Dropdown.Divider />
+                <Dropdown.Divider className="my-0" />
                 <Dropdown.Item
-                    label={{ color: 'blue', empty: true, circular: true }}
+                    label={{ color: Boolean(filter?.onlyArchive) ? 'yellow' : null, empty: true, circular: true }}
+                    text='В архиве'
+                    onClick={() => setFilters(p => ({ ...p, archive: !p.archive }))}
+                    active={Boolean(filter?.onlyArchive)}
+                />
+                <Dropdown.Divider className="my-0" />
+                <Dropdown.Item
+                    label={{ color: (!Boolean(filter?.onlyRent) && !Boolean(filter?.onlyFree)) ? 'blue' : null, empty: true, circular: true }}
                     text='Все помещения'
-                    onClick={() => setFilter({})}
+                    onClick={() => setFilters(p => ({ ...p, all: true }))}
                     active={!Boolean(filter?.onlyRent) && !Boolean(filter?.onlyFree)}
+                    disabled={Boolean(filter?.onlyArchive)}
                 />
                 <Dropdown.Item
-                    label={{ color: 'red', empty: true, circular: true }}
+                    label={{ color: Boolean(filter?.onlyRent) ? 'red' : null, empty: true, circular: true }}
                     text='Арендованные'
-                    onClick={() => setFilter({ onlyRent: true })}
+                    onClick={() => setFilters(p => ({ ...p, all: false, rent: true, free: false }))}
                     active={Boolean(filter?.onlyRent)}
+                    disabled={Boolean(filter?.onlyArchive)}
                 />
                 <Dropdown.Item
-                    label={{ color: 'green', empty: true, circular: true }}
+                    label={{ color: Boolean(filter?.onlyFree) ? 'green' : null, empty: true, circular: true }}
                     text='Свободные'
-                    onClick={() => setFilter({ onlyFree: true })}
+                    onClick={() => setFilters(p => ({ ...p, all: false, rent: false, free: true }))}
                     active={Boolean(filter?.onlyFree)}
+                    disabled={Boolean(filter?.onlyArchive)}
                 />
             </Dropdown.Menu>
         </Dropdown>

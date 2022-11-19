@@ -112,8 +112,9 @@ const TableRowSource = props => {
     const navigate = useNavigate();
 
     const className = ["income-table-row"];
-    (overdue || row.is_overdue) && !row.is_free && className.push("overdue");
-    !row.is_free && className.push('not-free');
+    (overdue || row.is_overdue) && !row.is_free && !row.deleted_at && className.push("overdue");
+    !row.is_free && !row.deleted_at && className.push('not-free');
+    row.deleted_at && className.push('in-archive');
 
     const price = Number(Number(row.price) * Number(row.space));
 
