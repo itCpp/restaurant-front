@@ -1,3 +1,4 @@
+import moment from "moment";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -22,7 +23,7 @@ const SalaryTable = props => {
         rows.forEach(r => {
             counter.toPayoff += Number(r.toPayoff || 0);
             counter.prepayment += Number(r.prepayment || 0);
-            counter.debt += Number(r.debt || 0);
+            counter.debt += Number(r.duty || 0);
             counter.balance += Number(r.balance || 0);
         });
 
@@ -30,11 +31,11 @@ const SalaryTable = props => {
 
     }, [rows]);
 
-    return <Table className="mx-auto" style={{ maxWidth: 1000 }} compact>
+    return <Table className="mx-auto" style={{ maxWidth: 1000 }} compact selectable>
 
         <Table.Header>
             <Table.Row textAlign="center">
-                <Table.HeaderCell />
+                {/* <Table.HeaderCell /> */}
                 <Table.HeaderCell textAlign="left">ФИО</Table.HeaderCell>
                 <Table.HeaderCell>Должность</Table.HeaderCell>
                 <Table.HeaderCell>Оклад</Table.HeaderCell>
@@ -48,8 +49,15 @@ const SalaryTable = props => {
 
         <Table.Body>
 
+            {rows.map(row => <SalaryTableRow
+                key={row.id}
+                {...props}
+                row={row}
+                dispatch={dispatch}
+            />)}
+
             {rows.length > 0 && Boolean(stat) && <Table.Row active textAlign="center">
-                <Table.Cell />
+                {/* <Table.Cell /> */}
                 <Table.Cell />
                 <Table.Cell />
                 <Table.Cell />
@@ -68,13 +76,6 @@ const SalaryTable = props => {
                 <Table.Cell />
             </Table.Row>}
 
-            {rows.map(row => <SalaryTableRow
-                key={row.id}
-                {...props}
-                row={row}
-                dispatch={dispatch}
-            />)}
-
             {rows.length === 0 && <Table.Row>
                 <Table.Cell disabled colSpan={9}>
                     <div className="text-center py-4">Данных еще нет</div>
@@ -86,17 +87,29 @@ const SalaryTable = props => {
     </Table>
 }
 
+const SalaryChanged = props => {
+
+    const { row } = props;
+
+    return <div>
+        <span className="text-nowrap">{row.salary}{row.salary_one_day ? <span className="text-muted">/день</span> : ""}</span>
+        {Boolean(row.salary_story) && row.salary_story.map((r, i) => <div key={i}>
+            <small className="text-nowrap text-muted">{'c '}{moment(r.date).format("DD MMM")}{' '}{r.salary}{r.salary_one_day ? "/день" : ""}</small>
+        </div>)}
+    </div>
+}
+
 const SalaryTableRow = props => {
 
     const { row, dispatch, load } = props;
 
     return <Table.Row textAlign="center" negative={row.is_fired} disabled={load === row.id}>
-        <Table.Cell>{row.pin}</Table.Cell>
+        {/* <Table.Cell>{row.pin}</Table.Cell> */}
         <Table.Cell textAlign="left">{row.fullname}</Table.Cell>
         <Table.Cell><small className="opacity-70">{row.job_title}</small></Table.Cell>
-        <Table.Cell>{row.salary}{row.salary_one_day ? "/день" : ""}</Table.Cell>
+        <Table.Cell content={<SalaryChanged row={row} />} />
         <Table.Cell>{row.toPayoff || 0}</Table.Cell>
-        <Table.Cell>{0}</Table.Cell>
+        <Table.Cell>{row.duty || 0}</Table.Cell>
         <Table.Cell>{row.prepayment || 0}</Table.Cell>
         <Table.Cell>
             <strong className={`${load === row.id ? "opacity-40" : ((row.balance || 0) > 0 ? "text-success" : ((row.balance || 0) < 0 ? "text-danger" : ""))}`}>{row.balance || 0}</strong>
@@ -109,7 +122,7 @@ const SalaryTableRow = props => {
                 trigger={<Icon
                     name="ellipsis vertical"
                     link
-                    fitted
+                    className="mx-1"
                 />}
             >
                 <Dropdown.Menu>
