@@ -3,6 +3,8 @@ import { combineReducers } from "redux";
 import { expensesReducer } from "./expenses/reducer";
 import { incomesReducer } from "./incomes/reducers";
 import { cashboxReducer } from "./cashbox/reducer";
+import { clientReducer } from "./client/reducer";
+import { contractReducer } from "./contract/reducer";
 
 const defaultMainState = {
     user: {},
@@ -54,6 +56,8 @@ export default combineReducers({
     cashbox: cashboxReducer,
     expenses: expensesReducer,
     incomes: incomesReducer,
+    client: clientReducer,
+    contract: contractReducer,
     main: (state = defaultMainState, action) => {
 
         switch (action.type) {
