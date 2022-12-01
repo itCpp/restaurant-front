@@ -18,6 +18,7 @@ const SalaryTable = props => {
             prepayment: 0,
             debt: 0,
             balance: 0,
+            premium: 0,
         }
 
         rows.forEach(r => {
@@ -25,6 +26,7 @@ const SalaryTable = props => {
             counter.prepayment += Number(r.prepayment || 0);
             counter.debt += Number(r.duty || 0);
             counter.balance += Number(r.balance || 0);
+            counter.premium += Number(r?.premium || 0);
         });
 
         setStat(counter);
@@ -42,6 +44,7 @@ const SalaryTable = props => {
                 <Table.HeaderCell>Зарплата</Table.HeaderCell>
                 <Table.HeaderCell>Долг</Table.HeaderCell>
                 <Table.HeaderCell>Аванс</Table.HeaderCell>
+                <Table.HeaderCell>Премия</Table.HeaderCell>
                 <Table.HeaderCell>Остаток</Table.HeaderCell>
                 <Table.HeaderCell />
             </Table.Row>
@@ -69,6 +72,9 @@ const SalaryTable = props => {
                 />
                 <Table.Cell
                     content={stat.prepayment.toFixed((stat.prepayment - stat.prepayment.toFixed(0) !== 0) ? 2 : 0)}
+                />
+                <Table.Cell
+                    content={stat.premium.toFixed((stat.premium - stat.premium.toFixed(0) !== 0) ? 2 : 0)}
                 />
                 <Table.Cell
                     content={stat.balance.toFixed((stat.balance - stat.balance.toFixed(0) !== 0) ? 2 : 0)}
@@ -108,9 +114,10 @@ const SalaryTableRow = props => {
         <Table.Cell textAlign="left">{row.fullname}</Table.Cell>
         <Table.Cell><small className="opacity-70">{row.job_title}</small></Table.Cell>
         <Table.Cell content={<SalaryChanged row={row} />} />
-        <Table.Cell>{row.toPayoff || 0}</Table.Cell>
-        <Table.Cell>{row.duty || 0}</Table.Cell>
-        <Table.Cell>{row.prepayment || 0}</Table.Cell>
+        <Table.Cell>{row.toPayoff || <span className="opacity-30">0</span>}</Table.Cell>
+        <Table.Cell>{row.duty || <span className="opacity-30">0</span>}</Table.Cell>
+        <Table.Cell>{row.prepayment || <span className="opacity-30">0</span>}</Table.Cell>
+        <Table.Cell>{row.premium || <span className="opacity-30">0</span>}</Table.Cell>
         <Table.Cell>
             <strong className={`${load === row.id ? "opacity-40" : ((row.balance || 0) > 0 ? "text-success" : ((row.balance || 0) < 0 ? "text-danger" : ""))}`}>{row.balance || 0}</strong>
         </Table.Cell>

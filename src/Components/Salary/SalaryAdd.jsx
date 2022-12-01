@@ -35,6 +35,7 @@ const SalaryAdd = props => {
                 expense_type_id: 1,
                 expense_subtype_id: data.id,
                 date,
+                month,
                 period_start: moment(date).startOf('month').format(`YYYY-MM-${day >= 16 ? '16' : 'DD'}`),
                 period_stop: moment(date).endOf('month').format(`YYYY-MM-${day >= 16 ? 'DD' : '15'}`),
             });
@@ -97,28 +98,43 @@ const SalaryAdd = props => {
                 />
             </Form.Group>
 
-            <Form.Input
-                label="Дата выдачи"
-                type="date"
-                name="date"
-                value={formdata.date || ""}
-                onChange={(e, { value }) => {
-                    setFormdata(p => {
+            <Form.Group widths={2}>
+                <Form.Select
+                    label="Тип оплаты"
+                    placeholder="Укажите тип оплаты"
+                    options={[
+                        { key: 0, text: "Аванс", value: 1 },
+                        { key: 1, text: "Зарплата", value: 2 },
+                        { key: 2, text: "Премия", value: 3 },
+                    ]}
+                    name="purpose_pay"
+                    value={formdata?.purpose_pay || null}
+                    onChange={handleChange}
+                    error={Boolean(errors?.purpose_pay)}
+                />
+                <Form.Input
+                    label="Дата выдачи"
+                    type="date"
+                    name="date"
+                    value={formdata.date || ""}
+                    onChange={(e, { value }) => {
+                        setFormdata(p => {
 
-                        let date = moment(value).format("YYYY-MM-DD"),
-                            day = Number(moment(date).format("DD"));
+                            let date = moment(value).format("YYYY-MM-DD"),
+                                day = Number(moment(date).format("DD"));
 
-                        return {
-                            ...p,
-                            date: value,
-                            period_start: moment(date).startOf('month').format(`YYYY-MM-${day >= 16 ? '16' : 'DD'}`),
-                            period_stop: moment(date).endOf('month').format(`YYYY-MM-${day >= 16 ? 'DD' : '15'}`),
-                        }
-                    })
-                }}
-                required
-                error={Boolean(errors?.date)}
-            />
+                            return {
+                                ...p,
+                                date: value,
+                                period_start: moment(date).startOf('month').format(`YYYY-MM-${day >= 16 ? '16' : 'DD'}`),
+                                period_stop: moment(date).endOf('month').format(`YYYY-MM-${day >= 16 ? 'DD' : '15'}`),
+                            }
+                        })
+                    }}
+                    required
+                    error={Boolean(errors?.date)}
+                />
+            </Form.Group>
             <Form.Group widths={2}>
                 <Form.Input
                     label="Период с"

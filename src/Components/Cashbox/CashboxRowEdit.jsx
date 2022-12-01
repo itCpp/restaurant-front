@@ -44,7 +44,9 @@ const CashboxRowEdit = props => {
                         expense_subtypes: data.expense_subtypes,
                         income_sources: data.income_sources,
                         income_source_parkings: data.income_source_parkings,
+                        income_source_services: data?.income_source_services || [],
                         purpose: data.purpose,
+                        purpose_salary: data.purpose_salary,
                     }))
                 })
                 .catch(e => {
@@ -111,6 +113,27 @@ const CashboxRowEdit = props => {
         }
 
     }, [formdata?.income_source_id]);
+
+    React.useEffect(() => {
+
+        if (!loading) {
+
+            if (formdata?.purpose_pay === 6 && formdata?.is_income === true) {
+                setLoadingIncomeSourceParkings(true);
+                axios.get('cashbox/service/list')
+                    .then(({ data }) => {
+                        setOptions(p => ({ ...p, income_source_services: data?.rows || [] }));
+                        setErrors(p => ({ ...p, income_source_service_id: null }));
+                    })
+                    .catch(e => setErrors(p => ({ ...p, income_source_service_id: [axios.getError(e)] })))
+                    .then(() => setLoadingIncomeSourceParkings(false));
+            } else {
+                setOptions(p => ({ ...p, income_source_services: [] }));
+            }
+
+        }
+
+    }, [formdata?.purpose_pay]);
 
     React.useEffect(() => {
 
@@ -303,14 +326,53 @@ const CashboxRowEdit = props => {
 
                     </Form.Group>
 
-                    <Form.Input
-                        label="Наименование или пояснение платежа"
-                        placeholder="Укажите наименование"
-                        name="name"
-                        value={formdata?.name || ""}
-                        onChange={handleChange}
-                        error={Boolean(errors.name)}
-                    />
+                    <Form.Group widths="equal">
+
+                        <Form.Input
+                            label="Наименование или пояснение платежа"
+                            placeholder="Укажите наименование"
+                            name="name"
+                            value={formdata?.name || ""}
+                            onChange={handleChange}
+                            error={Boolean(errors.name)}
+                        />
+
+                        {formdata?.expense_type_id === 1 && <Form.Select
+                            label="Тип оплаты"
+                            placeholder="Укажите тип оплаты"
+                            options={options?.purpose_salary || []}
+                            name="purpose_pay"
+                            value={formdata?.purpose_pay || null}
+                            onChange={(e, {name, value, options}) => {
+                                setFormdata(p => {
+
+                                    let o = (options || []).find(i => i.value === value),
+                                        pName = p.name;
+
+                                    if (Boolean(o?.name)) {
+
+                                        pName = o.name + " ";
+
+                                        if (p.period_start) {
+                                            pName += moment(p.period_start).format("DD");
+                                        }
+
+                                        if (p.period_stop) {
+                                            pName += moment(p.period_stop).format("-DD.MM");
+                                        }
+                                    }
+
+                                    return {
+                                        ...p,
+                                        name: pName,
+                                        [name]: value,
+                                    }
+                                });
+                            }}
+                            error={Boolean(errors?.purpose_pay)}
+                        />}
+
+                    </Form.Group>
 
                 </>}
 
@@ -389,6 +451,49 @@ const CashboxRowEdit = props => {
 
                         </Form.Group>
 
+                        {formdata.purpose_pay === 6 && <Form.Group widths="equal">
+
+                            <Form.Dropdown
+                                label="Дополнительная услуга"
+                                placeholder="Выберите услугу"
+                                options={[
+                                    { text: "Не выбрано", value: null },
+                                    ...(options?.income_source_services || [])
+                                ].map((r, i) => ({
+                                    ...r,
+                                    key: i,
+                                }))}
+                                name="income_source_service_id"
+                                value={formdata?.income_source_service_id || null}
+                                onChange={handleChange}
+                                loading={loadingExpenseTypes}
+                                disabled={loadingExpenseTypes}
+                                search
+                                selection
+                                allowAdditions
+                                additionLabel="Добавить в список: "
+                                noResultsMessage="Ничего не найдено..."
+                                onAddItem={(e, { name, value }) => {
+                                    setOptions(p => ({
+                                        ...p,
+                                        income_source_services: [...(p.income_source_services || []), { text: value, value }]
+                                    }));
+                                    setFormdata(p => ({ ...p, [name]: value }));
+                                }}
+                                error={Boolean(errors.income_source_service_id)}
+                            />
+
+                            <Form.Input
+                                label="Дполнительная информация"
+                                placeholder="Например ФИО сотрудника"
+                                name="comment"
+                                value={formdata?.comment || ""}
+                                onChange={handleChange}
+                                error={Boolean(errors.comment)}
+                            />
+
+                        </Form.Group>}
+
                     </>}
 
                 </>}
@@ -403,25 +508,26 @@ const CashboxRowEdit = props => {
 
             </Form>
 
-        </div>}
-        actions={[
-            {
-                key: 0,
-                content: "Отмена",
-                onClick: () => close(),
-                size: "mini",
-            },
-            {
-                key: 1,
-                content: "Сохранить",
-                color: "green",
-                labelPosition: "right",
-                icon: "save",
-                disabled: loading || save,
-                onClick: () => setSave(true),
-                size: "mini",
-            }
-        ]}
+        </div >}
+        actions={
+            [
+                {
+                    key: 0,
+                    content: "Отмена",
+                    onClick: () => close(),
+                    size: "mini",
+                },
+                {
+                    key: 1,
+                    content: "Сохранить",
+                    color: "green",
+                    labelPosition: "right",
+                    icon: "save",
+                    disabled: loading || save,
+                    onClick: () => setSave(true),
+                    size: "mini",
+                }
+            ]}
     />
 }
 
