@@ -70,11 +70,11 @@ const Employees = props => {
 
         {isError && <Message error content={error} style={{ maxWidth: 500 }} className="mx-auto" size="mini" />}
 
-        {isOk && <Table className="mt-2" celled>
+        {isOk && <Table className="mt-2" celled selectable>
 
             <Table.Header>
                 <Table.Row textAlign="center">
-                    <Table.HeaderCell />
+                    {/* <Table.HeaderCell /> */}
                     <Table.HeaderCell>ФИО</Table.HeaderCell>
                     <Table.HeaderCell>Должность</Table.HeaderCell>
                     <Table.HeaderCell>Телефон</Table.HeaderCell>

@@ -11,9 +11,9 @@ const EmployeesTableRow = props => {
     const d = useDispatch();
 
     return <Table.Row>
-        <Table.Cell>
+        {/* <Table.Cell>
             <div>{row.pin}</div>
-        </Table.Cell>
+        </Table.Cell> */}
         <Table.Cell>
             <div>{row.fullname}</div>
         </Table.Cell>

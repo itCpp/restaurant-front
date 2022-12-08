@@ -8,7 +8,7 @@ import { axios, moment } from "../../system";
 const SalaryAdd = props => {
 
     const { month } = props;
-    const { showEmployeeAddPay } = useSelector(s => s.main);
+    const { showEmployeeAddPay, payTypes } = useSelector(s => s.main);
     const data = showEmployeeAddPay;
     const open = Boolean(data);
     const d = useDispatch();
@@ -27,12 +27,17 @@ const SalaryAdd = props => {
     useEffect(() => {
 
         if (data?.id) {
+
+            let date = moment(new Date).format("YYYY-MM-DD"),
+                day = Number(moment(date).format("DD"));
+
             setFormdata({
                 expense_type_id: 1,
                 expense_subtype_id: data.id,
-                date: moment(month || new Date).format("YYYY-MM-DD"),
-                period_start: moment(month || new Date).startOf('month').format("YYYY-MM-DD"),
-                period_stop: moment(month || new Date).endOf('month').format("YYYY-MM-DD"),
+                date,
+                month,
+                period_start: moment(date).startOf('month').format(`YYYY-MM-${day >= 16 ? '16' : 'DD'}`),
+                period_stop: moment(date).endOf('month').format(`YYYY-MM-${day >= 16 ? 'DD' : '15'}`),
             });
         }
 
@@ -63,33 +68,73 @@ const SalaryAdd = props => {
     return <Modal
         open={open}
         header="Добавить оплату"
-        size="mini"
+        size="tiny"
         centered={false}
         closeIcon={<Icon name="close" onClick={() => !save && close()} />}
         content={<Form className="content">
 
             <Header content={data?.fullname} as="h5" />
 
-            <Form.Input
-                label="Сумма"
-                placeholder="Укажите сумму"
-                type="number"
-                step="0.01"
-                name="sum"
-                value={formdata.sum || ""}
-                onChange={handleChange}
-                required
-                error={Boolean(errors?.sum)}
-            />
-            <Form.Input
-                label="Дата выдачи"
-                type="date"
-                name="date"
-                value={formdata.date || ""}
-                onChange={handleChange}
-                required
-                error={Boolean(errors?.date)}
-            />
+            <Form.Group widths={2}>
+                <Form.Input
+                    label="Сумма"
+                    placeholder="Укажите сумму"
+                    type="number"
+                    step="0.01"
+                    name="sum"
+                    value={formdata.sum || ""}
+                    onChange={handleChange}
+                    required
+                    error={Boolean(errors?.sum)}
+                />
+                <Form.Select
+                    label="Вид расчета"
+                    placeholder="Укажите вид расчета"
+                    options={payTypes}
+                    name="type_pay"
+                    value={formdata?.type_pay || null}
+                    onChange={handleChange}
+                    error={Boolean(errors?.type_pay)}
+                />
+            </Form.Group>
+
+            <Form.Group widths={2}>
+                <Form.Select
+                    label="Тип оплаты"
+                    placeholder="Укажите тип оплаты"
+                    options={[
+                        { key: 0, text: "Аванс", value: 1 },
+                        { key: 1, text: "Зарплата", value: 2 },
+                        { key: 2, text: "Премия", value: 3 },
+                    ]}
+                    name="purpose_pay"
+                    value={formdata?.purpose_pay || null}
+                    onChange={handleChange}
+                    error={Boolean(errors?.purpose_pay)}
+                />
+                <Form.Input
+                    label="Дата выдачи"
+                    type="date"
+                    name="date"
+                    value={formdata.date || ""}
+                    onChange={(e, { value }) => {
+                        setFormdata(p => {
+
+                            let date = moment(value).format("YYYY-MM-DD"),
+                                day = Number(moment(date).format("DD"));
+
+                            return {
+                                ...p,
+                                date: value,
+                                period_start: moment(date).startOf('month').format(`YYYY-MM-${day >= 16 ? '16' : 'DD'}`),
+                                period_stop: moment(date).endOf('month').format(`YYYY-MM-${day >= 16 ? 'DD' : '15'}`),
+                            }
+                        })
+                    }}
+                    required
+                    error={Boolean(errors?.date)}
+                />
+            </Form.Group>
             <Form.Group widths={2}>
                 <Form.Input
                     label="Период с"
@@ -113,7 +158,7 @@ const SalaryAdd = props => {
 
             {error && <div className="text-danger mb-3">
                 <strong>Ошибка{' '}</strong>
-                <span>{error}</span>    
+                <span>{error}</span>
             </div>}
 
             <Button
