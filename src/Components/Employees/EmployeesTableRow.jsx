@@ -41,6 +41,17 @@ const EmployeesTableRow = props => {
                 </span>
             </div>
         </Table.Cell>
+        <Table.Cell
+            textAlign="center"
+            content={<div>
+                {row.personal_data_processing_hour}
+            </div>}
+        />
+        <Table.Cell
+            content={<div>
+                {row.personal_data_additional_info}
+            </div>}
+        />
         <Table.Cell textAlign="center">
             <Dropdown
                 icon={null}

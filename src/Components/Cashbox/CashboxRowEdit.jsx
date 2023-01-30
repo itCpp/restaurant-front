@@ -343,7 +343,7 @@ const CashboxRowEdit = props => {
                             options={options?.purpose_salary || []}
                             name="purpose_pay"
                             value={formdata?.purpose_pay || null}
-                            onChange={(e, {name, value, options}) => {
+                            onChange={(e, { name, value, options }) => {
                                 setFormdata(p => {
 
                                     let o = (options || []).find(i => i.value === value),
@@ -382,14 +382,36 @@ const CashboxRowEdit = props => {
                         label="Вид оплаты"
                         placeholder="Выберите вид оплаты"
                         options={[
-                            { key: 0, value: "tenant", text: "Платеж от арендатора" },
-                            { key: 1, value: "parking_one", text: "Оплата гостевой парковки" },
+                            // { key: 0, value: "tenant", text: "Платеж от арендатора" },
+                            // { key: 1, value: "parking_one", text: "Оплата гостевой парковки" },
+                            { key: 2, value: "income_cash", text: "Приход наличные" },
+                            { key: 3, value: "income_non_cash", text: "Приход безналичные" },
+                            { key: 4, value: "income_other", text: "Приход прочее" },
                         ]}
                         name="income_type_pay"
                         value={formdata.income_type_pay || null}
                         onChange={handleChange}
                         required
                     />
+
+                    {["income_cash", "income_non_cash", "income_other"].indexOf(formdata?.income_type_pay) >= 0 && <>
+                        <Form.Input
+                            label="Наименование платежа"
+                            placeholder="Дополните платеж наименованием"
+                            name="name"
+                            value={formdata?.name || ""}
+                            onChange={handleChange}
+                            error={Boolean(errors.name)}
+                        />
+                        <Form.Input
+                            label="Дполнительная информация"
+                            placeholder="Например ФИО сотрудника"
+                            name="comment"
+                            value={formdata?.comment || ""}
+                            onChange={handleChange}
+                            error={Boolean(errors.comment)}
+                        />
+                    </>}
 
                     {formdata?.income_type_pay == "tenant" && <>
 

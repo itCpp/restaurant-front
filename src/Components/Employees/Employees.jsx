@@ -81,6 +81,8 @@ const Employees = props => {
                     <Table.HeaderCell>График работы</Table.HeaderCell>
                     <Table.HeaderCell>Период работы</Table.HeaderCell>
                     <Table.HeaderCell>Оклад</Table.HeaderCell>
+                    <Table.HeaderCell>Цена П/Ч</Table.HeaderCell>
+                    <Table.HeaderCell>Доп. инфо</Table.HeaderCell>
                     <Table.HeaderCell className="px-0">
                         <Button
                             icon="plus"

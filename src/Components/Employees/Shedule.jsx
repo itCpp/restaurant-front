@@ -53,6 +53,7 @@ const Shedule = props => {
         centered={false}
         closeIcon
         onClose={() => d(setShowShedule(false))}
+        style={{ width: 1000 }}
         content={<div className="content">
 
             <Header

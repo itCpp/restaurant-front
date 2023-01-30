@@ -9,7 +9,7 @@ const SalaryMore = props => {
     const d = useDispatch();
     const data = useSelector(s => s?.main?.showSalaryMore);
     const open = Boolean(data);
-    const [accrd, setAccord] = useState(-1);
+    const [accrd, setAccord] = useState(0);
 
     const handleClick = useCallback((e, { index }) => {
         setAccord(a => a === index ? -1 : index);
@@ -22,7 +22,7 @@ const SalaryMore = props => {
         size="small"
         closeIcon
         onClose={() => {
-            setAccord(-1);
+            setAccord(0);
             d(setShowSalaryMore(false));
         }}
         content={<div className="content">
@@ -73,10 +73,15 @@ const SalaryMore = props => {
                         <small className="opacity-40">Данных нет</small>
                     </div>}
                     {(data.parts_data || []).length > 0 && <Grid columns={3} padded>
-                        {data.parts_data.map((r, i) => <Grid.Column key={i} className="py-1 d-flex">
-                            <span>{moment(r.date).format("DD.MM.YYYY")}</span>
-                            <span className="ms-2">{(r.sum || 0).toFixed(2)}</span>
-                        </Grid.Column>)}
+                        {data.parts_data.map((r, i) => {
+
+                            let date = new Date(r.date);
+
+                            return <Grid.Column key={i} className={`py-1 d-flex ${(date.getDay() == 0 || date.getDay() == 6) ? "text-danger" : ""}`}>
+                                <span>{moment(date).format("DD.MM.YYYY dd")}</span>
+                                <span className="ms-2" style={{ opacity: Number(r.sum || 0) > 0 ? 1 : 0.4 }}>{(r.sum || 0).toFixed(Number(r.sum || 0) - Number((r.sum || 0).toFixed(0)) == 0 ? 0 : 2)}</span>
+                            </Grid.Column>
+                        })}
                     </Grid>}
                 </Accordion.Content>
 

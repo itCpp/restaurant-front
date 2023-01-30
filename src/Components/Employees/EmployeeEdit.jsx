@@ -217,7 +217,7 @@ const EmployeeEdit = props => {
 
                 <hr />
 
-                <Form.Group widths={2}>
+                <Form.Group widths={3}>
 
                     <Form.Select
                         label="График работы"
@@ -258,7 +258,27 @@ const EmployeeEdit = props => {
 
                     </Form.Group>
 
+                    <Form.Input
+                        label="Цена П/Ч"
+                        placeholder="Например 1000.50"
+                        name="personal_data_processing_hour"
+                        value={formdata.personal_data_processing_hour || ""}
+                        onChange={handleChange}
+                        error={Boolean(saveErrors.personal_data_processing_hour)}
+                        disabled={isError}
+                    />
+
                 </Form.Group>
+
+                <Form.TextArea
+                    label="Дополнительная информация"
+                    placeholder="Введите дополнительную информацию"
+                    name="personal_data_additional_info"
+                    value={formdata.personal_data_additional_info || ""}
+                    onChange={handleChange}
+                    error={Boolean(saveErrors.personal_data_additional_info)}
+                    disabled={isError}
+                />
 
                 <Dimmer inverted>
                     <Loader />
