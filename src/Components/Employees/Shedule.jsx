@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux"
-import { Dimmer, Dropdown, Header, Label, Loader, Modal, Table } from "semantic-ui-react";
+import { Dimmer, Dropdown, Header, Icon, Label, Loader, Modal, Popup, Table } from "semantic-ui-react";
 import { setShowShedule } from "../../store/actions";
 import { axios, moment, ucFirst } from "../../system";
 import { createCalendarPlace } from "../Cashbox/CashboxCalendar";
@@ -16,6 +16,7 @@ const Shedule = props => {
     const [month, setMonth] = useState(null);
     const [calendar, setCalendar] = useState([]);
     const [options, setOptions] = useState([]);
+    const [processings, setProcessings] = useState([]);
     const [days, setDays] = useState({});
 
     useEffect(() => {
@@ -34,6 +35,7 @@ const Shedule = props => {
             axios.post('employees/shedule', { id: showShedule?.id, month })
                 .then(({ data }) => {
                     setOptions(data.options);
+                    setProcessings(data.processings || []);
                     setDays(data?.shedule?.days || {});
                 })
                 .catch(e => { })
@@ -42,6 +44,7 @@ const Shedule = props => {
 
         return () => {
             setDays({});
+            setProcessings([]);
             setLoading(true);
         }
 
@@ -83,6 +86,7 @@ const Shedule = props => {
                             key={key}
                             day={day}
                             options={options}
+                            processings={processings}
                             employee={showShedule?.id}
                             employeeData={showShedule || {}}
                             days={days}
@@ -110,7 +114,7 @@ const Shedule = props => {
 
 const TableCellDay = props => {
 
-    const { day, options, employee, employeeData } = props;
+    const { day, options, employee, employeeData, processings } = props;
     const { days, setDays } = props;
     const data = days[moment(day.date).format("DD")] || {};
     const row = { ...day, ...data };
@@ -136,12 +140,23 @@ const TableCellDay = props => {
             .then(() => setLoading(false));
     }, []);
 
+    const night = processings.find(item => item.date === day.date);
+
     return <Table.Cell
         disabled={!row?.toMonth}
         content={<div className="d-flex">
 
             <div className="flex-grow-1 d-flex align-items-center">
+
+                {night && <span>
+                    <Popup
+                        trigger={<Icon name="moon" color="orange" />}
+                        content={<>Ночная переработка: <b>{night.hour}</b> час.</>}
+                    />
+                </span>}
+
                 <span className="flex-grow-1">{moment(day.date).format("DD")}</span>
+
                 {day?.toMonth && row?.type && option?.color && <Label
                     color={option.color}
                     empty
@@ -149,6 +164,7 @@ const TableCellDay = props => {
                     className="mx-1"
                     size="mini"
                 />}
+
             </div>
 
             {row?.toMonth && <Dropdown

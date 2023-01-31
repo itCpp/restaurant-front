@@ -13,7 +13,7 @@ const SalaryMore = props => {
 
     const handleClick = useCallback((e, { index }) => {
         setAccord(a => a === index ? -1 : index);
-    }, [])
+    }, []);
 
     return <Modal
         open={open}
@@ -75,11 +75,15 @@ const SalaryMore = props => {
                     {(data.parts_data || []).length > 0 && <Grid columns={3} padded>
                         {data.parts_data.map((r, i) => {
 
-                            let date = new Date(r.date);
+                            let date = new Date(r.date),
+                                sum = typeof data.processings_date[r.date] != "undefined"
+                                ? r.sum + Number(data.processings_date[r.date])
+                                : (r.sum || 0);
 
-                            return <Grid.Column key={i} className={`py-1 d-flex ${(date.getDay() == 0 || date.getDay() == 6) ? "text-danger" : ""}`}>
+                            return <Grid.Column key={i} className={`py-1 d-flex align-items-center ${(date.getDay() == 0 || date.getDay() == 6) ? "text-danger" : ""}`}>
                                 <span>{moment(date).format("DD.MM.YYYY dd")}</span>
-                                <span className="ms-2" style={{ opacity: Number(r.sum || 0) > 0 ? 1 : 0.4 }}>{(r.sum || 0).toFixed(Number(r.sum || 0) - Number((r.sum || 0).toFixed(0)) == 0 ? 0 : 2)}</span>
+                                <span className="ms-2" style={{ opacity: Number(sum) > 0 ? 1 : 0.4 }}>{sum.toFixed(Number(sum) - Number(sum.toFixed(0)) == 0 ? 0 : 2)}</span>
+                                {typeof data.processings_date[r.date] != "undefined" && data.processings_date[r.date] > 0 && <span><Icon name="moon" color="blue" className="me-0 ms-2" size="small" /></span>}
                             </Grid.Column>
                         })}
                     </Grid>}

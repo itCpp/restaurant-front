@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Dropdown, Icon, Table } from "semantic-ui-react";
-import { setShowShedule, setShowSalaryMore, setShowAddSalary } from "../../store/actions";
+import { setShowShedule, setShowSalaryMore, setShowAddSalary, setShowProcessing } from "../../store/actions";
 
 const SalaryTable = props => {
 
@@ -147,6 +147,11 @@ const SalaryTableRow = props => {
                         icon="info"
                         content="Подробнее"
                         onClick={() => dispatch(setShowSalaryMore(row))}
+                    />
+                    <Dropdown.Item
+                        icon="moon outline"
+                        content="Ночная переработка"
+                        onClick={() => dispatch(setShowProcessing(row))}
                     />
                 </Dropdown.Menu>
             </Dropdown>}

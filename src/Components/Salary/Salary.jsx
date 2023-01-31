@@ -5,6 +5,7 @@ import { axios, moment, ucFirst } from "../../system";
 import Shedule from "../Employees/Shedule";
 import SalaryAdd from "./SalaryAdd";
 import SalaryMore from "./SalaryMore";
+import SalaryProcessing from "./SalaryProcessing";
 import SalaryTable from "./SalaryTable";
 
 export const getPeriodDatStartFromDate = (date = null) => {
@@ -25,6 +26,7 @@ const Salary = () => {
     const [update, setUpdate] = React.useState(false);
     const shedule = useSelector(s => s.main.showShedule);
     const salary = useSelector(s => s.main.showEmployeeAddPay);
+    const processing = useSelector(s => s.main.showProcessing);
     const [load, setLoad] = React.useState(null);
 
     React.useEffect(() => {
@@ -45,7 +47,7 @@ const Salary = () => {
 
     React.useEffect(() => {
 
-        const a = shedule || salary;
+        const a = shedule || salary || processing;
 
         return () => {
 
@@ -69,7 +71,7 @@ const Salary = () => {
                 .then(() => setLoad(null));
         }
 
-    }, [shedule, salary]);
+    }, [shedule, salary, processing]);
 
     return <div className="px-2 py-1">
 
@@ -78,6 +80,8 @@ const Salary = () => {
         <Shedule month={month} />
 
         <SalaryAdd month={month} />
+
+        <SalaryProcessing month={month} />
 
         <div className="mt-3 d-flex align-items-center justify-content-center">
             <span>

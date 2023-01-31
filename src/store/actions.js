@@ -33,3 +33,9 @@ export const setBuildings = data => ({
     type: SET_BUILDINGS,
     payload: data
 });
+
+export const SHOW_PROCESSING = "SHOW_PROCESSING";
+export const setShowProcessing = data => ({
+    type: SHOW_PROCESSING,
+    payload: data
+});

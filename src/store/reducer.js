@@ -48,6 +48,7 @@ const defaultMainState = {
         }
     ],
     showShedule: false,
+    showProcessing: false,
     showSalaryMore: false,
     showEmployeeAddPay: false,
     buildings: [],
@@ -71,6 +72,9 @@ export default combineReducers({
 
             case ACTIONS.SHOW_SHEDULE:
                 return { ...state, showShedule: action.payload }
+
+            case ACTIONS.SHOW_PROCESSING:
+                return { ...state, showProcessing: action.payload }
 
             case ACTIONS.SHOW_SALARY_MORE:
                 return { ...state, showSalaryMore: action.payload }
