@@ -46,6 +46,11 @@ const SalaryMore = props => {
                 </Statistic>
 
                 <Statistic size="tiny">
+                    <Statistic.Value>{data?.processings || 0}</Statistic.Value>
+                    <Statistic.Label>Переработка</Statistic.Label>
+                </Statistic>
+
+                <Statistic size="tiny">
                     <Statistic.Value>{data?.debt || 0}</Statistic.Value>
                     <Statistic.Label>Долг</Statistic.Label>
                 </Statistic>
@@ -72,7 +77,7 @@ const SalaryMore = props => {
                     {(data.parts_data || []).length === 0 && <div className="my-2 text-center">
                         <small className="opacity-40">Данных нет</small>
                     </div>}
-                    {(data.parts_data || []).length > 0 && <Grid columns={3} padded>
+                    {(data.parts_data || []).length > 0 && <Grid columns={4} padded>
                         {data.parts_data.map((r, i) => {
 
                             let date = new Date(r.date),
@@ -81,9 +86,9 @@ const SalaryMore = props => {
                                 : (r.sum || 0);
 
                             return <Grid.Column key={i} className={`py-1 d-flex align-items-center ${(date.getDay() == 0 || date.getDay() == 6) ? "text-danger" : ""}`}>
-                                <span>{moment(date).format("DD.MM.YYYY dd")}</span>
+                                <span>{moment(date).format("dd, DD MMM")}</span>
                                 <span className="ms-2" style={{ opacity: Number(sum) > 0 ? 1 : 0.4 }}>{sum.toFixed(Number(sum) - Number(sum.toFixed(0)) == 0 ? 0 : 2)}</span>
-                                {typeof data.processings_date[r.date] != "undefined" && data.processings_date[r.date] > 0 && <span><Icon name="moon" color="blue" className="me-0 ms-2" size="small" /></span>}
+                                {typeof data.processings_date[r.date] != "undefined" && data.processings_date[r.date] > 0 && <span><Icon name="moon" color="orange" className="me-0 ms-2" size="small" title={sum} /></span>}
                             </Grid.Column>
                         })}
                     </Grid>}

@@ -151,7 +151,7 @@ const TableCellDay = props => {
                 {night && <span>
                     <Popup
                         trigger={<Icon name="moon" color="orange" />}
-                        content={<>Ночная переработка: <b>{night.hour}</b> час.</>}
+                        content={<>Ночная переработка: <b>{night.hour}</b> час. ({night.processing}) руб.</>}
                     />
                 </span>}
 
