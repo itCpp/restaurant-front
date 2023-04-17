@@ -48,7 +48,7 @@ const Main = () => {
             <b>Ошибка</b>{' '}<span>{error}</span>
         </div>}
 
-        {!loading && !error && <>
+        {!loading && !error && 1 == 2 && <>
 
             <div className="text-center mt-4">
 

@@ -106,6 +106,8 @@ const SalaryAdd = props => {
                         { key: 0, text: "Аванс", value: 1 },
                         { key: 1, text: "Зарплата", value: 2 },
                         { key: 2, text: "Премия", value: 3 },
+                        { key: 3, text: "НДФЛ", value: 4 },
+                        { key: 4, text: "Штраф", value: 5 },
                     ]}
                     name="purpose_pay"
                     value={formdata?.purpose_pay || null}
@@ -126,6 +128,7 @@ const SalaryAdd = props => {
                             return {
                                 ...p,
                                 date: value,
+                                month: moment(date).startOf('month').format(`YYYY-MM`),
                                 period_start: moment(date).startOf('month').format(`YYYY-MM-${day >= 16 ? '16' : 'DD'}`),
                                 period_stop: moment(date).endOf('month').format(`YYYY-MM-${day >= 16 ? 'DD' : '15'}`),
                             }
@@ -141,7 +144,15 @@ const SalaryAdd = props => {
                     type="date"
                     name="period_start"
                     value={formdata.period_start || ""}
-                    onChange={handleChange}
+                    onChange={(e, { value }) => {
+                        setFormdata(p => {
+                            return {
+                                ...p,
+                                period_start: value,
+                                month: moment(value).startOf('month').format(`YYYY-MM`),
+                            }
+                        })
+                    }}
                     required
                     error={Boolean(errors?.period_start)}
                 />
